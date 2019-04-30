@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+
+    <item android:title="@string/sensores">
+        <menu>
+            <item
+                android:id="@+id/sens_conf"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/configra_o_sensores" />
+            <item
+                android:id="@+id/sens_graph"
+                android:icon="@mipmap/ic_grapg"
+                android:title="@string/gr_ficos" />
+            <item
+                android:id="@+id/sens_switch"
+                android:icon="@mipmap/ic_switch"
+                android:title="@string/switch_sensores" />
+            <item
+                android:id="@+id/sens_info"
+                android:icon="@mipmap/ic_info"
+                android:title="@string/informa_o_atual" />
+        </menu>
+    </item>
+    <item android:title="@string/condom_nio">
+        <menu>
+            <item
+                android:id="@+id/cond_chat"
+                android:icon="@mipmap/ic_chat"
+                android:title="@string/chat" />
+            <item
+                android:id="@+id/cond_cal"
+                android:icon="@mipmap/ic_calendario"
+                android:title="@string/calend_rio" />
+            <item
+                android:id="@+id/cond_fich"
+                android:icon="@mipmap/ic_file"
+                android:title="@string/ficheiros" />
+            <item
+                android:id="@+id/cond_regras"
+                android:icon="@mipmap/ic_rules"
+                android:title="@string/regras" />
+            <item
+                android:id="@+id/cond_manu"
+                android:icon="@mipmap/ic_manu"
+                android:title="@string/pedidos_de_manuten_o" />
+            <item
+                android:id="@+id/cond_res"
+                android:icon="@mipmap/ic_reser"
+                android:title="@string/pedidos_de_reservas" />
+        </menu>
+    </item>
+    <item android:title="@string/administrador">
+        <menu>
+            <item
+                android:id="@+id/admin_marc"
+                android:icon="@mipmap/ic_calendario"
+                android:title="@string/marca_o_de_assembleia" />
+            <item
+                android:id="@+id/admin_comuni"
+                android:icon="@mipmap/ic_calendario"
+                android:title="@string/comunicados" />
+            <item
+                android:id="@+id/admin_res"
+                android:icon="@mipmap/ic_calendario"
+                android:title="Reservas" />
+        </menu>
+    </item>
+
+</menu>
