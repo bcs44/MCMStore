@@ -8,11 +8,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_in_short">Login</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -20,7 +21,24 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+
+    <!-- BS:Menu Principal >> -->
     <string name="configra_o_sensores">Configração Sensores</string>
     <string name="gr_ficos">Gráficos</string>
     <string name="switch_sensores">Switch Sensores</string>
+    <string name="sensores">Sensores</string>
+    <string name="informa_o_atual">Informação Atual</string>
+    <string name="condom_nio">Condomínio</string>
+    <string name="chat">Chat</string>
+    <string name="calend_rio">Calendário</string>
+    <string name="ficheiros">Ficheiros</string>
+    <string name="regras">Regras</string>
+    <string name="administrador">Administrador</string>
+    <string name="marca_o_de_assembleia">Marcação de Assembleia</string>
+    <string name="comunicados">Comunicados</string>
+    <string name="pedidos_de_manuten_o">Pedidos de Manutenção</string>
+    <string name="pedidos_de_reservas">Pedidos de Reservas</string>
+    <string name="reservas">Reservas</string>
+    <!-- BS:Menu Principal << -->
 </resources>
