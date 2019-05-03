@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "219351819170",
+    "firebase_url": "https://mcmcondominio-bdb0e.firebaseio.com",
+    "project_id": "mcmcondominio-bdb0e",
+    "storage_bucket": "mcmcondominio-bdb0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219351819170:android:b26575af6dd0f848",
+        "android_client_info": {
+          "package_name": "mestrado.ipg.mcmstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219351819170-qq19i5buuq25rgng58mb9gce7u6mj40c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mestrado.ipg.mcmstore",
+            "certificate_hash": "9c5cbc4c3e6118107981c0dec464835f6be13540"
+          }
+        },
+        {
+          "client_id": "219351819170-sp9ktmf1ncng1c3lfm0jocldivme2rdr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJVuO4B1CbCuJdYgoy1yvnct79sEyoAko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219351819170-sp9ktmf1ncng1c3lfm0jocldivme2rdr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

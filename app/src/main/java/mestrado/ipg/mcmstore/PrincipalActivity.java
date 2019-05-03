@@ -100,16 +100,18 @@ public class PrincipalActivity extends AppCompatActivity
         } else if (id == R.id.cond_chat) {
             //Chat Condomonio
 
+            Intent myIntent = new Intent(PrincipalActivity.this, ChatCondominio.class);
+            startActivity(myIntent);
+
+
+
         } else if (id == R.id.cond_cal) {
             //Calendario de condominio
-
             Intent myIntent = new Intent(PrincipalActivity.this, CalendarActivity.class);
             startActivity(myIntent);
         }
         else if (id == R.id.cond_fich) {
             //Ficheiros de condominio
-
-
         }
         else if (id == R.id.cond_regras) {
             //Regras de condominio
