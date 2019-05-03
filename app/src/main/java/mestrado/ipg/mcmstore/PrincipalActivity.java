@@ -1,6 +1,8 @@
 package mestrado.ipg.mcmstore;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -12,6 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CalendarView;
+
+import java.sql.Time;
+import java.util.Calendar;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,7 +61,7 @@ public class PrincipalActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.princiapl, menu);
+        getMenuInflater().inflate(R.menu.principal, menu);
         return true;
     }
 
@@ -80,18 +86,48 @@ public class PrincipalActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.sens_conf) {
+            // Configuração de Sensores
+        } else if (id == R.id.sens_graph) {
+            //graficos sensores
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.sens_switch) {
+            //Switch de sensores
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.sens_info) {
+            //Informação de Sensores
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.cond_chat) {
+            //Chat Condomonio
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.cond_cal) {
+            //Calendario de condominio
 
+            Intent myIntent = new Intent(PrincipalActivity.this, CalendarActivity.class);
+            startActivity(myIntent);
+        }
+        else if (id == R.id.cond_fich) {
+            //Ficheiros de condominio
+
+
+        }
+        else if (id == R.id.cond_regras) {
+            //Regras de condominio
+        }
+        else if (id == R.id.cond_manu) {
+            //Pedido de Manutenção
+        }
+        else if (id == R.id.cond_res) {
+            //Reservas de espaço
+        }
+        else if (id == R.id.admin_marc) {
+            //marcação de Assembleia
+        }
+        else if (id == R.id.admin_comuni) {
+            //Comunicados de condominio
+        }
+        else if (id == R.id.admin_res) {
+            //Reservas
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

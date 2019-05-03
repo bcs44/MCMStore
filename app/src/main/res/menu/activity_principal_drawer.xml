@@ -53,20 +53,20 @@
                 android:title="@string/pedidos_de_reservas" />
         </menu>
     </item>
-    <item android:title="@string/administrador">
+    <item android:title="@string/administrador"> <!--android:visible="false">-->
         <menu>
             <item
                 android:id="@+id/admin_marc"
-                android:icon="@mipmap/ic_calendario"
+                android:icon="@mipmap/ic_marca"
                 android:title="@string/marca_o_de_assembleia" />
             <item
                 android:id="@+id/admin_comuni"
-                android:icon="@mipmap/ic_calendario"
+                android:icon="@mipmap/ic_comunicados"
                 android:title="@string/comunicados" />
             <item
                 android:id="@+id/admin_res"
-                android:icon="@mipmap/ic_calendario"
-                android:title="Reservas" />
+                android:icon="@mipmap/ic_reser"
+                android:title="@string/reservas" />
         </menu>
     </item>
 
