@@ -19,11 +19,10 @@ import java.util.Map;
 
 public class ChatCondominio extends AppCompatActivity {
 
-    private Button btn_send_msg;
     private EditText input_msg;
     private TextView chat_conversation;
 
-    private String user_name, room_name;
+    private String user_name;
     private DatabaseReference root;
     private String temp_key;
 
@@ -33,14 +32,14 @@ public class ChatCondominio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_condominio);
 
-        btn_send_msg = (Button) findViewById(R.id.btn_send);
-        input_msg = (EditText) findViewById(R.id.msg_input);
-        chat_conversation = (TextView) findViewById(R.id.textView);
+        Button btn_send_msg = findViewById(R.id.btn_send);
+        input_msg = findViewById(R.id.msg_input);
+        chat_conversation = findViewById(R.id.textView);
 
         user_name = "username";
-        room_name = "room_name";
+        String room_name = "room_name";
 
-        setTitle("Room - "+room_name);
+        setTitle("Room - "+ room_name);
 
         root = FirebaseDatabase.getInstance().getReference().child(room_name);
 
@@ -48,12 +47,12 @@ public class ChatCondominio extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Map<String,Object> map = new HashMap<String, Object>();
+                Map<String,Object> map = new HashMap<>();
                 temp_key = root.push().getKey();
                 root.updateChildren(map);
 
                 DatabaseReference message_root = root.child(temp_key);
-                Map<String, Object> map2 = new HashMap<String, Object>();
+                Map<String, Object> map2 = new HashMap<>();
                 map2.put("name", user_name);
                 map2.put("msg", input_msg.getText().toString());
                 input_msg.setText("");
@@ -93,17 +92,12 @@ public class ChatCondominio extends AppCompatActivity {
 
     }
 
-    private String chat_msg, chat_user_name;
     private void append_chat_conversation(DataSnapshot dataSnapshot){
-
         Iterator i =dataSnapshot.getChildren().iterator();
-
         while(i.hasNext()){
-
-            chat_msg = (String) ((DataSnapshot)i.next()).getValue();
-            chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
-
-            chat_conversation.append(chat_user_name+ " : "+chat_msg+"\n");
+            String chat_msg = (String) ((DataSnapshot) i.next()).getValue();
+            String chat_user_name = (String) ((DataSnapshot) i.next()).getValue();
+            chat_conversation.append(chat_user_name + " : "+ chat_msg +"\n");
         }
     }
 }
