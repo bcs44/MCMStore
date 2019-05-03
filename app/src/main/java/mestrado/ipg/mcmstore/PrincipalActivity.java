@@ -121,7 +121,8 @@ public class PrincipalActivity extends AppCompatActivity
             //Reservas de espaço
         }
         else if (id == R.id.admin_marc) {
-            //marcação de Assembleia
+            Intent myIntent = new Intent(PrincipalActivity.this, MarcacaoAssembleia.class);
+            startActivity(myIntent);
         }
         else if (id == R.id.admin_comuni) {
             //Comunicados de condominio
