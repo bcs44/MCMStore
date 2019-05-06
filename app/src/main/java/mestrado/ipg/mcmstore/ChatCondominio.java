@@ -38,7 +38,6 @@ public class ChatCondominio extends AppCompatActivity {
 
         user_name = "username";
         String room_name = "room_name";
-
         setTitle("Room - "+ room_name);
 
         root = FirebaseDatabase.getInstance().getReference().child(room_name);
@@ -75,21 +74,14 @@ public class ChatCondominio extends AppCompatActivity {
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
-
     }
 
     private void append_chat_conversation(DataSnapshot dataSnapshot){

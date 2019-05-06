@@ -1,11 +1,10 @@
 package mestrado.ipg.mcmstore;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
-
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -14,6 +13,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,26 +22,20 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+public class ConnectWithServer extends AppCompatActivity {
 
-public class CalendarActivity extends AppCompatActivity {
-
-
-   TextView textView;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
-        textView = findViewById(R.id.output);
+
 
         String urlStr = "https://bd.ipg.pt:5500/ords/bda_1701887/access/accessbyuserid";
-
 
         new sendPost().execute(urlStr);
 
     }
 
-
-
+  
     private class sendPost extends AsyncTask<String, String, String> {
 
         @Override
@@ -49,7 +43,7 @@ public class CalendarActivity extends AppCompatActivity {
 
             String d = strings[0];
             HashMap<String, String> params = new HashMap<String, String>();
-            params.put("user_id", "");
+            params.put("user_id", "1");
             disableHttpsVerify(null);
             BufferedReader bis = null;
             InputStream in = null;
@@ -101,8 +95,6 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
-
-
     private static void disableHttpsVerify(Object o) {
         try {
             TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
@@ -131,7 +123,4 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
     }
-
-
 }
-
