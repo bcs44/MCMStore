@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MarcacaoAssembleia">
 
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -30,30 +43,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Hora de Início"
-            android:textAlignment="center"
-            android:clickable="true"
-            android:editable="false"/>
-    </LinearLayout>
-    <LinearLayout android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="30dp">
-        <EditText
-            android:id="@+id/finalDate"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Data de Fim"
-            android:textAlignment="center"
-            android:clickable="true"
-            android:editable="false"
-            />
-        <EditText
-            android:id="@+id/finalTime"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Hora de fim"
             android:textAlignment="center"
             android:clickable="true"
             android:editable="false"/>
@@ -90,6 +79,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

@@ -38,6 +38,8 @@
         <activity android:name=".ChatCondominio" />
         <activity android:name=".SensorSwitch" />
         <activity android:name=".Registar"></activity>
+        <activity android:name=".PostBD"></activity>
+        <activity android:name=".GetBD"></activity>
     </application>
 
 </manifest>
