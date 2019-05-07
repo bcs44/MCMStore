@@ -1,5 +1,6 @@
 package mestrado.ipg.mcmstore;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,11 +10,9 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,77 +21,97 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class ConnectWithServer extends AppCompatActivity {
+public class GetBD extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        String urlStr = "https://bd.ipg.pt:5500/ords/bda_1701887/access/accessbyuserid";
+        //é Sempre recebido o URL e a Atividade para a qual vai, depois de feito o GET. Tambem a funcao para qual vai depois
+        Intent intent = getIntent();
+        String urlStrg =  intent.getStringExtra("urlStrg");
+        String activity =  intent.getStringExtra("activity");
 
-        new sendPost().execute(urlStr);
+        new sendGet().execute(urlStrg, activity);
 
     }
 
-  
-    private class sendPost extends AsyncTask<String, String, String> {
+
+    private class sendGet extends AsyncTask<String, String, HashMap<String, String>> {
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected HashMap<String, String> doInBackground(String... args) {
 
-            String d = strings[0];
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("user_id", "1");
+
+            String stringURL = args[0];
+            String activity = args[1];
             disableHttpsVerify(null);
             BufferedReader bis = null;
             InputStream in = null;
-            OutputStream out = null;
-            try {
-                URL url = new URL(d);
-                HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
-                connection.setDoOutput(true);
-                connection.setDoInput(true);
-                connection.setRequestMethod("POST");
-                out = connection.getOutputStream();
+            HashMap<String, String> params = new HashMap<>();
 
+            try {
+                URL url = new URL(stringURL);
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.setRequestMethod("GET");
                 StringBuilder sb = new StringBuilder();
-                for(Map.Entry<String, String> entry : params.entrySet()) {
-                    sb.append(entry.getKey());
-                    sb.append('=');
-                    sb.append(entry.getValue());
-                    sb.append('&');
-                }
                 String str = sb.toString();
-                byte[] data = str.substring(0, str.length() - 1).getBytes();
-                out.write(data);
 
                 connection.connect();
                 in = connection.getInputStream();
                 bis = new BufferedReader(new InputStreamReader(in));
                 sb.setLength(0);
-                while((str = bis.readLine()) != null) {
+                while ((str = bis.readLine()) != null) {
                     sb.append(str);
                 }
-                return sb.toString();
+
+                params.put("data", sb.toString());
+                params.put("activity", activity);
+                return params;
+
             } catch (Exception e) {
-                return "";
+                return params;
             } finally {
                 try {
-                    if(bis != null) {
+                    if (bis != null) {
                         bis.close();
                     }
-                    if(in != null) {
+                    if (in != null) {
                         in.close();
                     }
                 } catch (Exception x) {
+                }
+            }
+        }
 
+        @Override
+        protected void onPostExecute(HashMap<String, String> hashMap) {
+            super.onPostExecute(hashMap);
+
+            String data = "";
+            String activity = "";
+
+            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                if (entry.getKey().equals("data")) {
+                    data = entry.getValue();
+                }
+                else if(entry.getKey().equals("activity")){
+                    activity = entry.getValue();
                 }
             }
 
+            Class c = null;
+            try {
+                c = Class.forName(activity);
+                Intent myIntent = new Intent(GetBD.this, c);
+                myIntent.putExtra("data", data);
+                startActivity(myIntent);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
-
-
     }
 
     private static void disableHttpsVerify(Object o) {

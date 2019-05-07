@@ -130,7 +130,8 @@ public class PrincipalActivity extends AppCompatActivity
             //Reservas
         }
         else if (id == R.id.admin_ficheiro) {
-            //Adicionar Ficheiros
+            Intent myIntent = new Intent(PrincipalActivity.this, PostBD.class);
+            startActivity(myIntent);
 
         }
 
