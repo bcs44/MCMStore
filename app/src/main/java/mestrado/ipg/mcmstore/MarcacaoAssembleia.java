@@ -112,8 +112,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         } else {
             getPlaces();
         }
-
-
     }
 
     private void sendToBD() {
@@ -126,7 +124,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         params.put("description", "1");
         params.put("alternative_place", "1");
         params.put("alternative_date", "2019/05/12 23:10:00");
-
 
         Intent myIntent = new Intent(MarcacaoAssembleia.this, PostBD.class);
         myIntent.putExtra("ParamsMAP", params);
@@ -162,7 +159,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
 
         cv.put(CalendarContract.Events.TITLE, String.valueOf(etTitle.getText()));
         cv.put(CalendarContract.Events.DESCRIPTION, String.valueOf(etDesc.getText()));
-        //cv.put(CalendarContract.Events.EVENT_LOCATION, "location");
         cv.put(CalendarContract.Events.DTSTART, myCalendarInitial.getTimeInMillis());
         cv.put(CalendarContract.Events.DTEND, myCalendarInitial.getTimeInMillis() + 3600000);
         cv.put(CalendarContract.Events.CALENDAR_ID, 1);
@@ -178,17 +174,13 @@ public class MarcacaoAssembleia extends AppCompatActivity {
 
 
     private void getPlaces() {
-
         Intent myIntent = new Intent(MarcacaoAssembleia.this, GetBD.class);
         myIntent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/place/all");
         myIntent.putExtra("activity", "mestrado.ipg.mcmstore.MarcacaoAssembleia");
         startActivity(myIntent);
-
-
     }
 
     private void CreateSpinner(String data) {
-
 
         ArrayList<String> list = new ArrayList<>();
         JSONObject json;
@@ -214,6 +206,7 @@ public class MarcacaoAssembleia extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
         if (descriptions != null) {
             list.addAll(descriptions);
         }
@@ -224,8 +217,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         spinner1.setAdapter(dataAdapter);
 
         System.out.println(data);
-
     }
-
 }
 

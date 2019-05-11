@@ -50,6 +50,7 @@ public class PostBD extends AppCompatActivity {
 
             HashMap<String, String> hashMap = args[0];
 
+
             String stringURL = "";
 
             for(Map.Entry<String, String> entry : hashMap.entrySet()) {
