@@ -84,7 +84,9 @@ public class PrincipalActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.sens_conf) {
-            // Configuração de Sensores
+            Intent myIntent = new Intent(PrincipalActivity.this, ConfigSensors.class);
+            startActivity(myIntent);
+
         } else if (id == R.id.sens_graph) {
             //graficos sensores
 
