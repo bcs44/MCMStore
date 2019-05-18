@@ -24,7 +24,7 @@
 
 
     <!-- BS:Menu Principal >> -->
-    <string name="configra_o_sensores">Configração Sensores</string>
+    <string name="configra_o_sensores">Configuração Sensores</string>
     <string name="gr_ficos">Gráficos</string>
     <string name="switch_sensores">Switch Sensores</string>
     <string name="sensores">Sensores</string>

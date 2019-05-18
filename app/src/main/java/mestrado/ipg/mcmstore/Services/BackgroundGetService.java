@@ -1,4 +1,4 @@
-package mestrado.ipg.mcmstore.service;
+package mestrado.ipg.mcmstore.Services;
 
 import android.app.Service;
 import android.content.Intent;

@@ -15,6 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import mestrado.ipg.mcmstore.Condominio.CalendarActivity;
+import mestrado.ipg.mcmstore.Condominio.ChatCondominio;
+import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
+import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
+
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -91,7 +96,8 @@ public class PrincipalActivity extends AppCompatActivity
             //graficos sensores
 
         } else if (id == R.id.sens_switch) {
-            //Switch de sensores
+            Intent myIntent = new Intent(PrincipalActivity.this, SensorSwitch.class);
+            startActivity(myIntent);
 
         } else if (id == R.id.sens_info) {
             //Informação de Sensores

@@ -20,11 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <service
-            android:name=".service.BackgroundPostService"
+            android:name=".Services.BackgroundPostService"
             android:enabled="true"
             android:exported="true"></service>
         <service
-            android:name=".service.BackgroundGetService"
+            android:name=".Services.BackgroundGetService"
             android:enabled="true"
             android:exported="true" />
 
@@ -42,14 +42,14 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".CalendarActivity" />
+        <activity android:name=".Condominio.CalendarActivity" />
         <activity android:name=".MarcacaoAssembleia" />
-        <activity android:name=".ChatCondominio" />
-        <activity android:name=".SensorSwitch" />
+        <activity android:name=".Condominio.ChatCondominio" />
+        <activity android:name=".Sensors.SensorSwitch" />
         <activity android:name=".Registar" />
         <activity android:name=".PostBD" />
         <activity android:name=".GetBD" />
-        <activity android:name=".ConfigSensors" />
+        <activity android:name=".Sensors.ConfigSensors" />
     </application>
 
 </manifest>
