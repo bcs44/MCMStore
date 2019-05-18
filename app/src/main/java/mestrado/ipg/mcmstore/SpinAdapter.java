@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import mestrado.ipg.mcmstore.Globals.Place;
+
 public class SpinAdapter extends ArrayAdapter<Place> {
 
     // Your sent context

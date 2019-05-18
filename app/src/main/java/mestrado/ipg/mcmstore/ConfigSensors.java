@@ -21,18 +21,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.service.BackgroundGetService;
+import mestrado.ipg.mcmstore.service.BackgroundPostService;
 
 public class ConfigSensors extends AppCompatActivity {
 
     Button save;
 
     EditText minTemp, maxTemp, minHum, maxHum, minCo, maxCo, minLum, maxLum;
-    Spinner spinnerTemp, spinnerHum, spinnerCo, spinnerLum;
-    String placeDescTemp, placeIdTemp, placeDescHum, placeIdHum, placeDescCo,placeIdCo,  placeDescLum, placeIdLum;
-    Boolean clickable = false;
-    private static String isRegisteredreceiver = "false";
+    String placeDescTemp, placeIdTemp, placeDescHum, placeIdHum, placeDescCo, placeIdCo, placeDescLum, placeIdLum;
+    HashMap<String, String> paramsTOSEND = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,84 +50,91 @@ public class ConfigSensors extends AppCompatActivity {
         minLum = findViewById(R.id.MinValueSensorLum);
         maxLum = findViewById(R.id.MaxValueSensorLum);
 
-
         //1) get places - escolho
         //2) get sensor por type e place
         //3) post sensor com config (Max e Min)
+
         registerReceiver();
         getPlaces();
-
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (clickable) {
+                String TempID = "";
+                String HumID = "";
+                String CoID = "";
+                String LumID = "";
 
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
-                    params.put("id", "1");
-                    params.put("min", String.valueOf(minTemp.getText()));
-                    params.put("max", String.valueOf(maxTemp.getText()));
-
-
-                    new GetBD.sendGet().execute("https://bd.ipg.pt:5500/ords/bda_1701887/confs/update", "mestrado.ipg.mcmstore.ConfigSensors", "cena");
-
-                    new sendPost().execute(params);
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                for (Map.Entry<String, String> entry : paramsTOSEND.entrySet()) {
+                    switch (entry.getKey()) {
+                        case "Temperatura":
+                            TempID = entry.getValue();
+                            break;
+                        case "Humidade":
+                            HumID = entry.getValue();
+                            break;
+                        case "CO2":
+                            CoID = entry.getValue();
+                            break;
+                        case "Luminosidade":
+                            LumID = entry.getValue();
+                            break;
                     }
-
-                    params = new HashMap<>();
-                    params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
-                    params.put("id", "42");
-                    params.put("min", String.valueOf(minHum.getText()));
-                    params.put("max", String.valueOf(maxHum.getText()));
-
-                    new sendPost().execute(params);
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    params = new HashMap<>();
-                    params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
-                    params.put("id", "62");
-                    params.put("min", String.valueOf(minCo.getText()));
-                    params.put("max", String.valueOf(maxCo.getText()));
-
-                    new sendPost().execute(params);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    params = new HashMap<>();
-                    params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
-                    params.put("id", "21");
-                    params.put("min", String.valueOf(minLum.getText()));
-                    params.put("max", String.valueOf(maxLum.getText()));
-
-                    new sendPost().execute(params);
-
                 }
-                else{
-                    Toast.makeText(ConfigSensors.this, "Preencha todos os campos necessários",
-                            Toast.LENGTH_SHORT).show();
 
+                HashMap<String, String> params = new HashMap<>();
+                params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
+                params.put("id", TempID);
+                params.put("min", String.valueOf(minTemp.getText()));
+                params.put("max", String.valueOf(maxTemp.getText()));
+
+                new sendPost().execute(params);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+
+                params = new HashMap<>();
+                params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
+                params.put("id", HumID);
+                params.put("min", String.valueOf(minHum.getText()));
+                params.put("max", String.valueOf(maxHum.getText()));
+
+                new sendPost().execute(params);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                params = new HashMap<>();
+                params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
+                params.put("id", CoID);
+                params.put("min", String.valueOf(minCo.getText()));
+                params.put("max", String.valueOf(maxCo.getText()));
+
+                new sendPost().execute(params);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                params = new HashMap<>();
+                params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
+                params.put("id", LumID);
+                params.put("min", String.valueOf(minLum.getText()));
+                params.put("max", String.valueOf(maxLum.getText()));
+
+                new sendPost().execute(params);
+
             }
-
         });
     }
-
-
 
     private void registerReceiver() {
 
@@ -134,30 +142,49 @@ public class ConfigSensors extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-
-
                 String data = intent.getStringExtra("data");
                 String whereto = intent.getStringExtra("whereto");
 
-                if (whereto.equals("dealWithSpinners")){
-                    context.stopService(new Intent(context,BackgroundGetService.class));
+                if (whereto.equals("dealWithSpinners")) {
+                    context.stopService(new Intent(context, BackgroundGetService.class));
                     dealWithSpinners(data);
+                } else if (whereto.equals("dealWithSensorID")) {
+                    String sensorType = intent.getStringExtra("sensorType");
+                    context.stopService(new Intent(context, BackgroundGetService.class));
+                    dealWithSensorID(data, sensorType);
                 }
-                Bundle b = intent.getBundleExtra("Location");
+
+                intent.getBundleExtra("Location");
                 Log.d("1233", "BCR");
             }
         };
 
+        LocalBroadcastManager.getInstance(ConfigSensors.this).registerReceiver(
+                mMessageReceiver, new IntentFilter("GetSevice"));
 
-
-      //  if (isRegisteredreceiver.equals("false")) {
-            LocalBroadcastManager.getInstance(ConfigSensors.this).registerReceiver(
-                    mMessageReceiver, new IntentFilter("GetSevice"));
-          //  isRegisteredreceiver = "true";
-        //}
     }
 
+    private void dealWithSensorID(String data, String sensorType) {
 
+        JSONObject json;
+        JSONArray array;
+
+        try {
+            json = new JSONObject(data);
+            array = json.getJSONArray("items");
+
+            for (int i = 0; i < array.length(); ++i) {
+                json = array.getJSONObject(i);
+                if (json != null) {
+                    paramsTOSEND.put(sensorType, json.getString("sensor_id"));
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private class sendPost extends AsyncTask<HashMap, HashMap, String> {
 
@@ -166,9 +193,10 @@ public class ConfigSensors extends AppCompatActivity {
 
             HashMap<String, String> hashMap = args[0];
 
-            Intent myIntent = new Intent(ConfigSensors.this, PostBD.class);
-            myIntent.putExtra("ParamsMAP", hashMap);
-            startActivity(myIntent);
+            Intent intent = new Intent(ConfigSensors.this, BackgroundPostService.class);
+            intent.putExtra("ParamsMAP", hashMap);
+            startService(intent);
+
             return "done";
         }
     }
@@ -207,14 +235,14 @@ public class ConfigSensors extends AppCompatActivity {
                 android.R.layout.simple_spinner_item,
                 places);
 
-
         spinnerTemp.setAdapter(adapter);
         spinnerTemp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             int checkTemp = 0;
+
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
-                if(++checkTemp > 1) {
+                if (++checkTemp > 1) {
                     Place place = adapter.getItem(position);
                     if (place != null) {
                         placeDescTemp = place.getDesc();
@@ -226,16 +254,19 @@ public class ConfigSensors extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
         });
         spinnerHum.setAdapter(adapter);
         spinnerHum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-          int  checkHum = 0;
+            int checkHum = 0;
+
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
-                if(++checkHum > 1) {
+                if (++checkHum > 1) {
                     Place place = adapter.getItem(position);
                     if (place != null) {
                         placeDescHum = place.getDesc();
@@ -247,16 +278,19 @@ public class ConfigSensors extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
         });
         spinnerCo.setAdapter(adapter);
         spinnerCo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             int checkCo = 0;
+
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
-                if(++checkCo > 1) {
+                if (++checkCo > 1) {
                     Place place = adapter.getItem(position);
                     if (place != null) {
                         placeDescCo = place.getDesc();
@@ -267,16 +301,19 @@ public class ConfigSensors extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
         });
         spinnerLum.setAdapter(adapter);
         spinnerLum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             int checkLum = 0;
+
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view,
                                        int position, long id) {
-                if(++checkLum > 1) {
+                if (++checkLum > 1) {
                     Place place = adapter.getItem(position);
                     if (place != null) {
                         placeDescLum = place.getDesc();
@@ -287,18 +324,22 @@ public class ConfigSensors extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapter) {  }
+            public void onNothingSelected(AdapterView<?> adapter) {
+            }
         });
     }
 
     private void getSensorID(String sensorType, String placeId) {
-        Intent myIntent = new Intent(ConfigSensors.this, GetBD.class);
+
         String url = "https://bd.ipg.pt:5500/ords/bda_1701887/sensor/place/" + placeId + "/type/" + sensorType;
-        myIntent.putExtra("urlStrg", url);
-        myIntent.putExtra("activity", "mestrado.ipg.mcmstore.ConfigSensors");
-        myIntent.putExtra("metodo", "getSensorID");
-        startActivity(myIntent);
+        Intent intent = new Intent(ConfigSensors.this, BackgroundGetService.class);
+        intent.putExtra("urlStrg", url);
+        intent.putExtra("sensorType", sensorType);
+        intent.putExtra("whereto", "dealWithSensorID");
+        startService(intent);
+
     }
 
     private void getPlaces() {
@@ -309,7 +350,4 @@ public class ConfigSensors extends AppCompatActivity {
         startService(intent);
 
     }
-
-
-
 }

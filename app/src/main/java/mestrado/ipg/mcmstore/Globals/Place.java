@@ -1,4 +1,4 @@
-package mestrado.ipg.mcmstore;
+package mestrado.ipg.mcmstore.Globals;
 
 public class Place{
 
