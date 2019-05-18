@@ -21,6 +21,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
+
 public class GetBD extends AppCompatActivity {
 
     @Override

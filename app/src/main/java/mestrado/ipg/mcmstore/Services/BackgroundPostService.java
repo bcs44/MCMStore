@@ -1,11 +1,13 @@
-package mestrado.ipg.mcmstore;
+package mestrado.ipg.mcmstore.Services;
 
+import android.app.Service;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,6 +17,7 @@ import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -22,40 +25,67 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+public class BackgroundPostService extends Service {
+    public BackgroundPostService() {
+    }
 
-public class CalendarActivity extends AppCompatActivity {
-
-
-   TextView textView;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
-        textView = findViewById(R.id.output);
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-        String urlStr = "https://bd.ipg.pt:5500/ords/bda_1701887/access/accessbyuserid";
-
-
-        new sendPost().execute(urlStr);
-
+    @Override
+    public void onCreate() {
+        Toast.makeText(this, "Invoke background service onCreate method.", Toast.LENGTH_LONG).show();
+        Log.i("ccc", "onCreate");
+        super.onCreate();
     }
 
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
 
-    private class sendPost extends AsyncTask<String, String, String> {
+        HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("ParamsMAP");
+
+
+        new sendPost().execute(hashMap);
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "Invoke background service onDestroy method.", Toast.LENGTH_LONG).show();
+        Log.i("ccc", "onDestroy");
+    }
+
+    private class sendPost extends AsyncTask<HashMap, HashMap, HashMap> {
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected HashMap doInBackground(HashMap... args) {
 
-            String d = strings[0];
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("user_id", "");
+            HashMap<String, String> hashMap = args[0];
+
+
+            String stringURL = "";
+
+            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                if (entry.getKey().equals("urlStr")) {
+                    stringURL = entry.getValue();
+                }
+            }
+
+            hashMap.remove("urlStr");
+
             disableHttpsVerify(null);
             BufferedReader bis = null;
             InputStream in = null;
             OutputStream out = null;
             try {
-                URL url = new URL(d);
+                URL url = new URL(stringURL);
                 HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
                 connection.setDoOutput(true);
                 connection.setDoInput(true);
@@ -63,7 +93,8 @@ public class CalendarActivity extends AppCompatActivity {
                 out = connection.getOutputStream();
 
                 StringBuilder sb = new StringBuilder();
-                for(Map.Entry<String, String> entry : params.entrySet()) {
+
+                for(Map.Entry<String, String> entry : hashMap.entrySet()) {
                     sb.append(entry.getKey());
                     sb.append('=');
                     sb.append(entry.getValue());
@@ -80,9 +111,22 @@ public class CalendarActivity extends AppCompatActivity {
                 while((str = bis.readLine()) != null) {
                     sb.append(str);
                 }
-                return sb.toString();
+
+
+                JSONObject jsonObj = new JSONObject(sb.toString());
+
+                Iterator<String> iterator = jsonObj.keys();
+                HashMap<String, String> map = new HashMap<>();
+
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    String value = jsonObj.getString(key);
+                    map.put(key, value);
+                }
+
+                return map;
             } catch (Exception e) {
-                return "";
+                return hashMap;
             } finally {
                 try {
                     if(bis != null) {
@@ -95,13 +139,16 @@ public class CalendarActivity extends AppCompatActivity {
 
                 }
             }
-
         }
 
+        @Override
+        protected void onPostExecute(HashMap hashMap) {
 
+            Log.i("onPostExecute", "onPostExecute FEITO");
+
+            super.onPostExecute(hashMap);
+        }
     }
-
-
 
     private static void disableHttpsVerify(Object o) {
         try {
@@ -132,6 +179,4 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
-
 }
-
