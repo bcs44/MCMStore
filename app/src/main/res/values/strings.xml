@@ -41,4 +41,8 @@
     <string name="pedidos_de_reservas">Pedidos de Reservas</string>
     <string name="reservas">Reservas</string>
     <!-- BS:Menu Principal << -->
+
+
+
+    <string name="descricao_servico">Serviço de teste.</string>
 </resources>
