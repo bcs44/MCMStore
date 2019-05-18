@@ -1,11 +1,13 @@
-package mestrado.ipg.mcmstore;
+package mestrado.ipg.mcmstore.service;
 
+import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -21,33 +23,58 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class GetBD extends AppCompatActivity {
+public class BackgroundGetService extends Service {
+
+    public BackgroundGetService() {
+    }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-        //é Sempre recebido o URL e a Atividade para a qual vai, depois de feito o GET. Tambem a funcao para qual vai depois
-        Intent intent = getIntent();
-        String urlStrg =  intent.getStringExtra("urlStrg");
-        String activity =  intent.getStringExtra("activity");
-        String metodo =  intent.getStringExtra("metodo");
-
-        new sendGet().execute(urlStrg, activity, metodo);
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        Log.i("ccc", "onBind");
+        throw new UnsupportedOperationException("Not yet implemented");
 
     }
 
+    @Override
+    public void onCreate() {
+        Toast.makeText(this, "Invoke background service onCreate method.", Toast.LENGTH_LONG).show();
+        Log.i("ccc", "onCreate");
+        super.onCreate();
+    }
 
-    public static class sendGet extends AsyncTask<String, String, HashMap<String, String>> {
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
+
+        String url =   intent.getStringExtra("urlStrg");
+        String whereto =   intent.getStringExtra("whereto");
+
+        new sendGet().execute(url, whereto);
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "Invoke background service onDestroy method.", Toast.LENGTH_LONG).show();
+        Log.i("ccc", "onDestroy");
+    }
+
+
+
+    public class sendGet extends AsyncTask<String, String, HashMap<String, String>> {
 
         @Override
         protected HashMap<String, String> doInBackground(String... args) {
 
 
             String stringURL = args[0];
-          //  String activity = args[1];
-          //  String metodo = args[2];
+            String whereto = args[1];
+
+
             disableHttpsVerify(null);
             BufferedReader bis = null;
             InputStream in = null;
@@ -70,9 +97,8 @@ public class GetBD extends AppCompatActivity {
                 }
 
                 params.put("data", sb.toString());
+                params.put("whereto", whereto);
 
-            //    params.put("activity", activity);
-             //   params.put("metodo", metodo);
                 return params;
 
             } catch (Exception e) {
@@ -95,31 +121,25 @@ public class GetBD extends AppCompatActivity {
             super.onPostExecute(hashMap);
 
             String data = "";
-        //    String activity = "";
-         //   String metodo = "";
+            String whereto = "";
 
             for(Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("data")) {
                     data = entry.getValue();
+
                 }
-           /*     else if(entry.getKey().equals("activity")){
-                    activity = entry.getValue();
+                else if (entry.getKey().equals("whereto")) {
+                    whereto = entry.getValue();
                 }
-                else if(entry.getKey().equals("metodo")){
-                    metodo = entry.getValue();
-                }*/
             }
 
-            Class c = null;
+            Intent intent = new Intent("GetSevice");
+            intent.putExtra("data", data);
+            intent.putExtra("whereto", whereto);
 
-               // c = Class.forName(activity);
-              //  Intent myIntent = new Intent(GetBD.this, c);
-               //myIntent.putExtra("data", data);
-               // myIntent.putExtra("metodo", metodo);
-               // startActivity(myIntent);
-
-                new ConfigSensors().dealWithSpinners(data);
-
+            Bundle b = new Bundle();
+            intent.putExtra("Location", b);
+            LocalBroadcastManager.getInstance(BackgroundGetService.this).sendBroadcast(intent);
 
         }
     }
@@ -152,4 +172,5 @@ public class GetBD extends AppCompatActivity {
         }
 
     }
+
 }
