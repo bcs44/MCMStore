@@ -50,8 +50,9 @@ public class BackgroundGetService extends Service {
 
         String url =   intent.getStringExtra("urlStrg");
         String whereto =   intent.getStringExtra("whereto");
+        String sensorType =   intent.getStringExtra("sensorType");
 
-        new sendGet().execute(url, whereto);
+        new sendGet().execute(url, whereto, sensorType);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -73,6 +74,7 @@ public class BackgroundGetService extends Service {
 
             String stringURL = args[0];
             String whereto = args[1];
+            String sensorType = args[2];
 
 
             disableHttpsVerify(null);
@@ -98,6 +100,7 @@ public class BackgroundGetService extends Service {
 
                 params.put("data", sb.toString());
                 params.put("whereto", whereto);
+                params.put("sensorType", sensorType);
 
                 return params;
 
@@ -122,6 +125,7 @@ public class BackgroundGetService extends Service {
 
             String data = "";
             String whereto = "";
+            String sensorType = "";
 
             for(Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("data")) {
@@ -131,10 +135,14 @@ public class BackgroundGetService extends Service {
                 else if (entry.getKey().equals("whereto")) {
                     whereto = entry.getValue();
                 }
+                else if (entry.getKey().equals("sensorType")) {
+                    sensorType = entry.getValue();
+                }
             }
 
             Intent intent = new Intent("GetSevice");
             intent.putExtra("data", data);
+            intent.putExtra("sensorType", sensorType);
             intent.putExtra("whereto", whereto);
 
             Bundle b = new Bundle();
