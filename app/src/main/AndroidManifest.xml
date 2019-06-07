@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mestrado.ipg.mcmstore">
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -19,12 +18,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Administrador.Manutencoes"></activity>
+        <activity android:name=".Administrador.Reservas" />
+        <activity android:name=".Administrador.Comunicados" />
+        <activity android:name=".Condominio.PedidoReserva" />
+        <activity
+            android:name=".Condominio.PedidoManutencao"
+            android:label="@string/title_activity_pedido_manutencao"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+
         <service
             android:name=".Services.BackgroundPostService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".Services.BackgroundGetService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".tentativa"
             android:enabled="true"
             android:exported="true" />
 
@@ -40,13 +52,13 @@
             android:label="@string/title_activity_princiapl"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginRegisto.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".Condominio.CalendarActivity" />
         <activity android:name=".MarcacaoAssembleia" />
         <activity android:name=".Condominio.ChatCondominio" />
         <activity android:name=".Sensors.SensorSwitch" />
-        <activity android:name=".Registar" />
+        <activity android:name=".LoginRegisto.Registar" />
         <activity android:name=".PostBD" />
         <activity android:name=".GetBD" />
         <activity android:name=".Sensors.ConfigSensors" />

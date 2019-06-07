@@ -15,10 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import mestrado.ipg.mcmstore.Administrador.Comunicados;
+import mestrado.ipg.mcmstore.Administrador.Manutencoes;
+import mestrado.ipg.mcmstore.Administrador.Reservas;
 import mestrado.ipg.mcmstore.Condominio.CalendarActivity;
 import mestrado.ipg.mcmstore.Condominio.ChatCondominio;
+import mestrado.ipg.mcmstore.Condominio.PedidoManutencao;
+import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
+import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 
 
 public class PrincipalActivity extends AppCompatActivity
@@ -122,10 +128,16 @@ public class PrincipalActivity extends AppCompatActivity
             //Regras de condominio
         }
         else if (id == R.id.cond_manu) {
-            //Pedido de Manutenção
+            Intent myIntent = new Intent(PrincipalActivity.this, PedidoManutencao.class);
+            startActivity(myIntent);
         }
         else if (id == R.id.cond_res) {
             //Reservas de espaço
+
+            Intent myIntent = new Intent(PrincipalActivity.this, PedidoReserva.class);
+            startActivity(myIntent);
+
+
         }
         else if (id == R.id.admin_marc) {
             Intent myIntent = new Intent(PrincipalActivity.this, MarcacaoAssembleia.class);
@@ -133,10 +145,40 @@ public class PrincipalActivity extends AppCompatActivity
         }
         else if (id == R.id.admin_comuni) {
             //Comunicados de condominio
+
+
+            Intent myIntent = new Intent(PrincipalActivity.this, Comunicados.class);
+            startActivity(myIntent);
+
         }
         else if (id == R.id.admin_res) {
             //Reservas
+
+
+            Intent myIntent = new Intent(PrincipalActivity.this, Reservas.class);
+            startActivity(myIntent);
+
+
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //autenticaçaõ bem feita - TODO
+            /*Intent intent = new Intent(PrincipalActivity.this, tentativa.class);
+            intent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/user/121");
+            startService(intent);*/
+
+
+
         }
+
+        else if (id == R.id.admin_man) {
+            //Reservas
+            
+            Intent myIntent = new Intent(PrincipalActivity.this, Manutencoes.class);
+            startActivity(myIntent);
+
+        }
+
+
+
         else if (id == R.id.admin_ficheiro) {
             Intent myIntent = new Intent(PrincipalActivity.this, PostBD.class);
             startActivity(myIntent);

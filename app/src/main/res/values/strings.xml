@@ -43,6 +43,6 @@
     <!-- BS:Menu Principal << -->
 
 
-
     <string name="descricao_servico">Serviço de teste.</string>
+    <string name="title_activity_pedido_manutencao">PedidoManutencao</string>
 </resources>

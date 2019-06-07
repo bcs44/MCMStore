@@ -68,6 +68,10 @@
                 android:icon="@mipmap/ic_reser"
                 android:title="@string/reservas" />
             <item
+                android:id="@+id/admin_man"
+                android:icon="@mipmap/ic_manu"
+                android:title="@string/pedidos_de_manuten_o" />
+            <item
                 android:id="@+id/admin_ficheiro"
                 android:icon="@mipmap/ic_file"
                 android:title="@string/ficheiros" />
