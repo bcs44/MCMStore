@@ -6,15 +6,21 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,9 +45,12 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class tentativa extends Service {
+import mestrado.ipg.mcmstore.LoginRegisto.Registar;
+import mestrado.ipg.mcmstore.Services.BackgroundGetService;
+
+public class ServiceSendToBDAuth extends Service {
     private static final String HMAC_SHA_ALGORITHM = "HmacSHA512";
-    public tentativa() {
+    public ServiceSendToBDAuth() {
     }
 
     @Override
@@ -65,8 +74,23 @@ public class tentativa extends Service {
         Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
 
         String url =   intent.getStringExtra("urlStrg");
+        String wherefrom =   intent.getStringExtra("wherefrom");
+        String _uri;
+        if (wherefrom.equals("registo")){
+            String username =   intent.getStringExtra("username");
+            String password =   intent.getStringExtra("password");
 
-        new mestrado.ipg.mcmstore.tentativa.sendGet().execute(url);
+            _uri =  "/user/insert" ;
+            new sendGet().execute(url, _uri, wherefrom, username, password);
+        }
+       else if (wherefrom.equals("login")){
+            String username =   intent.getStringExtra("username");
+            String password =   intent.getStringExtra("password");
+            _uri =  "/user/login" ;
+            new sendGet().execute(url, _uri, wherefrom, username, password);
+        }
+
+       // new sendGet().execute(url);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -86,25 +110,30 @@ public class tentativa extends Service {
         protected HashMap<String, String> doInBackground(String... args) {
 
 
+            //Registo
+            String username = "";
+            String password = "";
+
+
+
             String stringURL = args[0];
+            String _uri = args[1];
+            String wherefrom = args[2];
+            if (wherefrom.equals("registo") || wherefrom.equals("login")){
+                username = args[3];
+                password = args[4];
 
-
+            }
 
             Calendar cal = Calendar.getInstance();
             long nonce = cal.getTimeInMillis();
             Map<String, String> headers = null;
             try {
-                headers = createHeaders("/user/121", null, nonce, "jesus", "secret",
+                headers = createHeaders(_uri, null, nonce, username, password,
                         "OUEzRkQyNDM0MTU5QTM5QzgxNzkzM0Y1RDBFMTg4REZDOEM2NjY3QQ==");
-               // String response = call("GET", "https://bd.ipg.pt:5500/ords/bda_1701887/user/121", null, nonce, headers, "");
-                //System.out.println(response);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
-
-
-
 
             String query = null;
             if (query == null) {
@@ -122,21 +151,63 @@ public class tentativa extends Service {
                         urlConnection.setRequestProperty(header.getKey(), header.getValue());
                     });
                 }
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setDoOutput(false);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
                 urlConnection.setReadTimeout(60 * 1000);
                 urlConnection.setConnectTimeout(60 * 1000);
 
-                BufferedReader in = null;
-                StringBuilder body;
-                String inputLine;
-                in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                body = new StringBuilder();
+                BufferedReader bis = null;
+                InputStream in = null;
+                OutputStream out = null;
+                out = urlConnection.getOutputStream();
 
-                while ((inputLine = in.readLine()) != null) {
-                    body.append(inputLine);
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("username");
+                sb.append('=');
+                sb.append(username);
+                sb.append('&');
+                sb.append("password");
+                sb.append('=');
+                sb.append(password);
+                sb.append('&');
+
+                String str = sb.toString();
+                byte[] data = str.substring(0, str.length() - 1).getBytes();
+                out.write(data);
+
+                urlConnection.connect();
+                in = urlConnection.getInputStream();
+                bis = new BufferedReader(new InputStreamReader(in));
+                sb.setLength(0);
+                while((str = bis.readLine()) != null) {
+                    sb.append(str);
                 }
 
+                if (wherefrom.equals("registo")) {
+
+                    Intent intent = new Intent("ServiceRegisto");
+                    intent.putExtra("data", sb.toString());
+                    intent.putExtra("username", username);
+
+                    Bundle b = new Bundle();
+                    intent.putExtra("Location", b);
+                    LocalBroadcastManager.getInstance(ServiceSendToBDAuth.this).sendBroadcast(intent);
+
+                }
+                else if (wherefrom.equals("login")) {
+
+                    Intent intent = new Intent("ServiceLogin");
+                    intent.putExtra("data", sb.toString());
+                    intent.putExtra("username", username);
+
+                    Bundle b = new Bundle();
+                    intent.putExtra("Location", b);
+                    LocalBroadcastManager.getInstance(ServiceSendToBDAuth.this).sendBroadcast(intent);
+
+                }
 
 
             } catch (NoSuchAlgorithmException e) {
@@ -157,8 +228,6 @@ public class tentativa extends Service {
         @Override
         protected void onPostExecute(HashMap<String, String> hashMap) {
             super.onPostExecute(hashMap);
-
-
 
         }
     }
@@ -303,3 +372,4 @@ public class tentativa extends Service {
 
 
 }
+
