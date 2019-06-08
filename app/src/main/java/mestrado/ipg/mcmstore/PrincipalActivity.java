@@ -22,6 +22,7 @@ import mestrado.ipg.mcmstore.Condominio.CalendarActivity;
 import mestrado.ipg.mcmstore.Condominio.ChatCondominio;
 import mestrado.ipg.mcmstore.Condominio.PedidoManutencao;
 import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
+import mestrado.ipg.mcmstore.LoginRegisto.Registar;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
@@ -123,6 +124,12 @@ public class PrincipalActivity extends AppCompatActivity
         }
         else if (id == R.id.cond_fich) {
             //Ficheiros de condominio
+
+            Intent myIntent = new Intent(PrincipalActivity.this, Registar.class);
+            startActivity(myIntent);
+
+
+
         }
         else if (id == R.id.cond_regras) {
             //Regras de condominio
@@ -171,7 +178,7 @@ public class PrincipalActivity extends AppCompatActivity
 
         else if (id == R.id.admin_man) {
             //Reservas
-            
+
             Intent myIntent = new Intent(PrincipalActivity.this, Manutencoes.class);
             startActivity(myIntent);
 

@@ -45,15 +45,10 @@ public class SensorSwitch extends AppCompatActivity {
         registerReceiver();
         getPlaces();
 
-
-
         switchTemp = findViewById(R.id.switchTemp);
         switchHum = findViewById(R.id.switchHum);
         switchCo = findViewById(R.id.switchCo);
         switchLum = findViewById(R.id.switchLum);
-
-
-
 
         switchTemp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
