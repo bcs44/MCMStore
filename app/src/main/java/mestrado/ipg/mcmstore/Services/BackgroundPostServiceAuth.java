@@ -110,11 +110,15 @@ public class BackgroundPostServiceAuth extends Service {
             String stringURL = args[0];
             String _uri = args[1];
             String wherefrom = args[2];
-            if (wherefrom.equals("registo") || wherefrom.equals("login")){
+            if (wherefrom.equals("registo")){
                 username = args[3];
                 email = args[4];
                 password = args[5];
             }
+            else if(wherefrom.equals("login")){
+                username = args[3];
+                password = args[4];
+        }
 
             Calendar cal = Calendar.getInstance();
             long nonce = cal.getTimeInMillis();
@@ -187,6 +191,7 @@ public class BackgroundPostServiceAuth extends Service {
                     intent.putExtra("data", sb.toString());
                     intent.putExtra("username", username);
                     intent.putExtra("email", email);
+                    intent.putExtra("password", password);
 
                     Bundle b = new Bundle();
                     intent.putExtra("Location", b);
@@ -198,6 +203,7 @@ public class BackgroundPostServiceAuth extends Service {
                     Intent intent = new Intent("ServiceLogin");
                     intent.putExtra("data", sb.toString());
                     intent.putExtra("username", username);
+                    intent.putExtra("password", password);
 
                     Bundle b = new Bundle();
                     intent.putExtra("Location", b);

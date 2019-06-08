@@ -4,7 +4,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import mestrado.ipg.mcmstore.Globals.User;
+
 public class BackgroundGetServiceAuth extends Service {
     private static final String HMAC_SHA_ALGORITHM = "HmacSHA512";
     public BackgroundGetServiceAuth() {
@@ -43,27 +47,28 @@ public class BackgroundGetServiceAuth extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        Log.i("ccc", "onBind");
         throw new UnsupportedOperationException("Not yet implemented");
-
     }
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Invoke background service onCreate method.", Toast.LENGTH_LONG).show();
-        Log.i("ccc", "onCreate");
         super.onCreate();
     }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
+
+
 
         String url =   intent.getStringExtra("urlStrg");
+        String wherefrom =   intent.getStringExtra("wherefrom");
 
-        new BackgroundGetServiceAuth.sendGet().execute(url);
+        if(wherefrom.equals("getPlacesToConfSens")){
+            String _uri = "/place/all";
+            new BackgroundGetServiceAuth.sendGet().execute(url, _uri, wherefrom);
+        }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -76,31 +81,27 @@ public class BackgroundGetServiceAuth extends Service {
     }
 
 
-
     public class sendGet extends AsyncTask<String, String, HashMap<String, String>> {
 
         @Override
         protected HashMap<String, String> doInBackground(String... args) {
 
+            User user = User.getInstance();
 
             String stringURL = args[0];
-
-
+            String _uri = args[1];
+            String wherefrom = args[2];
 
             Calendar cal = Calendar.getInstance();
             long nonce = cal.getTimeInMillis();
             Map<String, String> headers = null;
             try {
-                headers = createHeaders("/user/121", null, nonce, "jesus", "secret",
-                        "OUEzRkQyNDM0MTU5QTM5QzgxNzkzM0Y1RDBFMTg4REZDOEM2NjY3QQ==");
-               // String response = call("GET", "https://bd.ipg.pt:5500/ords/bda_1701887/user/121", null, nonce, headers, "");
-                //System.out.println(response);
+                headers = createHeaders(_uri, null, nonce, user.getUsername(), user.getPassword(),
+                        user.getApi_key());
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
-
-
 
 
             String query = null;
@@ -108,6 +109,9 @@ public class BackgroundGetServiceAuth extends Service {
                 query = "";
             }
             query += "?nonce=" + nonce;
+
+            HashMap<String, String> params = new HashMap<>();
+
             try {
                 allowSSLCertificates();
 
@@ -135,6 +139,9 @@ public class BackgroundGetServiceAuth extends Service {
                 }
 
 
+                params.put("data", body.toString());
+                params.put("wherefrom", wherefrom);
+                return  params;
 
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
@@ -146,9 +153,7 @@ public class BackgroundGetServiceAuth extends Service {
                 e.printStackTrace();
             }
 
-            HashMap<String, String> params = new HashMap<>();
-
-            return  params;
+            return params;
         }
 
         @Override
@@ -156,6 +161,30 @@ public class BackgroundGetServiceAuth extends Service {
             super.onPostExecute(hashMap);
 
 
+            String data = "";
+            String wherefrom = "";
+
+            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                if (entry.getKey().equals("data")) {
+                    data = entry.getValue();
+
+                }
+                else if (entry.getKey().equals("wherefrom")) {
+                    wherefrom = entry.getValue();
+                }
+            }
+
+
+
+
+            Intent intent = new Intent("GetService");
+            intent.putExtra("data", data);
+            intent.putExtra("wherefrom", wherefrom);
+
+
+            Bundle b = new Bundle();
+            intent.putExtra("Location", b);
+            LocalBroadcastManager.getInstance(BackgroundGetServiceAuth.this).sendBroadcast(intent);
 
         }
     }

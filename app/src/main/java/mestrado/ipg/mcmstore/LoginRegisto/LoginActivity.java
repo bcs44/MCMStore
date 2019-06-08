@@ -83,7 +83,8 @@ public class LoginActivity extends AppCompatActivity{
 
                 String data = intent.getStringExtra("data");
                 String username = intent.getStringExtra("username");
-                loginTerminado(data,username);
+                String password = intent.getStringExtra("password");
+                loginTerminado(data,username, password);
                 context.stopService(new Intent(context, BackgroundGetService.class));
                 intent.getBundleExtra("Location");
             }
@@ -94,7 +95,7 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
-    private void loginTerminado(String data, String username) {
+    private void loginTerminado(String data, String username, String password) {
 
         JSONObject json;
         String api_key;
@@ -103,11 +104,13 @@ public class LoginActivity extends AppCompatActivity{
         try {
             json = new JSONObject(data);
             api_key = json.getString("api-key");
+
             email = json.getString("email");
 
             user.setApi_key(api_key);
             user.setUsername(username);
             user.setEmail(email);
+            user.setPassword(password);
 
             Intent myIntent = new Intent(LoginActivity.this, PrincipalActivity.class);
             startActivity(myIntent);

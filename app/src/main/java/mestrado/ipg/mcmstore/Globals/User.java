@@ -9,6 +9,7 @@ public class User{
     private String nonce;
     private String email;
     private String rule_id;
+    private String password;
 
     private static User instance;
 
@@ -20,6 +21,7 @@ public class User{
         this.nonce = "";
         this.email = "";
         this.rule_id = "";
+        this.password = "";
     }
 
     public String getUser_id() {
@@ -76,6 +78,14 @@ public class User{
 
     public void setRule_id(String rule_id) {
         this.rule_id = rule_id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public static synchronized User getInstance(){
