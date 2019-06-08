@@ -8,7 +8,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,7 +20,7 @@ import org.json.JSONObject;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
-import mestrado.ipg.mcmstore.ServiceSendToBDAuth;
+import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 
 
@@ -29,7 +28,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private EditText etUsername, etPassword;
     Button lgnButn, login_rgt;
-    User user = new User();
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,7 @@ public class LoginActivity extends AppCompatActivity{
     private void login(String username, String password) {
 
         String url = "https://bd.ipg.pt:5500/ords/bda_1701887/user/login";
-        Intent intent = new Intent(LoginActivity.this, ServiceSendToBDAuth.class);
+        Intent intent = new Intent(LoginActivity.this, BackgroundPostServiceAuth.class);
         intent.putExtra("urlStrg", url);
         intent.putExtra("wherefrom", "login");
         intent.putExtra("username", username);

@@ -10,6 +10,8 @@ public class User{
     private String email;
     private String rule_id;
 
+    private static User instance;
+
     public User(){
         this.user_id = "";
         this.username = "";
@@ -75,4 +77,13 @@ public class User{
     public void setRule_id(String rule_id) {
         this.rule_id = rule_id;
     }
+
+    public static synchronized User getInstance(){
+        if(instance==null){
+            instance = new User();
+        }
+
+        return instance;
+    }
+
 }

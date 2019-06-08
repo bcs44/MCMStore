@@ -1,19 +1,16 @@
-package mestrado.ipg.mcmstore;
+package mestrado.ipg.mcmstore.Services;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -39,9 +36,9 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class tentativa extends Service {
+public class BackgroundGetServiceAuth extends Service {
     private static final String HMAC_SHA_ALGORITHM = "HmacSHA512";
-    public tentativa() {
+    public BackgroundGetServiceAuth() {
     }
 
     @Override
@@ -66,7 +63,7 @@ public class tentativa extends Service {
 
         String url =   intent.getStringExtra("urlStrg");
 
-        new mestrado.ipg.mcmstore.tentativa.sendGet().execute(url);
+        new BackgroundGetServiceAuth.sendGet().execute(url);
         return super.onStartCommand(intent, flags, startId);
     }
 

@@ -1,4 +1,4 @@
-package mestrado.ipg.mcmstore;
+package mestrado.ipg.mcmstore.Services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -6,14 +6,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -45,12 +40,9 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import mestrado.ipg.mcmstore.LoginRegisto.Registar;
-import mestrado.ipg.mcmstore.Services.BackgroundGetService;
-
-public class ServiceSendToBDAuth extends Service {
+public class BackgroundPostServiceAuth extends Service {
     private static final String HMAC_SHA_ALGORITHM = "HmacSHA512";
-    public ServiceSendToBDAuth() {
+    public BackgroundPostServiceAuth() {
     }
 
     @Override
@@ -78,10 +70,10 @@ public class ServiceSendToBDAuth extends Service {
         String _uri;
         if (wherefrom.equals("registo")){
             String username =   intent.getStringExtra("username");
+            String email =   intent.getStringExtra("email");
             String password =   intent.getStringExtra("password");
-
             _uri =  "/user/insert" ;
-            new sendGet().execute(url, _uri, wherefrom, username, password);
+            new sendGet().execute(url, _uri, wherefrom, username, email, password);
         }
        else if (wherefrom.equals("login")){
             String username =   intent.getStringExtra("username");
@@ -113,16 +105,15 @@ public class ServiceSendToBDAuth extends Service {
             //Registo
             String username = "";
             String password = "";
-
-
+            String email = "";
 
             String stringURL = args[0];
             String _uri = args[1];
             String wherefrom = args[2];
             if (wherefrom.equals("registo") || wherefrom.equals("login")){
                 username = args[3];
-                password = args[4];
-
+                email = args[4];
+                password = args[5];
             }
 
             Calendar cal = Calendar.getInstance();
@@ -173,6 +164,10 @@ public class ServiceSendToBDAuth extends Service {
                 sb.append('=');
                 sb.append(password);
                 sb.append('&');
+                sb.append("email");
+                sb.append('=');
+                sb.append(email);
+                sb.append('&');
 
                 String str = sb.toString();
                 byte[] data = str.substring(0, str.length() - 1).getBytes();
@@ -191,10 +186,11 @@ public class ServiceSendToBDAuth extends Service {
                     Intent intent = new Intent("ServiceRegisto");
                     intent.putExtra("data", sb.toString());
                     intent.putExtra("username", username);
+                    intent.putExtra("email", email);
 
                     Bundle b = new Bundle();
                     intent.putExtra("Location", b);
-                    LocalBroadcastManager.getInstance(ServiceSendToBDAuth.this).sendBroadcast(intent);
+                    LocalBroadcastManager.getInstance(BackgroundPostServiceAuth.this).sendBroadcast(intent);
 
                 }
                 else if (wherefrom.equals("login")) {
@@ -205,7 +201,7 @@ public class ServiceSendToBDAuth extends Service {
 
                     Bundle b = new Bundle();
                     intent.putExtra("Location", b);
-                    LocalBroadcastManager.getInstance(ServiceSendToBDAuth.this).sendBroadcast(intent);
+                    LocalBroadcastManager.getInstance(BackgroundPostServiceAuth.this).sendBroadcast(intent);
 
                 }
 

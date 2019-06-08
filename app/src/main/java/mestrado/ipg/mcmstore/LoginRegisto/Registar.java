@@ -12,24 +12,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import mestrado.ipg.mcmstore.Administrador.Comunicados;
-import mestrado.ipg.mcmstore.Condominio.ChatCondominio;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
-import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
-import mestrado.ipg.mcmstore.ServiceSendToBDAuth;
+import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 
 public class Registar extends AppCompatActivity {
 
     Button login_rgt;
-    EditText userET, passET;
-    User user = new User();
+    EditText userET, passET, emailET;
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +35,13 @@ public class Registar extends AppCompatActivity {
 
         login_rgt = findViewById(R.id.login_rgt);
         userET = findViewById(R.id.user);
+        emailET = findViewById(R.id.email);
         passET = findViewById(R.id.password);
 
         login_rgt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registo(String.valueOf(userET.getText()), String.valueOf(passET.getText()));
+                registo(String.valueOf(userET.getText()), String.valueOf(emailET.getText()), String.valueOf(passET.getText()));
             }
         });
 
@@ -52,13 +49,14 @@ public class Registar extends AppCompatActivity {
 
     }
 
-    private void registo(String username, String password) {
+    private void registo(String username, String email,String password) {
 
         String url = "https://bd.ipg.pt:5500/ords/bda_1701887/user/insert";
-        Intent intent = new Intent(Registar.this, ServiceSendToBDAuth.class);
+        Intent intent = new Intent(Registar.this, BackgroundPostServiceAuth.class);
         intent.putExtra("urlStrg", url);
         intent.putExtra("wherefrom", "registo");
         intent.putExtra("username", username);
+        intent.putExtra("email", email);
         intent.putExtra("password", password);
 
         startService(intent);
@@ -73,7 +71,8 @@ public class Registar extends AppCompatActivity {
 
                 String data = intent.getStringExtra("data");
                 String username = intent.getStringExtra("username");
-                registoTerminado(data,username);
+                String email = intent.getStringExtra("email");
+                registoTerminado(data,username, email);
                 context.stopService(new Intent(context, BackgroundGetService.class));
                 intent.getBundleExtra("Location");
                 Log.d("1233", "BCR");
@@ -85,7 +84,7 @@ public class Registar extends AppCompatActivity {
 
     }
 
-    private void registoTerminado(String data, String username) {
+    private void registoTerminado(String data, String username, String email) {
 
         JSONObject json;
         String api_key;
@@ -95,10 +94,9 @@ public class Registar extends AppCompatActivity {
             json = new JSONObject(data);
             api_key = json.getString("api-key");
 
-
             user.setApi_key(api_key);
             user.setUsername(username);
-
+            user.setEmail(email);
 
             Intent myIntent = new Intent(Registar.this, PrincipalActivity.class);
             startActivity(myIntent);
