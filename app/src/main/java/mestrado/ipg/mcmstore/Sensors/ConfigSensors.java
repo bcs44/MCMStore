@@ -26,6 +26,7 @@ import java.util.Map;
 import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
+import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostService;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
 
@@ -145,24 +146,29 @@ public class ConfigSensors extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
 
                 String data = intent.getStringExtra("data");
-                String whereto = intent.getStringExtra("whereto");
+                String wherefrom = intent.getStringExtra("wherefrom");
 
-                if (whereto.equals("dealWithSpinners")) {
+                if(wherefrom.equals("getPlacesToConfSens")){
+                    context.stopService(new Intent(context, BackgroundGetService.class));
+                    dealWithSpinners(data);
+                }
+
+               /* if (whereto.equals("dealWithSpinners")) {
                     context.stopService(new Intent(context, BackgroundGetService.class));
                     dealWithSpinners(data);
                 } else if (whereto.equals("dealWithSensorID")) {
                     String sensorType = intent.getStringExtra("sensorType");
                     context.stopService(new Intent(context, BackgroundGetService.class));
                     dealWithSensorID(data, sensorType);
-                }
+                }*/
 
                 intent.getBundleExtra("Location");
-                Log.d("1233", "BCR");
+
             }
         };
 
         LocalBroadcastManager.getInstance(ConfigSensors.this).registerReceiver(
-                mMessageReceiver, new IntentFilter("GetSevice"));
+                mMessageReceiver, new IntentFilter("GetService"));
 
     }
 
@@ -217,7 +223,7 @@ public class ConfigSensors extends AppCompatActivity {
 
         try {
             json = new JSONObject(data);
-            array = json.getJSONArray("items");
+            array = json.getJSONArray("response");
             places = new Place[array.length()];
 
             for (int i = 0; i < array.length(); ++i) {
@@ -346,9 +352,10 @@ public class ConfigSensors extends AppCompatActivity {
 
     private void getPlaces() {
 
-        Intent intent = new Intent(ConfigSensors.this, BackgroundGetService.class);
+        Intent intent = new Intent(ConfigSensors.this, BackgroundGetServiceAuth.class);
         intent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/place/all");
-        intent.putExtra("whereto", "dealWithSpinners");
+        intent.putExtra("wherefrom", "getPlacesToConfSens");
+        //intent.putExtra("whereto", "dealWithSpinners");
         startService(intent);
 
     }

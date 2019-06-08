@@ -140,7 +140,7 @@ public class BackgroundGetService extends Service {
                 }
             }
 
-            Intent intent = new Intent("GetSevice");
+            Intent intent = new Intent("GetService");
             intent.putExtra("data", data);
             intent.putExtra("sensorType", sensorType);
             intent.putExtra("whereto", whereto);

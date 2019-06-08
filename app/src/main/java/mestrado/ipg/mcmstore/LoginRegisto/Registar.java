@@ -71,8 +71,9 @@ public class Registar extends AppCompatActivity {
 
                 String data = intent.getStringExtra("data");
                 String username = intent.getStringExtra("username");
+                String password = intent.getStringExtra("password");
                 String email = intent.getStringExtra("email");
-                registoTerminado(data,username, email);
+                registoTerminado(data,username, email, password);
                 context.stopService(new Intent(context, BackgroundGetService.class));
                 intent.getBundleExtra("Location");
                 Log.d("1233", "BCR");
@@ -84,7 +85,7 @@ public class Registar extends AppCompatActivity {
 
     }
 
-    private void registoTerminado(String data, String username, String email) {
+    private void registoTerminado(String data, String username, String email, String password) {
 
         JSONObject json;
         String api_key;
@@ -97,6 +98,7 @@ public class Registar extends AppCompatActivity {
             user.setApi_key(api_key);
             user.setUsername(username);
             user.setEmail(email);
+            user.setPassword(password);
 
             Intent myIntent = new Intent(Registar.this, PrincipalActivity.class);
             startActivity(myIntent);
