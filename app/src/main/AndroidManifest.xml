@@ -36,11 +36,11 @@
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".ServiceSendToBDAuth"
+            android:name=".Services.BackgroundPostServiceAuth"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".tentativa"
+            android:name=".Services.BackgroundGetServiceAuth"
             android:enabled="true"
             android:exported="true" />
 

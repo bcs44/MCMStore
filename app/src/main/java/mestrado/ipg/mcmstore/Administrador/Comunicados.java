@@ -8,9 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import mestrado.ipg.mcmstore.R;
-import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
-import mestrado.ipg.mcmstore.ServiceSendToBDAuth;
-import mestrado.ipg.mcmstore.Services.BackgroundGetService;
+import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 public class Comunicados extends AppCompatActivity {
 
@@ -42,7 +40,7 @@ public class Comunicados extends AppCompatActivity {
 
 
         String url = "https://bd.ipg.pt:5500/ords/bda_1701887/place/insert";
-        Intent intent = new Intent(Comunicados.this, ServiceSendToBDAuth.class);
+        Intent intent = new Intent(Comunicados.this, BackgroundPostServiceAuth.class);
         intent.putExtra("urlStrg", url);
         intent.putExtra("DESCRIPTION", title);
         intent.putExtra("TITLE", desc);

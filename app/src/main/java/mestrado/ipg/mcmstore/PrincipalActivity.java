@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import mestrado.ipg.mcmstore.Administrador.Comunicados;
 import mestrado.ipg.mcmstore.Administrador.Manutencoes;
@@ -22,6 +23,7 @@ import mestrado.ipg.mcmstore.Condominio.CalendarActivity;
 import mestrado.ipg.mcmstore.Condominio.ChatCondominio;
 import mestrado.ipg.mcmstore.Condominio.PedidoManutencao;
 import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
+import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.LoginRegisto.Registar;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
@@ -31,12 +33,18 @@ import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    TextView emailET, usernameET;
+    User user = User.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +63,13 @@ public class PrincipalActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+
+        emailET = headerView.findViewById(R.id.textView);
+        usernameET = headerView.findViewById(R.id.username);
+        usernameET.setText(user.getUsername());
+        emailET.setText(user.getEmail());
+
     }
 
     @Override
@@ -115,23 +130,18 @@ public class PrincipalActivity extends AppCompatActivity
             Intent myIntent = new Intent(PrincipalActivity.this, ChatCondominio.class);
             startActivity(myIntent);
 
-
-
         } else if (id == R.id.cond_cal) {
             //Calendario de condominio
             Intent myIntent = new Intent(PrincipalActivity.this, CalendarActivity.class);
             startActivity(myIntent);
-        }
-        else if (id == R.id.cond_fich) {
+
+        } else if (id == R.id.cond_fich) {
             //Ficheiros de condominio
 
             Intent myIntent = new Intent(PrincipalActivity.this, Registar.class);
             startActivity(myIntent);
 
-
-
-        }
-        else if (id == R.id.cond_regras) {
+        } else if (id == R.id.cond_regras) {
             //Regras de condominio
         }
         else if (id == R.id.cond_manu) {
@@ -168,7 +178,7 @@ public class PrincipalActivity extends AppCompatActivity
 
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //autenticaçaõ bem feita - TODO
-            /*Intent intent = new Intent(PrincipalActivity.this, tentativa.class);
+            /*Intent intent = new Intent(PrincipalActivity.this, BackgroundGetServiceAuth.class);
             intent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/user/121");
             startService(intent);*/
 
