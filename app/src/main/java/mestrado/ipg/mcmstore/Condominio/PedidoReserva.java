@@ -33,7 +33,6 @@ public class PedidoReserva extends AppCompatActivity {
         fotoET = findViewById(R.id.foto);
 
 
-
         final DatePickerDialog.OnDateSetListener initialDate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,

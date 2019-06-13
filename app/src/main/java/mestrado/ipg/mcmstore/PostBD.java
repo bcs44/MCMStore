@@ -36,7 +36,7 @@ public class PostBD extends AppCompatActivity {
         params.put("user_id", "1");*/
 
         Intent intent = getIntent();
-        HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("ParamsMAP");
+        HashMap<String, String> hashMap = (HashMap<String, String>) intent.getSerializableExtra("ParamsMAP");
 
         new sendPost().execute(hashMap);
 
@@ -53,7 +53,7 @@ public class PostBD extends AppCompatActivity {
 
             String stringURL = "";
 
-            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("urlStr")) {
                     stringURL = entry.getValue();
                 }
@@ -67,7 +67,7 @@ public class PostBD extends AppCompatActivity {
             OutputStream out = null;
             try {
                 URL url = new URL(stringURL);
-                HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setDoInput(true);
                 connection.setRequestMethod("POST");
@@ -75,7 +75,7 @@ public class PostBD extends AppCompatActivity {
 
                 StringBuilder sb = new StringBuilder();
 
-                for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                     sb.append(entry.getKey());
                     sb.append('=');
                     sb.append(entry.getValue());
@@ -89,7 +89,7 @@ public class PostBD extends AppCompatActivity {
                 in = connection.getInputStream();
                 bis = new BufferedReader(new InputStreamReader(in));
                 sb.setLength(0);
-                while((str = bis.readLine()) != null) {
+                while ((str = bis.readLine()) != null) {
                     sb.append(str);
                 }
 
@@ -110,10 +110,10 @@ public class PostBD extends AppCompatActivity {
                 return hashMap;
             } finally {
                 try {
-                    if(bis != null) {
+                    if (bis != null) {
                         bis.close();
                     }
-                    if(in != null) {
+                    if (in != null) {
                         in.close();
                     }
                 } catch (Exception x) {

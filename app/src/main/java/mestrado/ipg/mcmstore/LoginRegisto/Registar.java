@@ -49,7 +49,7 @@ public class Registar extends AppCompatActivity {
 
     }
 
-    private void registo(String username, String email,String password) {
+    private void registo(String username, String email, String password) {
 
         String url = "https://bd.ipg.pt:5500/ords/bda_1701887/user/insert";
         Intent intent = new Intent(Registar.this, BackgroundPostServiceAuth.class);
@@ -73,7 +73,7 @@ public class Registar extends AppCompatActivity {
                 String username = intent.getStringExtra("username");
                 String password = intent.getStringExtra("password");
                 String email = intent.getStringExtra("email");
-                registoTerminado(data,username, email, password);
+                registoTerminado(data, username, email, password);
                 context.stopService(new Intent(context, BackgroundGetService.class));
                 intent.getBundleExtra("Location");
                 Log.d("1233", "BCR");

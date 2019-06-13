@@ -44,8 +44,6 @@ public class PrincipalActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +53,7 @@ public class PrincipalActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer =findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -143,32 +141,27 @@ public class PrincipalActivity extends AppCompatActivity
 
         } else if (id == R.id.cond_regras) {
             //Regras de condominio
-        }
-        else if (id == R.id.cond_manu) {
+        } else if (id == R.id.cond_manu) {
             Intent myIntent = new Intent(PrincipalActivity.this, PedidoManutencao.class);
             startActivity(myIntent);
-        }
-        else if (id == R.id.cond_res) {
+        } else if (id == R.id.cond_res) {
             //Reservas de espaço
 
             Intent myIntent = new Intent(PrincipalActivity.this, PedidoReserva.class);
             startActivity(myIntent);
 
 
-        }
-        else if (id == R.id.admin_marc) {
+        } else if (id == R.id.admin_marc) {
             Intent myIntent = new Intent(PrincipalActivity.this, MarcacaoAssembleia.class);
             startActivity(myIntent);
-        }
-        else if (id == R.id.admin_comuni) {
+        } else if (id == R.id.admin_comuni) {
             //Comunicados de condominio
 
 
             Intent myIntent = new Intent(PrincipalActivity.this, Comunicados.class);
             startActivity(myIntent);
 
-        }
-        else if (id == R.id.admin_res) {
+        } else if (id == R.id.admin_res) {
             //Reservas
 
 
@@ -183,20 +176,13 @@ public class PrincipalActivity extends AppCompatActivity
             startService(intent);*/
 
 
-
-        }
-
-        else if (id == R.id.admin_man) {
+        } else if (id == R.id.admin_man) {
             //Reservas
 
             Intent myIntent = new Intent(PrincipalActivity.this, Manutencoes.class);
             startActivity(myIntent);
 
-        }
-
-
-
-        else if (id == R.id.admin_ficheiro) {
+        } else if (id == R.id.admin_ficheiro) {
             Intent myIntent = new Intent(PrincipalActivity.this, PostBD.class);
             startActivity(myIntent);
 

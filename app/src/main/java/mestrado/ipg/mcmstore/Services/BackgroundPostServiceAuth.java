@@ -44,6 +44,7 @@ import mestrado.ipg.mcmstore.Globals.User;
 
 public class BackgroundPostServiceAuth extends Service {
     private static final String HMAC_SHA_ALGORITHM = "HmacSHA512";
+
     public BackgroundPostServiceAuth() {
     }
 
@@ -65,7 +66,7 @@ public class BackgroundPostServiceAuth extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("ParamsMAP");
+        HashMap<String, String> hashMap = (HashMap<String, String>) intent.getSerializableExtra("ParamsMAP");
         new sendPost().execute(hashMap);
 
         return super.onStartCommand(intent, flags, startId);
@@ -78,17 +79,17 @@ public class BackgroundPostServiceAuth extends Service {
         Log.i("ccc", "onDestroy");
     }
 
-    public class sendPost extends  AsyncTask<HashMap, HashMap, HashMap> {
+    public class sendPost extends AsyncTask<HashMap, HashMap, HashMap> {
 
         @Override
         protected HashMap doInBackground(HashMap... args) {
 
 
             String username = "";
-            String password= "";
+            String password = "";
             String apiKey = "";
             User user = User.getInstance();
-            if(!user.getUsername().equals("")){
+            if (!user.getUsername().equals("")) {
                 username = user.getUsername();
                 password = user.getPassword();
                 apiKey = user.getApi_key();
@@ -101,14 +102,12 @@ public class BackgroundPostServiceAuth extends Service {
             String wherefrom = "";
 
 
-            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("urlStr")) {
                     stringURL = entry.getValue();
-                }
-                else if(entry.getKey().equals("wherefrom")) {
+                } else if (entry.getKey().equals("wherefrom")) {
                     wherefrom = entry.getValue();
-                }
-                else if(entry.getKey().equals("_uri")) {
+                } else if (entry.getKey().equals("_uri")) {
                     _uri = entry.getValue();
                 }
             }
@@ -140,7 +139,7 @@ public class BackgroundPostServiceAuth extends Service {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestProperty("Accept", "*/*");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    headers.entrySet().forEach(header ->{
+                    headers.entrySet().forEach(header -> {
                         urlConnection.setRequestProperty(header.getKey(), header.getValue());
                     });
                 }
@@ -158,7 +157,7 @@ public class BackgroundPostServiceAuth extends Service {
 
                 StringBuilder sb = new StringBuilder();
 
-                for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                     sb.append(entry.getKey());
                     sb.append('=');
                     sb.append(entry.getValue());
@@ -173,18 +172,16 @@ public class BackgroundPostServiceAuth extends Service {
                 in = urlConnection.getInputStream();
                 bis = new BufferedReader(new InputStreamReader(in));
                 sb.setLength(0);
-                while((str = bis.readLine()) != null) {
+                while ((str = bis.readLine()) != null) {
                     sb.append(str);
                 }
 
                 Intent intent = null;
                 if (wherefrom.equals("registo")) {
                     intent = new Intent("ServiceRegisto");
-                }
-                else if (wherefrom.equals("login")) {
+                } else if (wherefrom.equals("login")) {
                     intent = new Intent("ServiceLogin");
-                }
-                else if (wherefrom.equals("PostConfigSensors")) {
+                } else if (wherefrom.equals("PostConfigSensors")) {
                     intent = new Intent("ServiceConfigSensors");
                 }
 
@@ -209,7 +206,7 @@ public class BackgroundPostServiceAuth extends Service {
 
             HashMap<String, String> params = new HashMap<>();
 
-            return  params;
+            return params;
         }
 
         @Override
@@ -220,17 +217,25 @@ public class BackgroundPostServiceAuth extends Service {
     }
 
     private static void allowSSLCertificates() throws NoSuchAlgorithmException, KeyManagementException {
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null; }
-            public void checkClientTrusted(X509Certificate[] certs, String authType) { }
-            public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
 
-        } };
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            }
+
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            }
+
+        }};
         SSLContext sc = SSLContext.getInstance("SSL");
         sc.init(null, trustAllCerts, new java.security.SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         HostnameVerifier allHostsValid = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) { return true; }
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
         };
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
@@ -281,7 +286,7 @@ public class BackgroundPostServiceAuth extends Service {
             urlBytes = URI.getBytes(StandardCharsets.US_ASCII);
         }
         byte[] paramsNonceBytes = hash256(nonce + sParamsNonce);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(urlBytes);
         outputStream.write(paramsNonceBytes);
         byte[] finalArray = outputStream.toByteArray();
@@ -302,8 +307,7 @@ public class BackgroundPostServiceAuth extends Service {
         String originalInput = bytesToHex(encodedHash);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return Base64.getEncoder().encodeToString(originalInput.toUpperCase().getBytes());
-        }
-        else{
+        } else {
             return "";
         }
     }
@@ -319,8 +323,7 @@ public class BackgroundPostServiceAuth extends Service {
         mac.init(signingKey);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return Base64.getEncoder().encodeToString(mac.doFinal(data));
-        }
-        else {
+        } else {
             return "";
         }
     }
@@ -329,8 +332,7 @@ public class BackgroundPostServiceAuth extends Service {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             return digest.digest(secret.getBytes(StandardCharsets.UTF_8));
-        }
-        else {
+        } else {
 
             return null;
         }
@@ -340,8 +342,7 @@ public class BackgroundPostServiceAuth extends Service {
         MessageDigest digest = MessageDigest.getInstance("SHA-512");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             return digest.digest(secret.getBytes(StandardCharsets.UTF_8));
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -355,7 +356,6 @@ public class BackgroundPostServiceAuth extends Service {
         }
         return hexString.toString();
     }
-
 
 
 }

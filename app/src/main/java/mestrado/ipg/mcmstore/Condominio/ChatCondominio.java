@@ -40,7 +40,7 @@ public class ChatCondominio extends AppCompatActivity {
 
         user_name = "username";
         String room_name = "room_name";
-        setTitle("Room - "+ room_name);
+        setTitle("Room - " + room_name);
 
         root = FirebaseDatabase.getInstance().getReference().child(room_name);
 
@@ -48,7 +48,7 @@ public class ChatCondominio extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Map<String,Object> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>();
                 temp_key = root.push().getKey();
                 root.updateChildren(map);
 
@@ -76,22 +76,25 @@ public class ChatCondominio extends AppCompatActivity {
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 
-    private void append_chat_conversation(DataSnapshot dataSnapshot){
-        Iterator i =dataSnapshot.getChildren().iterator();
-        while(i.hasNext()){
+    private void append_chat_conversation(DataSnapshot dataSnapshot) {
+        Iterator i = dataSnapshot.getChildren().iterator();
+        while (i.hasNext()) {
             String chat_msg = (String) ((DataSnapshot) i.next()).getValue();
             String chat_user_name = (String) ((DataSnapshot) i.next()).getValue();
-            chat_conversation.append(chat_user_name + " : "+ chat_msg +"\n");
+            chat_conversation.append(chat_user_name + " : " + chat_msg + "\n");
         }
     }
 }

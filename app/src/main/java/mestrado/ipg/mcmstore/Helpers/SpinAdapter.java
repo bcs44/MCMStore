@@ -24,17 +24,17 @@ public class SpinAdapter extends ArrayAdapter<Place> {
     }
 
     @Override
-    public int getCount(){
+    public int getCount() {
         return values.length;
     }
 
     @Override
-    public Place getItem(int position){
+    public Place getItem(int position) {
         return values[position];
     }
 
     @Override
-    public long getItemId(int position){
+    public long getItemId(int position) {
         return position;
     }
 
