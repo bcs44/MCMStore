@@ -48,9 +48,9 @@ public class BackgroundGetService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
 
-        String url =   intent.getStringExtra("urlStrg");
-        String whereto =   intent.getStringExtra("whereto");
-        String sensorType =   intent.getStringExtra("sensorType");
+        String url = intent.getStringExtra("urlStrg");
+        String whereto = intent.getStringExtra("whereto");
+        String sensorType = intent.getStringExtra("sensorType");
 
         new sendGet().execute(url, whereto, sensorType);
         return super.onStartCommand(intent, flags, startId);
@@ -63,7 +63,6 @@ public class BackgroundGetService extends Service {
         Toast.makeText(this, "Invoke background service onDestroy method.", Toast.LENGTH_LONG).show();
         Log.i("ccc", "onDestroy");
     }
-
 
 
     public class sendGet extends AsyncTask<String, String, HashMap<String, String>> {
@@ -127,15 +126,13 @@ public class BackgroundGetService extends Service {
             String whereto = "";
             String sensorType = "";
 
-            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("data")) {
                     data = entry.getValue();
 
-                }
-                else if (entry.getKey().equals("whereto")) {
+                } else if (entry.getKey().equals("whereto")) {
                     whereto = entry.getValue();
-                }
-                else if (entry.getKey().equals("sensorType")) {
+                } else if (entry.getKey().equals("sensorType")) {
                     sensorType = entry.getValue();
                 }
             }

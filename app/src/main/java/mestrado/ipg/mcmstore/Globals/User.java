@@ -1,6 +1,6 @@
 package mestrado.ipg.mcmstore.Globals;
 
-public class User{
+public class User {
 
     private String user_id;
     private String username;
@@ -13,7 +13,7 @@ public class User{
 
     private static User instance;
 
-    public User(){
+    public User() {
         this.user_id = "";
         this.username = "";
         this.api_key = "";
@@ -88,8 +88,8 @@ public class User{
         this.password = password;
     }
 
-    public static synchronized User getInstance(){
-        if(instance==null){
+    public static synchronized User getInstance() {
+        if (instance == null) {
             instance = new User();
         }
 

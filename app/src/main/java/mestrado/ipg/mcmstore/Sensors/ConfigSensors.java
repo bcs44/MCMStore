@@ -31,7 +31,7 @@ import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 public class ConfigSensors extends AppCompatActivity {
 
-    Button saveTemp, saveHum, saveCO2,saveLum;
+    Button saveTemp, saveHum, saveCO2, saveLum;
 
     EditText minTemp, maxTemp, minHum, maxHum, minCo, maxCo, minLum, maxLum;
     String placeDescTemp, placeIdTemp, placeDescHum, placeIdHum, placeDescCo, placeIdCo, placeDescLum, placeIdLum;
@@ -389,8 +389,6 @@ public class ConfigSensors extends AppCompatActivity {
             }
         });
     }
-
-
 
 
 }

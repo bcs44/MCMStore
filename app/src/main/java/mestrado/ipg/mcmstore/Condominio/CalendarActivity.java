@@ -28,7 +28,8 @@ import mestrado.ipg.mcmstore.R;
 public class CalendarActivity extends AppCompatActivity {
 
 
-   TextView textView;
+    TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +42,6 @@ public class CalendarActivity extends AppCompatActivity {
         new sendPost().execute(urlStr);
 
     }
-
 
 
     private class sendPost extends AsyncTask<String, String, String> {
@@ -58,14 +58,14 @@ public class CalendarActivity extends AppCompatActivity {
             OutputStream out = null;
             try {
                 URL url = new URL(d);
-                HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setDoInput(true);
                 connection.setRequestMethod("POST");
                 out = connection.getOutputStream();
 
                 StringBuilder sb = new StringBuilder();
-                for(Map.Entry<String, String> entry : params.entrySet()) {
+                for (Map.Entry<String, String> entry : params.entrySet()) {
                     sb.append(entry.getKey());
                     sb.append('=');
                     sb.append(entry.getValue());
@@ -79,7 +79,7 @@ public class CalendarActivity extends AppCompatActivity {
                 in = connection.getInputStream();
                 bis = new BufferedReader(new InputStreamReader(in));
                 sb.setLength(0);
-                while((str = bis.readLine()) != null) {
+                while ((str = bis.readLine()) != null) {
                     sb.append(str);
                 }
                 return sb.toString();
@@ -87,10 +87,10 @@ public class CalendarActivity extends AppCompatActivity {
                 return "";
             } finally {
                 try {
-                    if(bis != null) {
+                    if (bis != null) {
                         bis.close();
                     }
-                    if(in != null) {
+                    if (in != null) {
                         in.close();
                     }
                 } catch (Exception x) {
@@ -102,7 +102,6 @@ public class CalendarActivity extends AppCompatActivity {
 
 
     }
-
 
 
     private static void disableHttpsVerify(Object o) {

@@ -1,28 +1,28 @@
 package mestrado.ipg.mcmstore.Globals;
 
-public class Place{
+public class Place {
 
     private String _id;
     private String _desc;
 
-    public Place(){
+    public Place() {
         this._id = "";
         this._desc = "";
     }
 
-    public void setId(String id){
+    public void setId(String id) {
         this._id = id;
     }
 
-    public String getId(){
+    public String getId() {
         return this._id;
     }
 
-    public void setDesc(String desc){
+    public void setDesc(String desc) {
         this._desc = desc;
     }
 
-    public String getDesc(){
+    public String getDesc() {
         return this._desc;
     }
 }

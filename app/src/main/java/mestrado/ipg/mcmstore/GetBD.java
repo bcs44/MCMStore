@@ -32,9 +32,9 @@ public class GetBD extends AppCompatActivity {
 
         //é Sempre recebido o URL e a Atividade para a qual vai, depois de feito o GET. Tambem a funcao para qual vai depois
         Intent intent = getIntent();
-        String urlStrg =  intent.getStringExtra("urlStrg");
-        String activity =  intent.getStringExtra("activity");
-        String metodo =  intent.getStringExtra("metodo");
+        String urlStrg = intent.getStringExtra("urlStrg");
+        String activity = intent.getStringExtra("activity");
+        String metodo = intent.getStringExtra("metodo");
 
         new sendGet().execute(urlStrg, activity, metodo);
 
@@ -48,8 +48,8 @@ public class GetBD extends AppCompatActivity {
 
 
             String stringURL = args[0];
-          //  String activity = args[1];
-          //  String metodo = args[2];
+            //  String activity = args[1];
+            //  String metodo = args[2];
             disableHttpsVerify(null);
             BufferedReader bis = null;
             InputStream in = null;
@@ -73,8 +73,8 @@ public class GetBD extends AppCompatActivity {
 
                 params.put("data", sb.toString());
 
-            //    params.put("activity", activity);
-             //   params.put("metodo", metodo);
+                //    params.put("activity", activity);
+                //   params.put("metodo", metodo);
                 return params;
 
             } catch (Exception e) {
@@ -97,10 +97,10 @@ public class GetBD extends AppCompatActivity {
             super.onPostExecute(hashMap);
 
             String data = "";
-        //    String activity = "";
-         //   String metodo = "";
+            //    String activity = "";
+            //   String metodo = "";
 
-            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("data")) {
                     data = entry.getValue();
                 }
@@ -114,13 +114,13 @@ public class GetBD extends AppCompatActivity {
 
             Class c = null;
 
-               // c = Class.forName(activity);
-              //  Intent myIntent = new Intent(GetBD.this, c);
-               //myIntent.putExtra("data", data);
-               // myIntent.putExtra("metodo", metodo);
-               // startActivity(myIntent);
+            // c = Class.forName(activity);
+            //  Intent myIntent = new Intent(GetBD.this, c);
+            //myIntent.putExtra("data", data);
+            // myIntent.putExtra("metodo", metodo);
+            // startActivity(myIntent);
 
-                new ConfigSensors().dealWithSpinners(data);
+            new ConfigSensors().dealWithSpinners(data);
 
 
         }

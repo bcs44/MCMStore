@@ -41,6 +41,7 @@ import mestrado.ipg.mcmstore.Globals.User;
 
 public class BackgroundGetServiceAuth extends Service {
     private static final String HMAC_SHA_ALGORITHM = "HmacSHA512";
+
     public BackgroundGetServiceAuth() {
     }
 
@@ -58,24 +59,24 @@ public class BackgroundGetServiceAuth extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        String url =   intent.getStringExtra("urlStrg");
-        String _uri =   intent.getStringExtra("_uri");
-        String wherefrom =   intent.getStringExtra("wherefrom");
+        String url = intent.getStringExtra("urlStrg");
+        String _uri = intent.getStringExtra("_uri");
+        String wherefrom = intent.getStringExtra("wherefrom");
         HashMap<String, String> params = new HashMap<>();
 
         params.put("url", url);
         params.put("_uri", _uri);
         params.put("wherefrom", wherefrom);
 
-        if(wherefrom.equals("getSensorIDToConfSens")){
-            String sensorType =   intent.getStringExtra("sensorType");
+        if (wherefrom.equals("getSensorIDToConfSens")) {
+            String sensorType = intent.getStringExtra("sensorType");
             params.put("sensorType", sensorType);
         }
 
 
         new BackgroundGetServiceAuth.sendGet().execute(params);
 
-        
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -98,17 +99,14 @@ public class BackgroundGetServiceAuth extends Service {
             String wherefrom = "";
             String sensorType = "";
 
-            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("url")) {
                     stringURL = entry.getValue();
-                }
-                else if(entry.getKey().equals("wherefrom")) {
+                } else if (entry.getKey().equals("wherefrom")) {
                     wherefrom = entry.getValue();
-                }
-                else if(entry.getKey().equals("_uri")) {
+                } else if (entry.getKey().equals("_uri")) {
                     _uri = entry.getValue();
-                }
-                else if(entry.getKey().equals("sensorType")) {
+                } else if (entry.getKey().equals("sensorType")) {
                     sensorType = entry.getValue();
                 }
             }
@@ -140,7 +138,7 @@ public class BackgroundGetServiceAuth extends Service {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestProperty("Accept", "*/*");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    headers.entrySet().forEach(header ->{
+                    headers.entrySet().forEach(header -> {
                         urlConnection.setRequestProperty(header.getKey(), header.getValue());
                     });
                 }
@@ -161,11 +159,11 @@ public class BackgroundGetServiceAuth extends Service {
 
                 params.put("data", body.toString());
                 params.put("wherefrom", wherefrom);
-                if(wherefrom.equals("getSensorIDToConfSens")){
+                if (wherefrom.equals("getSensorIDToConfSens")) {
                     params.put("sensorType", sensorType);
                 }
-                
-                return  params;
+
+                return params;
 
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
@@ -186,31 +184,28 @@ public class BackgroundGetServiceAuth extends Service {
 
             String data = "";
             String wherefrom = "";
-            
+
             String sensorType = null;
 
-            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("data")) {
                     data = entry.getValue();
 
-                }
-                else if (entry.getKey().equals("wherefrom")) {
+                } else if (entry.getKey().equals("wherefrom")) {
                     wherefrom = entry.getValue();
-                }
-                else if (entry.getKey().equals("sensorType")) {
+                } else if (entry.getKey().equals("sensorType")) {
                     sensorType = entry.getValue();
                 }
             }
 
             Intent intent = null;
 
-            if(wherefrom.equals("getPlacesToConfSens") || wherefrom.equals("getSensorIDToConfSens")){
+            if (wherefrom.equals("getPlacesToConfSens") || wherefrom.equals("getSensorIDToConfSens")) {
                 intent = new Intent("ServiceConfigSensors");
-                if( wherefrom.equals("getSensorIDToConfSens")){
+                if (wherefrom.equals("getSensorIDToConfSens")) {
                     intent.putExtra("sensorType", sensorType);
                 }
-            }
-            else if (wherefrom.equals("getPlacesToSensorSwitch")){
+            } else if (wherefrom.equals("getPlacesToSensorSwitch")) {
                 intent = new Intent("ServiceSensorSwitch");
             }
 
@@ -223,17 +218,25 @@ public class BackgroundGetServiceAuth extends Service {
     }
 
     private static void allowSSLCertificates() throws NoSuchAlgorithmException, KeyManagementException {
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null; }
-            public void checkClientTrusted(X509Certificate[] certs, String authType) { }
-            public void checkServerTrusted(X509Certificate[] certs, String authType) { }
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
 
-        } };
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            }
+
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            }
+
+        }};
         SSLContext sc = SSLContext.getInstance("SSL");
         sc.init(null, trustAllCerts, new java.security.SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         HostnameVerifier allHostsValid = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) { return true; }
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
         };
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
@@ -284,7 +287,7 @@ public class BackgroundGetServiceAuth extends Service {
             urlBytes = URI.getBytes(StandardCharsets.US_ASCII);
         }
         byte[] paramsNonceBytes = hash256(nonce + sParamsNonce);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(urlBytes);
         outputStream.write(paramsNonceBytes);
         byte[] finalArray = outputStream.toByteArray();
@@ -305,8 +308,7 @@ public class BackgroundGetServiceAuth extends Service {
         String originalInput = bytesToHex(encodedHash);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return Base64.getEncoder().encodeToString(originalInput.toUpperCase().getBytes());
-        }
-        else{
+        } else {
             return "";
         }
     }
@@ -322,8 +324,7 @@ public class BackgroundGetServiceAuth extends Service {
         mac.init(signingKey);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return Base64.getEncoder().encodeToString(mac.doFinal(data));
-        }
-        else {
+        } else {
             return "";
         }
     }
@@ -332,8 +333,7 @@ public class BackgroundGetServiceAuth extends Service {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             return digest.digest(secret.getBytes(StandardCharsets.UTF_8));
-        }
-        else {
+        } else {
 
             return null;
         }
@@ -343,8 +343,7 @@ public class BackgroundGetServiceAuth extends Service {
         MessageDigest digest = MessageDigest.getInstance("SHA-512");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             return digest.digest(secret.getBytes(StandardCharsets.UTF_8));
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -358,7 +357,6 @@ public class BackgroundGetServiceAuth extends Service {
         }
         return hexString.toString();
     }
-
 
 
 }

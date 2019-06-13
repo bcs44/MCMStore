@@ -29,7 +29,7 @@ import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsername, etPassword;
     Button lgnButn, login_rgt;
@@ -41,15 +41,15 @@ public class LoginActivity extends AppCompatActivity{
         setContentView(R.layout.activity_login);
 
         etUsername = findViewById(R.id.user);
-        etPassword= findViewById(R.id.password);
-        lgnButn= findViewById(R.id.login_btn);
+        etPassword = findViewById(R.id.password);
+        lgnButn = findViewById(R.id.login_btn);
         login_rgt = findViewById(R.id.login_rgt);
 
         lgnButn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 login(String.valueOf(etUsername.getText()), String.valueOf(etPassword.getText()));
-                Toast.makeText(LoginActivity.this, "Username = " + String.valueOf(etUsername.getText()) + "Password=" + String.valueOf(etPassword   .getText()), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Username = " + String.valueOf(etUsername.getText()) + "Password=" + String.valueOf(etPassword.getText()), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -99,20 +99,19 @@ public class LoginActivity extends AppCompatActivity{
             public void onReceive(Context context, Intent intent) {
 
                 String data = intent.getStringExtra("data");
-                HashMap<String, String>  hashParams = (HashMap<String, String>) intent.getSerializableExtra("hashParams");
+                HashMap<String, String> hashParams = (HashMap<String, String>) intent.getSerializableExtra("hashParams");
                 String username = null;
                 String password = null;
 
-                for(Map.Entry<String, String> entry : hashParams.entrySet()) {
+                for (Map.Entry<String, String> entry : hashParams.entrySet()) {
                     if (entry.getKey().equals("username")) {
                         username = entry.getValue();
-                    }
-                    else if(entry.getKey().equals("password")) {
+                    } else if (entry.getKey().equals("password")) {
                         password = entry.getValue();
                     }
                 }
 
-                loginTerminado(data,username, password);
+                loginTerminado(data, username, password);
                 context.stopService(new Intent(context, BackgroundGetService.class));
                 intent.getBundleExtra("Location");
             }

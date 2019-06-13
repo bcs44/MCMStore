@@ -8,7 +8,7 @@ public class Sensor {
     private String identification;
     private String sensortype_id;
 
-    public Sensor(){
+    public Sensor() {
         this.sensor_id = "";
         this.description = "";
         this.brand = "";

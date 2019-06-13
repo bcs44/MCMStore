@@ -63,11 +63,13 @@
         <activity android:name=".Condominio.CalendarActivity" />
         <activity android:name=".MarcacaoAssembleia" />
         <activity android:name=".Condominio.ChatCondominio" />
+        <activity android:name=".Condominio.SalaChat" />
         <activity android:name=".Sensors.SensorSwitch" />
         <activity android:name=".LoginRegisto.Registar" />
         <activity android:name=".PostBD" />
         <activity android:name=".GetBD" />
         <activity android:name=".Sensors.ConfigSensors" />
     </application>
+
 
 </manifest>

@@ -46,7 +46,7 @@ public class BackgroundPostService extends Service {
         Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
 
 
-        HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("ParamsMAP");
+        HashMap<String, String> hashMap = (HashMap<String, String>) intent.getSerializableExtra("ParamsMAP");
         new sendPost().execute(hashMap);
 
         return super.onStartCommand(intent, flags, startId);
@@ -67,7 +67,7 @@ public class BackgroundPostService extends Service {
 
             String stringURL = "";
 
-            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("urlStr")) {
                     stringURL = entry.getValue();
                 }
@@ -81,7 +81,7 @@ public class BackgroundPostService extends Service {
             OutputStream out = null;
             try {
                 URL url = new URL(stringURL);
-                HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setDoInput(true);
                 connection.setRequestMethod("POST");
@@ -89,7 +89,7 @@ public class BackgroundPostService extends Service {
 
                 StringBuilder sb = new StringBuilder();
 
-                for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                     sb.append(entry.getKey());
                     sb.append('=');
                     sb.append(entry.getValue());
@@ -103,7 +103,7 @@ public class BackgroundPostService extends Service {
                 in = connection.getInputStream();
                 bis = new BufferedReader(new InputStreamReader(in));
                 sb.setLength(0);
-                while((str = bis.readLine()) != null) {
+                while ((str = bis.readLine()) != null) {
                     sb.append(str);
                 }
 
@@ -124,10 +124,10 @@ public class BackgroundPostService extends Service {
                 return hashMap;
             } finally {
                 try {
-                    if(bis != null) {
+                    if (bis != null) {
                         bis.close();
                     }
-                    if(in != null) {
+                    if (in != null) {
                         in.close();
                     }
                 } catch (Exception x) {
