@@ -21,13 +21,13 @@ import mestrado.ipg.mcmstore.Administrador.Manutencoes;
 import mestrado.ipg.mcmstore.Administrador.Reservas;
 import mestrado.ipg.mcmstore.Condominio.CalendarActivity;
 import mestrado.ipg.mcmstore.Condominio.ChatCondominio;
+import mestrado.ipg.mcmstore.Condominio.SalaChat;
 import mestrado.ipg.mcmstore.Condominio.PedidoManutencao;
 import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.LoginRegisto.Registar;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
-import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 
 
 public class PrincipalActivity extends AppCompatActivity
