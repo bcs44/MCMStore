@@ -29,10 +29,11 @@ import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostService;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
+import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 public class ConfigSensors extends AppCompatActivity {
 
-    Button save;
+    Button saveTemp, saveHum, saveCO2,saveLum;
 
     EditText minTemp, maxTemp, minHum, maxHum, minCo, maxCo, minLum, maxLum;
     String placeDescTemp, placeIdTemp, placeDescHum, placeIdHum, placeDescCo, placeIdCo, placeDescLum, placeIdLum;
@@ -43,7 +44,11 @@ public class ConfigSensors extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config_sensors);
 
-        save = findViewById(R.id.saveConfigData);
+        saveTemp = findViewById(R.id.saveTemp);
+        saveHum = findViewById(R.id.saveHum);
+        saveCO2 = findViewById(R.id.saveCO2);
+        saveLum = findViewById(R.id.saveLum);
+
         minTemp = findViewById(R.id.MinValueSensorTemp);
         maxTemp = findViewById(R.id.MaxValueSensorTemp);
         minHum = findViewById(R.id.MinValueSensorHum);
@@ -60,83 +65,129 @@ public class ConfigSensors extends AppCompatActivity {
         registerReceiver();
         getPlaces();
 
-        save.setOnClickListener(new View.OnClickListener() {
+        saveTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String TempID = "";
-                String HumID = "";
-                String CoID = "";
-                String LumID = "";
-
                 for (Map.Entry<String, String> entry : paramsTOSEND.entrySet()) {
                     switch (entry.getKey()) {
                         case "Temperatura":
                             TempID = entry.getValue();
                             break;
+                    }
+                }
+                HashMap<String, String> params = new HashMap<>();
+                String urlTemp = "https://bd.ipg.pt:5500/ords/bda_1701887/confsensor/update/sensor/" + TempID;
+                String _uriTemp = "/confsensor/update/sensor/" + TempID;
+                params.put("urlStr", urlTemp);
+                params.put("_uri", _uriTemp);
+                params.put("id", TempID);
+                params.put("min", String.valueOf(minTemp.getText()));
+                params.put("max", String.valueOf(maxTemp.getText()));
+                params.put("wherefrom", "PostConfigSensors");
+
+                new sendPost().execute(params);
+            }
+        });
+
+        saveHum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String HumID = "";
+                for (Map.Entry<String, String> entry : paramsTOSEND.entrySet()) {
+                    switch (entry.getKey()) {
                         case "Humidade":
                             HumID = entry.getValue();
                             break;
+                    }
+                }
+                HashMap<String, String> params = new HashMap<>();
+                String urlHum = "https://bd.ipg.pt:5500/ords/bda_1701887/confsensor/update/sensor/" + HumID;
+                String _uriHum = "/confsensor/update/sensor/" + HumID;
+                params.put("urlStr", urlHum);
+                params.put("_uri", _uriHum);
+                params.put("id", HumID);
+                params.put("min", String.valueOf(minHum.getText()));
+                params.put("max", String.valueOf(maxHum.getText()));
+                params.put("wherefrom", "PostConfigSensors");
+
+                new sendPost().execute(params);
+            }
+        });
+
+        saveCO2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String CoID = "";
+                for (Map.Entry<String, String> entry : paramsTOSEND.entrySet()) {
+                    switch (entry.getKey()) {
                         case "CO2":
                             CoID = entry.getValue();
                             break;
+                    }
+                }
+                HashMap<String, String> params = new HashMap<>();
+                String urlCO = "https://bd.ipg.pt:5500/ords/bda_1701887/confsensor/update/sensor/" + CoID;
+                String _uriCO = "/confsensor/update/sensor/" + CoID;
+                params.put("urlStr", urlCO);
+                params.put("_uri", _uriCO);
+                params.put("id", CoID);
+                params.put("min", String.valueOf(minCo.getText()));
+                params.put("max", String.valueOf(maxCo.getText()));
+                params.put("wherefrom", "PostConfigSensors");
+
+                new sendPost().execute(params);
+            }
+        });
+
+        saveLum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String LumID = "";
+                for (Map.Entry<String, String> entry : paramsTOSEND.entrySet()) {
+                    switch (entry.getKey()) {
                         case "Luminosidade":
                             LumID = entry.getValue();
                             break;
                     }
                 }
-
                 HashMap<String, String> params = new HashMap<>();
-                params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
-                params.put("id", TempID);
-                params.put("min", String.valueOf(minTemp.getText()));
-                params.put("max", String.valueOf(maxTemp.getText()));
-
-                new sendPost().execute(params);
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                params = new HashMap<>();
-                params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
-                params.put("id", HumID);
-                params.put("min", String.valueOf(minHum.getText()));
-                params.put("max", String.valueOf(maxHum.getText()));
-
-                new sendPost().execute(params);
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                params = new HashMap<>();
-                params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
-                params.put("id", CoID);
-                params.put("min", String.valueOf(minCo.getText()));
-                params.put("max", String.valueOf(maxCo.getText()));
-
-                new sendPost().execute(params);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                params = new HashMap<>();
-                params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/confs/update");
+                String urlLum = "https://bd.ipg.pt:5500/ords/bda_1701887/confsensor/update/sensor/" + LumID;
+                String _uriLum = "/confsensor/update/sensor/" + LumID;
+                params.put("urlStr", urlLum);
+                params.put("_uri", _uriLum);
                 params.put("id", LumID);
                 params.put("min", String.valueOf(minLum.getText()));
                 params.put("max", String.valueOf(maxLum.getText()));
+                params.put("wherefrom", "PostConfigSensors");
 
                 new sendPost().execute(params);
-
             }
         });
+
+    }
+
+    private void getPlaces() {
+
+        Intent intent = new Intent(ConfigSensors.this, BackgroundGetServiceAuth.class);
+        intent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/place/all");
+        intent.putExtra("_uri", "/place/all");
+        intent.putExtra("wherefrom", "getPlacesToConfSens");
+        startService(intent);
+
+    }
+
+    private void getSensorID(String sensorType, String placeId) {
+
+        String url = "https://bd.ipg.pt:5500/ords/bda_1701887/sensor/place/" + placeId + "/type/" + sensorType;
+        String _uri = "/sensor/place/" + placeId + "/type/" + sensorType;
+        Intent intent = new Intent(ConfigSensors.this, BackgroundGetServiceAuth.class);
+        intent.putExtra("urlStrg", url);
+        intent.putExtra("_uri", _uri);
+        intent.putExtra("wherefrom", "getSensorIDToConfSens");
+        intent.putExtra("sensorType", sensorType);
+        startService(intent);
+
     }
 
     private void registerReceiver() {
@@ -152,15 +203,15 @@ public class ConfigSensors extends AppCompatActivity {
                     context.stopService(new Intent(context, BackgroundGetService.class));
                     dealWithSpinners(data);
                 }
-
-               /* if (whereto.equals("dealWithSpinners")) {
-                    context.stopService(new Intent(context, BackgroundGetService.class));
-                    dealWithSpinners(data);
-                } else if (whereto.equals("dealWithSensorID")) {
+                else if(wherefrom.equals("getSensorIDToConfSens")){
                     String sensorType = intent.getStringExtra("sensorType");
                     context.stopService(new Intent(context, BackgroundGetService.class));
                     dealWithSensorID(data, sensorType);
-                }*/
+                }
+                else if(wherefrom.equals("PostConfigSensors")){
+                    context.stopService(new Intent(context, BackgroundGetService.class));
+                }
+
 
                 intent.getBundleExtra("Location");
 
@@ -168,7 +219,7 @@ public class ConfigSensors extends AppCompatActivity {
         };
 
         LocalBroadcastManager.getInstance(ConfigSensors.this).registerReceiver(
-                mMessageReceiver, new IntentFilter("GetService"));
+                mMessageReceiver, new IntentFilter("ServiceConfigSensors"));
 
     }
 
@@ -179,7 +230,7 @@ public class ConfigSensors extends AppCompatActivity {
 
         try {
             json = new JSONObject(data);
-            array = json.getJSONArray("items");
+            array = json.getJSONArray("response");
 
             for (int i = 0; i < array.length(); ++i) {
                 json = array.getJSONObject(i);
@@ -201,7 +252,7 @@ public class ConfigSensors extends AppCompatActivity {
 
             HashMap<String, String> hashMap = args[0];
 
-            Intent intent = new Intent(ConfigSensors.this, BackgroundPostService.class);
+            Intent intent = new Intent(ConfigSensors.this, BackgroundPostServiceAuth.class);
             intent.putExtra("ParamsMAP", hashMap);
             startService(intent);
 
@@ -282,7 +333,7 @@ public class ConfigSensors extends AppCompatActivity {
                         Toast.makeText(ConfigSensors.this, "ID: " + place.getId() + "\nDesc: " + place.getDesc(),
                                 Toast.LENGTH_SHORT).show();
 
-                        getSensorID("Humidade", placeIdTemp);
+                        getSensorID("Humidade", placeIdHum);
                     }
                 }
             }
@@ -305,7 +356,7 @@ public class ConfigSensors extends AppCompatActivity {
                         placeIdCo = place.getId();
                         Toast.makeText(ConfigSensors.this, "ID: " + place.getId() + "\nDesc: " + place.getDesc(),
                                 Toast.LENGTH_SHORT).show();
-                        getSensorID("CO2", placeIdTemp);
+                        getSensorID("CO2", placeIdCo);
                     }
                 }
             }
@@ -328,7 +379,7 @@ public class ConfigSensors extends AppCompatActivity {
                         placeIdLum = place.getId();
                         Toast.makeText(ConfigSensors.this, "ID: " + place.getId() + "\nDesc: " + place.getDesc(),
                                 Toast.LENGTH_SHORT).show();
-                        getSensorID("Luminosidade", placeIdTemp);
+                        getSensorID("Luminosidade", placeIdLum);
                     }
                 }
             }
@@ -339,24 +390,7 @@ public class ConfigSensors extends AppCompatActivity {
         });
     }
 
-    private void getSensorID(String sensorType, String placeId) {
 
-        String url = "https://bd.ipg.pt:5500/ords/bda_1701887/sensor/place/" + placeId + "/type/" + sensorType;
-        Intent intent = new Intent(ConfigSensors.this, BackgroundGetService.class);
-        intent.putExtra("urlStrg", url);
-        intent.putExtra("sensorType", sensorType);
-        intent.putExtra("whereto", "dealWithSensorID");
-        startService(intent);
 
-    }
 
-    private void getPlaces() {
-
-        Intent intent = new Intent(ConfigSensors.this, BackgroundGetServiceAuth.class);
-        intent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/place/all");
-        intent.putExtra("wherefrom", "getPlacesToConfSens");
-        //intent.putExtra("whereto", "dealWithSpinners");
-        startService(intent);
-
-    }
 }

@@ -31,13 +31,11 @@ public class BackgroundPostService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Invoke background service onCreate method.", Toast.LENGTH_LONG).show();
         Log.i("ccc", "onCreate");
         super.onCreate();
     }
@@ -47,9 +45,8 @@ public class BackgroundPostService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
 
+
         HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("ParamsMAP");
-
-
         new sendPost().execute(hashMap);
 
         return super.onStartCommand(intent, flags, startId);
@@ -58,7 +55,6 @@ public class BackgroundPostService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Invoke background service onDestroy method.", Toast.LENGTH_LONG).show();
         Log.i("ccc", "onDestroy");
     }
 
@@ -68,7 +64,6 @@ public class BackgroundPostService extends Service {
         protected HashMap doInBackground(HashMap... args) {
 
             HashMap<String, String> hashMap = args[0];
-
 
             String stringURL = "";
 

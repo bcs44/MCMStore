@@ -17,9 +17,14 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
+import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
+import mestrado.ipg.mcmstore.Services.BackgroundPostService;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 
@@ -64,13 +69,25 @@ public class LoginActivity extends AppCompatActivity{
 
     private void login(String username, String password) {
 
-        String url = "https://bd.ipg.pt:5500/ords/bda_1701887/user/login";
+     /*   String url = "https://bd.ipg.pt:5500/ords/bda_1701887/user/login";
         Intent intent = new Intent(LoginActivity.this, BackgroundPostServiceAuth.class);
         intent.putExtra("urlStrg", url);
         intent.putExtra("wherefrom", "login");
         intent.putExtra("username", username);
         intent.putExtra("password", password);
+        startService(intent);*/
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/user/login");
+        params.put("_uri", "/user/login");
+        params.put("wherefrom", "login");
+        params.put("username", username);
+        params.put("password", password);
+
+        Intent intent = new Intent(LoginActivity.this, BackgroundPostServiceAuth.class);
+        intent.putExtra("ParamsMAP", params);
         startService(intent);
+
 
     }
 
@@ -82,8 +99,19 @@ public class LoginActivity extends AppCompatActivity{
             public void onReceive(Context context, Intent intent) {
 
                 String data = intent.getStringExtra("data");
-                String username = intent.getStringExtra("username");
-                String password = intent.getStringExtra("password");
+                HashMap<String, String>  hashParams = (HashMap<String, String>) intent.getSerializableExtra("hashParams");
+                String username = null;
+                String password = null;
+
+                for(Map.Entry<String, String> entry : hashParams.entrySet()) {
+                    if (entry.getKey().equals("username")) {
+                        username = entry.getValue();
+                    }
+                    else if(entry.getKey().equals("password")) {
+                        password = entry.getValue();
+                    }
+                }
+
                 loginTerminado(data,username, password);
                 context.stopService(new Intent(context, BackgroundGetService.class));
                 intent.getBundleExtra("Location");
