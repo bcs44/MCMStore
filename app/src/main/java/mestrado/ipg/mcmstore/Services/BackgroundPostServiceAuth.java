@@ -49,7 +49,7 @@ public class BackgroundPostServiceAuth extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
+
         Log.i("ccc", "onBind");
         throw new UnsupportedOperationException("Not yet implemented");
 
@@ -57,7 +57,6 @@ public class BackgroundPostServiceAuth extends Service {
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Invoke background service onCreate method.", Toast.LENGTH_LONG).show();
         Log.i("ccc", "onCreate");
         super.onCreate();
     }
@@ -65,37 +64,10 @@ public class BackgroundPostServiceAuth extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
-
 
         HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("ParamsMAP");
         new sendPost().execute(hashMap);
 
-
-
-
-
-
-
-
-      /*  String url =   intent.getStringExtra("urlStrg");
-        String wherefrom =   intent.getStringExtra("wherefrom");
-        String _uri;
-        if (wherefrom.equals("registo")){
-            String username =   intent.getStringExtra("username");
-            String email =   intent.getStringExtra("email");
-            String password =   intent.getStringExtra("password");
-            _uri =  "/user/insert" ;
-            new sendGet().execute(url, _uri, wherefrom, username, email, password);
-        }
-       else if (wherefrom.equals("login")){
-            String username =   intent.getStringExtra("username");
-            String password =   intent.getStringExtra("password");
-            _uri =  "/user/login" ;
-            new sendGet().execute(url, _uri, wherefrom, username, password);
-        }*/
-
-       // new sendGet().execute(url);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -103,11 +75,8 @@ public class BackgroundPostServiceAuth extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Invoke background service onDestroy method.", Toast.LENGTH_LONG).show();
         Log.i("ccc", "onDestroy");
     }
-
-
 
     public class sendPost extends  AsyncTask<HashMap, HashMap, HashMap> {
 
@@ -125,15 +94,12 @@ public class BackgroundPostServiceAuth extends Service {
                 apiKey = user.getApi_key();
             }
 
-
             HashMap<String, String> hashMap = args[0];
 
             String stringURL = "";
             String _uri = "";
             String wherefrom = "";
 
-
-            String email = "";
 
             for(Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("urlStr")) {
@@ -225,8 +191,6 @@ public class BackgroundPostServiceAuth extends Service {
                 intent.putExtra("data", sb.toString());
                 intent.putExtra("hashParams", hashMap);
                 intent.putExtra("wherefrom", wherefrom);
-              //  intent.putExtra("email", email);
-               // intent.putExtra("password", password);
 
                 Bundle b = new Bundle();
                 intent.putExtra("Location", b);

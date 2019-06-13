@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -27,7 +26,6 @@ import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
-import mestrado.ipg.mcmstore.Services.BackgroundPostService;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
@@ -199,17 +197,19 @@ public class ConfigSensors extends AppCompatActivity {
                 String data = intent.getStringExtra("data");
                 String wherefrom = intent.getStringExtra("wherefrom");
 
-                if(wherefrom.equals("getPlacesToConfSens")){
-                    context.stopService(new Intent(context, BackgroundGetService.class));
-                    dealWithSpinners(data);
-                }
-                else if(wherefrom.equals("getSensorIDToConfSens")){
-                    String sensorType = intent.getStringExtra("sensorType");
-                    context.stopService(new Intent(context, BackgroundGetService.class));
-                    dealWithSensorID(data, sensorType);
-                }
-                else if(wherefrom.equals("PostConfigSensors")){
-                    context.stopService(new Intent(context, BackgroundGetService.class));
+                switch (wherefrom) {
+                    case "getPlacesToConfSens":
+                        context.stopService(new Intent(context, BackgroundGetService.class));
+                        dealWithSpinners(data);
+                        break;
+                    case "getSensorIDToConfSens":
+                        String sensorType = intent.getStringExtra("sensorType");
+                        context.stopService(new Intent(context, BackgroundGetService.class));
+                        dealWithSensorID(data, sensorType);
+                        break;
+                    case "PostConfigSensors":
+                        context.stopService(new Intent(context, BackgroundGetService.class));
+                        break;
                 }
 
 

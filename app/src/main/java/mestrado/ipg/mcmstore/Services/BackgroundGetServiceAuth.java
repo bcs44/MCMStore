@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -210,6 +209,9 @@ public class BackgroundGetServiceAuth extends Service {
                 if( wherefrom.equals("getSensorIDToConfSens")){
                     intent.putExtra("sensorType", sensorType);
                 }
+            }
+            else if (wherefrom.equals("getPlacesToSensorSwitch")){
+                intent = new Intent("ServiceSensorSwitch");
             }
 
             intent.putExtra("data", data);
