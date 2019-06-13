@@ -59,38 +59,61 @@ public class BackgroundGetServiceAuth extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
-
         String url =   intent.getStringExtra("urlStrg");
+        String _uri =   intent.getStringExtra("_uri");
         String wherefrom =   intent.getStringExtra("wherefrom");
+        HashMap<String, String> params = new HashMap<>();
 
-        if(wherefrom.equals("getPlacesToConfSens")){
-            String _uri = "/place/all";
-            new BackgroundGetServiceAuth.sendGet().execute(url, _uri, wherefrom);
+        params.put("url", url);
+        params.put("_uri", _uri);
+        params.put("wherefrom", wherefrom);
+
+        if(wherefrom.equals("getSensorIDToConfSens")){
+            String sensorType =   intent.getStringExtra("sensorType");
+            params.put("sensorType", sensorType);
         }
 
+
+        new BackgroundGetServiceAuth.sendGet().execute(params);
+
+        
         return super.onStartCommand(intent, flags, startId);
     }
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Invoke background service onDestroy method.", Toast.LENGTH_LONG).show();
         Log.i("ccc", "onDestroy");
     }
 
-
-    public class sendGet extends AsyncTask<String, String, HashMap<String, String>> {
+    public class sendGet extends AsyncTask<HashMap<String, String>, HashMap, HashMap<String, String>> {
 
         @Override
-        protected HashMap<String, String> doInBackground(String... args) {
+        protected HashMap doInBackground(HashMap... args) {
 
             User user = User.getInstance();
+            HashMap<String, String> hashMap = args[0];
 
-            String stringURL = args[0];
-            String _uri = args[1];
-            String wherefrom = args[2];
+            String stringURL = "";
+            String _uri = "";
+            String wherefrom = "";
+            String sensorType = "";
+
+            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                if (entry.getKey().equals("url")) {
+                    stringURL = entry.getValue();
+                }
+                else if(entry.getKey().equals("wherefrom")) {
+                    wherefrom = entry.getValue();
+                }
+                else if(entry.getKey().equals("_uri")) {
+                    _uri = entry.getValue();
+                }
+                else if(entry.getKey().equals("sensorType")) {
+                    sensorType = entry.getValue();
+                }
+            }
+
 
             Calendar cal = Calendar.getInstance();
             long nonce = cal.getTimeInMillis();
@@ -114,7 +137,6 @@ public class BackgroundGetServiceAuth extends Service {
 
             try {
                 allowSSLCertificates();
-
                 URL url = new URL(stringURL + query);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestProperty("Accept", "*/*");
@@ -138,9 +160,12 @@ public class BackgroundGetServiceAuth extends Service {
                     body.append(inputLine);
                 }
 
-
                 params.put("data", body.toString());
                 params.put("wherefrom", wherefrom);
+                if(wherefrom.equals("getSensorIDToConfSens")){
+                    params.put("sensorType", sensorType);
+                }
+                
                 return  params;
 
             } catch (NoSuchAlgorithmException e) {
@@ -160,9 +185,10 @@ public class BackgroundGetServiceAuth extends Service {
         protected void onPostExecute(HashMap<String, String> hashMap) {
             super.onPostExecute(hashMap);
 
-
             String data = "";
             String wherefrom = "";
+            
+            String sensorType = null;
 
             for(Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("data")) {
@@ -172,20 +198,25 @@ public class BackgroundGetServiceAuth extends Service {
                 else if (entry.getKey().equals("wherefrom")) {
                     wherefrom = entry.getValue();
                 }
+                else if (entry.getKey().equals("sensorType")) {
+                    sensorType = entry.getValue();
+                }
             }
 
+            Intent intent = null;
 
+            if(wherefrom.equals("getPlacesToConfSens") || wherefrom.equals("getSensorIDToConfSens")){
+                intent = new Intent("ServiceConfigSensors");
+                if( wherefrom.equals("getSensorIDToConfSens")){
+                    intent.putExtra("sensorType", sensorType);
+                }
+            }
 
-
-            Intent intent = new Intent("GetService");
             intent.putExtra("data", data);
             intent.putExtra("wherefrom", wherefrom);
-
-
             Bundle b = new Bundle();
             intent.putExtra("Location", b);
             LocalBroadcastManager.getInstance(BackgroundGetServiceAuth.this).sendBroadcast(intent);
-
         }
     }
 

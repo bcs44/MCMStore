@@ -40,6 +40,8 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import mestrado.ipg.mcmstore.Globals.User;
+
 public class BackgroundPostServiceAuth extends Service {
     private static final String HMAC_SHA_ALGORITHM = "HmacSHA512";
     public BackgroundPostServiceAuth() {
@@ -65,7 +67,18 @@ public class BackgroundPostServiceAuth extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Invoke background service onStartCommand method.", Toast.LENGTH_LONG).show();
 
-        String url =   intent.getStringExtra("urlStrg");
+
+        HashMap<String, String> hashMap = (HashMap<String, String>)intent.getSerializableExtra("ParamsMAP");
+        new sendPost().execute(hashMap);
+
+
+
+
+
+
+
+
+      /*  String url =   intent.getStringExtra("urlStrg");
         String wherefrom =   intent.getStringExtra("wherefrom");
         String _uri;
         if (wherefrom.equals("registo")){
@@ -80,7 +93,7 @@ public class BackgroundPostServiceAuth extends Service {
             String password =   intent.getStringExtra("password");
             _uri =  "/user/login" ;
             new sendGet().execute(url, _uri, wherefrom, username, password);
-        }
+        }*/
 
        // new sendGet().execute(url);
         return super.onStartCommand(intent, flags, startId);
@@ -96,36 +109,55 @@ public class BackgroundPostServiceAuth extends Service {
 
 
 
-    public class sendGet extends AsyncTask<String, String, HashMap<String, String>> {
+    public class sendPost extends  AsyncTask<HashMap, HashMap, HashMap> {
 
         @Override
-        protected HashMap<String, String> doInBackground(String... args) {
+        protected HashMap doInBackground(HashMap... args) {
 
 
-            //Registo
             String username = "";
-            String password = "";
+            String password= "";
+            String apiKey = "";
+            User user = User.getInstance();
+            if(!user.getUsername().equals("")){
+                username = user.getUsername();
+                password = user.getPassword();
+                apiKey = user.getApi_key();
+            }
+
+
+            HashMap<String, String> hashMap = args[0];
+
+            String stringURL = "";
+            String _uri = "";
+            String wherefrom = "";
+
+
             String email = "";
 
-            String stringURL = args[0];
-            String _uri = args[1];
-            String wherefrom = args[2];
-            if (wherefrom.equals("registo")){
-                username = args[3];
-                email = args[4];
-                password = args[5];
+            for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                if (entry.getKey().equals("urlStr")) {
+                    stringURL = entry.getValue();
+                }
+                else if(entry.getKey().equals("wherefrom")) {
+                    wherefrom = entry.getValue();
+                }
+                else if(entry.getKey().equals("_uri")) {
+                    _uri = entry.getValue();
+                }
             }
-            else if(wherefrom.equals("login")){
-                username = args[3];
-                password = args[4];
-        }
+
+            hashMap.remove("urlStr");
+            hashMap.remove("wherefrom");
+            hashMap.remove("_uri");
+
 
             Calendar cal = Calendar.getInstance();
             long nonce = cal.getTimeInMillis();
             Map<String, String> headers = null;
             try {
                 headers = createHeaders(_uri, null, nonce, username, password,
-                        "OUEzRkQyNDM0MTU5QTM5QzgxNzkzM0Y1RDBFMTg4REZDOEM2NjY3QQ==");
+                        apiKey);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -160,18 +192,12 @@ public class BackgroundPostServiceAuth extends Service {
 
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("username");
-                sb.append('=');
-                sb.append(username);
-                sb.append('&');
-                sb.append("password");
-                sb.append('=');
-                sb.append(password);
-                sb.append('&');
-                sb.append("email");
-                sb.append('=');
-                sb.append(email);
-                sb.append('&');
+                for(Map.Entry<String, String> entry : hashMap.entrySet()) {
+                    sb.append(entry.getKey());
+                    sb.append('=');
+                    sb.append(entry.getValue());
+                    sb.append('&');
+                }
 
                 String str = sb.toString();
                 byte[] data = str.substring(0, str.length() - 1).getBytes();
@@ -185,31 +211,26 @@ public class BackgroundPostServiceAuth extends Service {
                     sb.append(str);
                 }
 
+                Intent intent = null;
                 if (wherefrom.equals("registo")) {
-
-                    Intent intent = new Intent("ServiceRegisto");
-                    intent.putExtra("data", sb.toString());
-                    intent.putExtra("username", username);
-                    intent.putExtra("email", email);
-                    intent.putExtra("password", password);
-
-                    Bundle b = new Bundle();
-                    intent.putExtra("Location", b);
-                    LocalBroadcastManager.getInstance(BackgroundPostServiceAuth.this).sendBroadcast(intent);
-
+                    intent = new Intent("ServiceRegisto");
                 }
                 else if (wherefrom.equals("login")) {
-
-                    Intent intent = new Intent("ServiceLogin");
-                    intent.putExtra("data", sb.toString());
-                    intent.putExtra("username", username);
-                    intent.putExtra("password", password);
-
-                    Bundle b = new Bundle();
-                    intent.putExtra("Location", b);
-                    LocalBroadcastManager.getInstance(BackgroundPostServiceAuth.this).sendBroadcast(intent);
-
+                    intent = new Intent("ServiceLogin");
                 }
+                else if (wherefrom.equals("PostConfigSensors")) {
+                    intent = new Intent("ServiceConfigSensors");
+                }
+
+                intent.putExtra("data", sb.toString());
+                intent.putExtra("hashParams", hashMap);
+                intent.putExtra("wherefrom", wherefrom);
+              //  intent.putExtra("email", email);
+               // intent.putExtra("password", password);
+
+                Bundle b = new Bundle();
+                intent.putExtra("Location", b);
+                LocalBroadcastManager.getInstance(BackgroundPostServiceAuth.this).sendBroadcast(intent);
 
 
             } catch (NoSuchAlgorithmException e) {
@@ -228,7 +249,7 @@ public class BackgroundPostServiceAuth extends Service {
         }
 
         @Override
-        protected void onPostExecute(HashMap<String, String> hashMap) {
+        protected void onPostExecute(HashMap hashMap) {
             super.onPostExecute(hashMap);
 
         }
