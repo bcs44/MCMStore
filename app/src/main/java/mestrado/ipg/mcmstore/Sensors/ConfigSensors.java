@@ -199,16 +199,16 @@ public class ConfigSensors extends AppCompatActivity {
 
                 switch (wherefrom) {
                     case "getPlacesToConfSens":
-                        context.stopService(new Intent(context, BackgroundGetService.class));
+                        context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                         dealWithSpinners(data);
                         break;
                     case "getSensorIDToConfSens":
                         String sensorType = intent.getStringExtra("sensorType");
-                        context.stopService(new Intent(context, BackgroundGetService.class));
+                        context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                         dealWithSensorID(data, sensorType);
                         break;
                     case "PostConfigSensors":
-                        context.stopService(new Intent(context, BackgroundGetService.class));
+                        context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                         break;
                 }
 

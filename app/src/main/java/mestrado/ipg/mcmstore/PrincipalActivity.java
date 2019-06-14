@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import mestrado.ipg.mcmstore.Administrador.Comunicados;
+import mestrado.ipg.mcmstore.Administrador.Ficheiros;
 import mestrado.ipg.mcmstore.Administrador.Manutencoes;
 import mestrado.ipg.mcmstore.Administrador.Reservas;
 import mestrado.ipg.mcmstore.Condominio.CalendarActivity;
@@ -183,7 +184,7 @@ public class PrincipalActivity extends AppCompatActivity
             startActivity(myIntent);
 
         } else if (id == R.id.admin_ficheiro) {
-            Intent myIntent = new Intent(PrincipalActivity.this, PostBD.class);
+            Intent myIntent = new Intent(PrincipalActivity.this, Ficheiros.class);
             startActivity(myIntent);
 
         }
