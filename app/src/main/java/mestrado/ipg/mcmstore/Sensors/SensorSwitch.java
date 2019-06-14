@@ -118,7 +118,7 @@ public class SensorSwitch extends AppCompatActivity {
                 String wherefrom = intent.getStringExtra("wherefrom");
 
                 if (wherefrom.equals("getPlacesToSensorSwitch")) {
-                    context.stopService(new Intent(context, BackgroundGetService.class));
+                    context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                     dealWithSpinner(data);
                 }
 
