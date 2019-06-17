@@ -22,7 +22,7 @@ import mestrado.ipg.mcmstore.Administrador.Manutencoes;
 import mestrado.ipg.mcmstore.Administrador.Reservas;
 import mestrado.ipg.mcmstore.Condominio.CalendarActivity;
 import mestrado.ipg.mcmstore.Condominio.ChatCondominio;
-import mestrado.ipg.mcmstore.Condominio.SalaChat;
+import mestrado.ipg.mcmstore.Administrador.MarcacaoAssembleia;
 import mestrado.ipg.mcmstore.Condominio.PedidoManutencao;
 import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
 import mestrado.ipg.mcmstore.Globals.User;
