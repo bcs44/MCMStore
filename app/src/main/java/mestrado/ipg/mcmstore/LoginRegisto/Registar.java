@@ -73,6 +73,7 @@ public class Registar extends AppCompatActivity {
                 String username = intent.getStringExtra("username");
                 String password = intent.getStringExtra("password");
                 String email = intent.getStringExtra("email");
+
                 registoTerminado(data, username, email, password);
                 context.stopService(new Intent(context, BackgroundGetService.class));
                 intent.getBundleExtra("Location");
@@ -89,16 +90,18 @@ public class Registar extends AppCompatActivity {
 
         JSONObject json;
         String api_key;
+        String townhouse_id;
 
 
         try {
             json = new JSONObject(data);
             api_key = json.getString("api-key");
-
+            townhouse_id = json.getString("townhouse_id");
             user.setApi_key(api_key);
             user.setUsername(username);
             user.setEmail(email);
             user.setPassword(password);
+            user.setTownhouse_id(townhouse_id);
 
             Intent myIntent = new Intent(Registar.this, PrincipalActivity.class);
             startActivity(myIntent);

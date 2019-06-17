@@ -205,7 +205,7 @@ public class BackgroundGetServiceAuth extends Service {
                 if (wherefrom.equals("getSensorIDToConfSens")) {
                     intent.putExtra("sensorType", sensorType);
                 }
-            } else if (wherefrom.equals("getPlacesToSensorSwitch")) {
+            } else if (wherefrom.equals("getPlacesToSensorSwitch") || wherefrom.equals("getActiveSensors")) {
                 intent = new Intent("ServiceSensorSwitch");
             }
             else if (wherefrom.equals("getPlacesToPedidoReserva")) {

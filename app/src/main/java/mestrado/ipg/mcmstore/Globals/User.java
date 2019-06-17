@@ -10,6 +10,15 @@ public class User {
     private String email;
     private String rule_id;
     private String password;
+    private String townhouse_id;
+
+    public String getTownhouse_id() {
+        return townhouse_id;
+    }
+
+    public void setTownhouse_id(String townhouse_id) {
+        this.townhouse_id = townhouse_id;
+    }
 
     private static User instance;
 

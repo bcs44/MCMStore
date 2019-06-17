@@ -30,7 +30,6 @@ public class BackgroundGetService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         Log.i("ccc", "onBind");
         throw new UnsupportedOperationException("Not yet implemented");
 

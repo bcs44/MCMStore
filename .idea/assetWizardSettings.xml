@@ -133,9 +133,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\BSilva\Desktop\luz.png" />
-                                      <entry key="outputName" value="ic_save" />
+                                      <entry key="imageAsset" value="C:\Users\BSilva\Desktop\Black-Building-Testing1.jpg" />
+                                      <entry key="outputName" value="ic_background" />
                                     </map>
                                   </option>
                                 </PersistentState>
