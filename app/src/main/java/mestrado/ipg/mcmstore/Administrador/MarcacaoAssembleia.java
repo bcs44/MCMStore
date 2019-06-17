@@ -11,8 +11,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -43,6 +45,7 @@ import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
+import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 public class MarcacaoAssembleia extends AppCompatActivity {
 
@@ -116,7 +119,7 @@ public class MarcacaoAssembleia extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addEventToCalendar();
-                sendData();
+
             }
         });
 
@@ -243,28 +246,56 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         }
         Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, cv);
         Toast.makeText(this, "Inserido" + uri, Toast.LENGTH_LONG).show();
+        sendData();
     }
 
     private void sendData() {
 
         HashMap<String, String> params = new HashMap<>();
-        String url = "https://bd.ipg.pt:5500/ords/bda_1701887/meeting/post";
-        String _uri = "/meeting/post";
+        String url = "https://bd.ipg.pt:5500/ords/bda_1701887/meeting/insert";
+        String _uri = "/meeting/insert";
         params.put("urlStr", url);
         params.put("_uri", _uri);
 
-        params.put("meeting_date", "2019/05/10 21:02:44");
-        params.put("place_id", "1");
-        params.put("description", "1");
-        params.put("alternative_place", "1");
-        params.put("alternative_date", "2019/05/12 23:10:00");
+        params.put("meeting_date", String.valueOf(myCalendarInitial.getTimeInMillis()));
+        params.put("place_id", placeId);
+        params.put("description", String.valueOf(etDesc.getText()));
+        params.put("title", String.valueOf(etTitle.getText()));
 
         params.put("wherefrom", "postAssembleia");
 
-        new SensorSwitch.sendPost().execute(params);
+        new sendPost().execute(params);
 
 
     }
 
+    private class sendPost extends AsyncTask<HashMap, HashMap, String> {
+
+        @Override
+        protected String doInBackground(HashMap... args) {
+
+            HashMap<String, String> hashMap = args[0];
+
+            Intent intent = new Intent(MarcacaoAssembleia.this, BackgroundPostServiceAuth.class);
+            intent.putExtra("ParamsMAP", hashMap);
+            startService(intent);
+
+            return "done";
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    addEventToCalendar();
+                }
+            }
+        }
+    }
 
 }

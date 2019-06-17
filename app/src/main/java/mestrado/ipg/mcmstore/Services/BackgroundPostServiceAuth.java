@@ -204,6 +204,9 @@ public class BackgroundPostServiceAuth extends Service {
                 else if (wherefrom.equals("postActiveSensor")) {
                     intent = new Intent("ServiceSensorSwitch");
                 }
+                else if (wherefrom.equals("postAssembleia")) {
+                    intent = new Intent("ServiceMarcAssembleia");
+                }
 
                 intent.putExtra("data", sb.toString());
                 intent.putExtra("hashParams", hashMap);
