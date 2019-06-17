@@ -46,10 +46,6 @@ public class SensorSwitch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_switch);
 
-
-        //TODO - get activesensor/place/placeID -- para por os switchs com o on ou off, conforme o que está na BD
-
-
         // get all places
         // get all sensor from place
         // switch sensor

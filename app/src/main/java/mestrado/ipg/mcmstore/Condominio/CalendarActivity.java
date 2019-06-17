@@ -1,33 +1,47 @@
 package mestrado.ipg.mcmstore.Condominio;
 
-import android.os.AsyncTask;
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.CalendarContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URL;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
+import mestrado.ipg.mcmstore.Administrador.MarcacaoAssembleia;
+import mestrado.ipg.mcmstore.Globals.Meeting;
+import mestrado.ipg.mcmstore.Globals.Place;
+import mestrado.ipg.mcmstore.Globals.User;
+import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
 import mestrado.ipg.mcmstore.R;
+import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 
 
 public class CalendarActivity extends AppCompatActivity {
 
-
+    User user = User.getInstance();
     TextView textView;
 
     @Override
@@ -36,100 +50,113 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
         textView = findViewById(R.id.output);
 
-        String urlStr = "https://bd.ipg.pt:5500/ords/bda_1701887/access/accessbyuserid";
-
-
-        new sendPost().execute(urlStr);
+        registerReceiver();
+        getMeetings();
 
     }
 
+    private void getMeetings() {
+        Intent intent = new Intent(CalendarActivity.this, BackgroundGetServiceAuth.class);
+        intent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/meeting/townhouse/" + user.getTownhouse_id());
+        intent.putExtra("_uri", "/meeting/townhouse/" + user.getTownhouse_id());
+        intent.putExtra("wherefrom", "getMeetingsToCalendar");
+        startService(intent);
 
-    private class sendPost extends AsyncTask<String, String, String> {
+    }
 
-        @Override
-        protected String doInBackground(String... strings) {
+    private void registerReceiver() {
 
-            String d = strings[0];
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put("user_id", "");
-            disableHttpsVerify(null);
-            BufferedReader bis = null;
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                URL url = new URL(d);
-                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-                connection.setDoOutput(true);
-                connection.setDoInput(true);
-                connection.setRequestMethod("POST");
-                out = connection.getOutputStream();
+        BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
 
-                StringBuilder sb = new StringBuilder();
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    sb.append(entry.getKey());
-                    sb.append('=');
-                    sb.append(entry.getValue());
-                    sb.append('&');
+                String data = intent.getStringExtra("data");
+                String wherefrom = intent.getStringExtra("wherefrom");
+
+                if (wherefrom.equals("getMeetingsToCalendar")) {
+                    context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
+                    dealWithCalendar(data);
                 }
-                String str = sb.toString();
-                byte[] data = str.substring(0, str.length() - 1).getBytes();
-                out.write(data);
 
-                connection.connect();
-                in = connection.getInputStream();
-                bis = new BufferedReader(new InputStreamReader(in));
-                sb.setLength(0);
-                while ((str = bis.readLine()) != null) {
-                    sb.append(str);
-                }
-                return sb.toString();
-            } catch (Exception e) {
-                return "";
-            } finally {
-                try {
-                    if (bis != null) {
-                        bis.close();
-                    }
-                    if (in != null) {
-                        in.close();
-                    }
-                } catch (Exception x) {
+                intent.getBundleExtra("Location");
+                Log.d("1233", "BCR");
+            }
+        };
 
+        LocalBroadcastManager.getInstance(CalendarActivity.this).registerReceiver(
+                mMessageReceiver, new IntentFilter("ServiceCalendar"));
+
+    }
+
+    private void dealWithCalendar(String data) {
+
+        JSONObject json;
+        JSONArray array;
+        Meeting[] meetings = new Meeting[0];
+
+        try {
+            json = new JSONObject(data);
+            array = json.getJSONArray("response");
+            meetings = new Meeting[array.length()];
+
+            for (int i = 0; i < array.length(); ++i) {
+                json = array.getJSONObject(i);
+                if (json != null) {
+                    meetings[i] = new Meeting();
+                    meetings[i].setData(json.getString("meeting_date"));
+                    meetings[i].setDescricao(json.getString("description"));
+                    meetings[i].setTitulo(json.getString("title"));
                 }
             }
 
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
 
-    }
+        for (int i=0; i<meetings.length; i++){
 
 
-    private static void disableHttpsVerify(Object o) {
-        try {
-            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
 
-                @Override
-                public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-                    // Not implemented
-                }
+            try {
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");;
+                Date date = null;
+                date = dateFormat.parse(meetings[i].getData());
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); //If you need time just put specific format for time like 'HH:mm:ss'
+                String dateStr = formatter.format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-                @Override
-                public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-                    // Not implemented
-                }
-            }};
-            SSLContext sc = SSLContext.getInstance("TLS");
 
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
 
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-            Log.d("disableHttpsVerify", e.toString());
+            ContentResolver cr = this.getContentResolver();
+            ContentValues cv = new ContentValues();
+
+            cv.put(CalendarContract.Events.TITLE, meetings[i].getTitulo());
+            cv.put(CalendarContract.Events.DESCRIPTION, meetings[i].getDescricao());
+            //cv.put(CalendarContract.Events.DTSTART, date.);
+          //  cv.put(CalendarContract.Events.DTEND, myCalendarInitial.getTimeInMillis() + 3600000);
+            cv.put(CalendarContract.Events.CALENDAR_ID, 1);
+            cv.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(CalendarActivity.this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        1);
+            }
+            Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, cv);
+            Toast.makeText(this, "Inserido" + uri, Toast.LENGTH_LONG).show();
+
+
         }
+
+
+
+
+
+
+
+
 
     }
 

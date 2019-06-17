@@ -214,6 +214,9 @@ public class BackgroundGetServiceAuth extends Service {
             else if (wherefrom.equals("getPlacesToMarcAssembleia")) {
                 intent = new Intent("ServiceMarcAssembleia");
             }
+            else if (wherefrom.equals("getMeetingsToCalendar")) {
+                intent = new Intent("ServiceCalendar");
+            }
 
             intent.putExtra("data", data);
             intent.putExtra("wherefrom", wherefrom);

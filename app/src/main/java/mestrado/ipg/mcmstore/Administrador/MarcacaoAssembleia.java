@@ -39,11 +39,7 @@ import java.util.Locale;
 
 import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
-import mestrado.ipg.mcmstore.MarcacaoAssembleiaa;
-import mestrado.ipg.mcmstore.PostBD;
 import mestrado.ipg.mcmstore.R;
-import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
-import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
