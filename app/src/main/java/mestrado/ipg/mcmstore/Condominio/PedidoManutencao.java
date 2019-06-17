@@ -3,10 +3,7 @@ package mestrado.ipg.mcmstore.Condominio;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -16,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import mestrado.ipg.mcmstore.MarcacaoAssembleia;
 import mestrado.ipg.mcmstore.R;
 
 public class PedidoManutencao extends AppCompatActivity {
