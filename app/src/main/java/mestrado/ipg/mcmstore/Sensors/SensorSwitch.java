@@ -1,7 +1,9 @@
 package mestrado.ipg.mcmstore.Sensors;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
@@ -22,6 +24,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import mestrado.ipg.mcmstore.Globals.ActiveSensor;
 import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.Globals.Sensor;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
@@ -35,11 +38,16 @@ public class SensorSwitch extends AppCompatActivity {
 
     Switch switchTemp, switchHum, switchCo, switchLum;
     String placeDesc, placeId;
+    Boolean onFirstCall;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_switch);
+
+
+        //TODO - get activesensor/place/placeID -- para por os switchs com o on ou off, conforme o que está na BD
 
 
         // get all places
@@ -48,6 +56,7 @@ public class SensorSwitch extends AppCompatActivity {
 
         registerReceiver();
         getPlaces();
+        onFirstCall = true;
 
         switchTemp = findViewById(R.id.switchTemp);
         switchHum = findViewById(R.id.switchHum);
@@ -59,8 +68,10 @@ public class SensorSwitch extends AppCompatActivity {
                 String x = String.valueOf(isChecked);
                 Toast.makeText(SensorSwitch.this, "isChecked switch1 " + x, Toast.LENGTH_LONG).show();
 
-                sendData("Temperatura", isChecked);
-                //getSensorId("Temperatura", isChecked);
+                if (!onFirstCall) {
+                    sendData("Temperatura", isChecked);
+                }
+
             }
         });
 
@@ -68,8 +79,9 @@ public class SensorSwitch extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 String x = String.valueOf(isChecked);
                 Toast.makeText(SensorSwitch.this, "isChecked switch2 " + x, Toast.LENGTH_LONG).show();
-
-                sendData("Humidade", isChecked);
+                if (!onFirstCall) {
+                    sendData("Humidade", isChecked);
+                }
 
 
             }
@@ -79,7 +91,10 @@ public class SensorSwitch extends AppCompatActivity {
                 String x = String.valueOf(isChecked);
                 Toast.makeText(SensorSwitch.this, "isChecked switch3 " + x, Toast.LENGTH_LONG).show();
 
-                sendData("CO2", isChecked);
+                if (!onFirstCall) {
+                    sendData("CO2", isChecked);
+                }
+
 
             }
         });
@@ -88,24 +103,25 @@ public class SensorSwitch extends AppCompatActivity {
                 String x = String.valueOf(isChecked);
                 Toast.makeText(SensorSwitch.this, "isChecked switch4 " + x, Toast.LENGTH_LONG).show();
 
-                sendData("Luminosidade", isChecked);
+                if (!onFirstCall) {
+                    sendData("Luminosidade", isChecked);
+                }
 
             }
         });
 
     }
 
-    private void getSensorId(String sensorType, Boolean isChecked) {
+    private void getActiveSensors() {
 
-        String url = "https://bd.ipg.pt:5500/ords/bda_1701887/sensor/place/" + placeId + "/type/" + sensorType;
-        String _uri = "/sensor/place/" + placeId + "/type/" + sensorType;
+
+        String url = "https://bd.ipg.pt:5500/ords/bda_1701887/activesensor/place/" + placeId;
+        String _uri = "/activesensor/place/" + placeId;
         Intent intent = new Intent(SensorSwitch.this, BackgroundGetServiceAuth.class);
         intent.putExtra("urlStrg", url);
         intent.putExtra("_uri", _uri);
-        intent.putExtra("wherefrom", "getSensorIDToSensorSwitch");
-        intent.putExtra("sensorType", sensorType);
+        intent.putExtra("wherefrom", "getActiveSensors");
         startService(intent);
-
     }
 
     private void registerReceiver() {
@@ -120,6 +136,21 @@ public class SensorSwitch extends AppCompatActivity {
                 if (wherefrom.equals("getPlacesToSensorSwitch")) {
                     context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                     dealWithSpinner(data);
+                } else if (wherefrom.equals("getActiveSensors")) {
+                    context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
+                    dealWithActiveSensors(data);
+                } else if (wherefrom.equals("postActiveSensor")) {
+                    context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
+                    AlertDialog.Builder dialogo = new
+                            AlertDialog.Builder(SensorSwitch.this);
+                    dialogo.setTitle("Aviso");
+                    dialogo.setMessage("Estado do Sensor Alterado");
+                    dialogo.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialogo.show();
                 }
 
                 intent.getBundleExtra("Location");
@@ -132,6 +163,54 @@ public class SensorSwitch extends AppCompatActivity {
 
     }
 
+    private void dealWithActiveSensors(String data) {
+
+        System.out.println(data);
+
+
+        JSONObject json;
+        JSONArray array;
+        ActiveSensor[] activeSensor = new ActiveSensor[0];
+
+        try {
+            json = new JSONObject(data);
+            array = json.getJSONArray("response");
+            activeSensor = new ActiveSensor[array.length()];
+
+            for (int i = 0; i < array.length(); ++i) {
+                json = array.getJSONObject(i);
+                if (json != null) {
+                    activeSensor[i] = new ActiveSensor();
+                    activeSensor[i].setSensor_id(json.getString("sensor_id"));
+                    activeSensor[i].setTownhouse_id(json.getString("townhouse_id"));
+                    activeSensor[i].setState(json.getString("state"));
+                    activeSensor[i].setSensorTypeDes(json.getString("description"));
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        int i = 0;
+
+        while (i < activeSensor.length) {
+
+            if (activeSensor[i].getSensorTypeDes().equals("Temperatura")) {
+                switchTemp.setChecked(activeSensor[i].getState().equals("1"));
+            } else if (activeSensor[i].getSensorTypeDes().equals("Humidade")) {
+                switchHum.setChecked(activeSensor[i].getState().equals("1"));
+            } else if (activeSensor[i].getSensorTypeDes().equals("Luminosidade")) {
+                switchLum.setChecked(activeSensor[i].getState().equals("1"));
+            } else if (activeSensor[i].getSensorTypeDes().equals("CO2")) {
+                switchCo.setChecked(activeSensor[i].getState().equals("1"));
+            }
+            i++;
+        }
+
+        onFirstCall = false;
+    }
+
     private void sendData(String sensorType, Boolean isChecked) {
 
         HashMap<String, String> params = new HashMap<>();
@@ -140,16 +219,17 @@ public class SensorSwitch extends AppCompatActivity {
         if (isChecked) {
 
             url = "https://bd.ipg.pt:5500/ords/bda_1701887/activesensor/on/place/" + placeId + "/type/" + sensorType;
-            _uri = "/activesensor/on/place/" + placeId + "/type" + sensorType;
+            _uri = "/activesensor/on/place/" + placeId + "/type/" + sensorType;
 
         } else {
             url = "https://bd.ipg.pt:5500/ords/bda_1701887/activesensor/off/place/" + placeId + "/type/" + sensorType;
-            _uri = "/activesensor/off/place/" + placeId + "/type" + sensorType;
+            _uri = "/activesensor/off/place/" + placeId + "/type/" + sensorType;
         }
         params.put("urlStr", url);
         params.put("_uri", _uri);
         params.put("place", placeId);
         params.put("type", sensorType);
+        params.put("wherefrom", "postActiveSensor");
 
         new sendPost().execute(params);
     }
@@ -227,6 +307,8 @@ public class SensorSwitch extends AppCompatActivity {
                         placeId = place.getId();
                         Toast.makeText(SensorSwitch.this, "ID: " + place.getId() + "\nDesc: " + place.getDesc(),
                                 Toast.LENGTH_SHORT).show();
+
+                        getActiveSensors();
 
                         //    getSensorID("Temperatura", placeIdTemp);
                     }

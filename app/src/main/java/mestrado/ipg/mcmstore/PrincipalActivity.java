@@ -170,12 +170,6 @@ public class PrincipalActivity extends AppCompatActivity
             startActivity(myIntent);
 
 
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //autenticaçaõ bem feita - TODO
-            /*Intent intent = new Intent(PrincipalActivity.this, BackgroundGetServiceAuth.class);
-            intent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/user/121");
-            startService(intent);*/
-
 
         } else if (id == R.id.admin_man) {
             //Reservas

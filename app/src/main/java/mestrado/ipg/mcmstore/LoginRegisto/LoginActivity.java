@@ -127,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
         JSONObject json;
         String api_key;
         String email;
+        String townhouse_id;
 
         try {
             json = new JSONObject(data);
@@ -134,10 +135,13 @@ public class LoginActivity extends AppCompatActivity {
 
             email = json.getString("email");
 
+            townhouse_id = json.getString("townhouse_id");
+
             user.setApi_key(api_key);
             user.setUsername(username);
             user.setEmail(email);
             user.setPassword(password);
+            user.setTownhouse_id(townhouse_id);
 
             Intent myIntent = new Intent(LoginActivity.this, PrincipalActivity.class);
             startActivity(myIntent);

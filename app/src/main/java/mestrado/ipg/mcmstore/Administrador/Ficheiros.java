@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
@@ -36,13 +37,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
+import mestrado.ipg.mcmstore.Globals.FileGlobal;
+import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.R;
+import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
+import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 public class Ficheiros extends AppCompatActivity {
 
     EditText et;
-
+    User user = User.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +72,7 @@ public class Ficheiros extends AppCompatActivity {
             }
         });
 
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -80,10 +87,52 @@ public class Ficheiros extends AppCompatActivity {
 
             if (base64String != null) {
                 Log.d("Assignment","Base64 String : --> "+base64String );
+
+                sendData(base64String);
+
+
             }
 
         }
     }
+
+    private void sendData(String base64String) {
+        FileGlobal fileGlobal = FileGlobal.getInstance();
+
+        HashMap<String, String> params = new HashMap<>();
+        String url = "https://bd.ipg.pt:5500/ords/bda_1701887/file/post";
+        String _uri = "/file/post";
+        params.put("urlStr", url);
+        params.put("_uri", _uri);
+      //  params.put("file_base64", base64String);
+      //  params.put("file_type", "ATA");
+        params.put("townhouse_id", user.getTownhouse_id());
+        params.put("wherefrom", "postNewFile");
+
+        fileGlobal.setBase64(base64String);
+        fileGlobal.setType("ATA");
+
+
+        new sendPost().execute(params);
+
+    }
+
+    private class sendPost extends AsyncTask<HashMap, HashMap, String> {
+
+        @Override
+        protected String doInBackground(HashMap... args) {
+
+            HashMap<String, String> hashMap = args[0];
+
+            Intent intent = new Intent(Ficheiros.this, BackgroundPostServiceAuth.class);
+            intent.putExtra("ParamsMAP", hashMap);
+            startService(intent);
+
+            return "done";
+        }
+    }
+
+
     public String convertFileToByteArray(Uri uri) {
         byte[] byteArray = null;
         try {

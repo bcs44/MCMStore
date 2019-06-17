@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Base64InputStream;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import mestrado.ipg.mcmstore.Globals.FileGlobal;
 import mestrado.ipg.mcmstore.Globals.User;
 
 public class BackgroundPostServiceAuth extends Service {
@@ -116,6 +118,14 @@ public class BackgroundPostServiceAuth extends Service {
             hashMap.remove("wherefrom");
             hashMap.remove("_uri");
 
+            if(wherefrom.equals("postNewFile")){
+                FileGlobal fileGlobal = FileGlobal.getInstance();
+                hashMap.put("file_base64", fileGlobal.getBase64());
+                hashMap.put("file_type", fileGlobal.getType());
+
+
+            }
+
 
             Calendar cal = Calendar.getInstance();
             long nonce = cal.getTimeInMillis();
@@ -149,11 +159,14 @@ public class BackgroundPostServiceAuth extends Service {
                 urlConnection.setReadTimeout(60 * 1000);
                 urlConnection.setConnectTimeout(60 * 1000);
 
+
+
+
+
                 BufferedReader bis = null;
                 InputStream in = null;
                 OutputStream out = null;
                 out = urlConnection.getOutputStream();
-
 
                 StringBuilder sb = new StringBuilder();
 
@@ -167,6 +180,10 @@ public class BackgroundPostServiceAuth extends Service {
                 String str = sb.toString();
                 byte[] data = str.substring(0, str.length() - 1).getBytes();
                 out.write(data);
+
+
+
+
 
                 urlConnection.connect();
                 in = urlConnection.getInputStream();
@@ -183,6 +200,9 @@ public class BackgroundPostServiceAuth extends Service {
                     intent = new Intent("ServiceLogin");
                 } else if (wherefrom.equals("PostConfigSensors")) {
                     intent = new Intent("ServiceConfigSensors");
+                }
+                else if (wherefrom.equals("postActiveSensor")) {
+                    intent = new Intent("ServiceSensorSwitch");
                 }
 
                 intent.putExtra("data", sb.toString());
