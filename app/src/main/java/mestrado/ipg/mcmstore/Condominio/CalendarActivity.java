@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -27,8 +28,10 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import mestrado.ipg.mcmstore.Administrador.MarcacaoAssembleia;
 import mestrado.ipg.mcmstore.Globals.Meeting;
@@ -113,21 +116,24 @@ public class CalendarActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
+        Uri uri = null;
         for (int i=0; i<meetings.length; i++){
 
-
-
+            Calendar calendar = GregorianCalendar.getInstance();
             try {
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");;
+                String iso8601string = meetings[i].getData();
+                String s = iso8601string.replace("Z", "+00:00");
+                s = s.substring(0, 22) + s.substring(23);  // to get rid of the ":"
                 Date date = null;
-                date = dateFormat.parse(meetings[i].getData());
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); //If you need time just put specific format for time like 'HH:mm:ss'
-                String dateStr = formatter.format(date);
+                date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(s);
+                calendar.setTime(date);
+                System.out.println(calendar.getTimeInMillis());
+
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println(e);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
 
 
             ContentResolver cr = this.getContentResolver();
@@ -135,8 +141,8 @@ public class CalendarActivity extends AppCompatActivity {
 
             cv.put(CalendarContract.Events.TITLE, meetings[i].getTitulo());
             cv.put(CalendarContract.Events.DESCRIPTION, meetings[i].getDescricao());
-            //cv.put(CalendarContract.Events.DTSTART, date.);
-          //  cv.put(CalendarContract.Events.DTEND, myCalendarInitial.getTimeInMillis() + 3600000);
+            cv.put(CalendarContract.Events.DTSTART, calendar.getTimeInMillis());
+            cv.put(CalendarContract.Events.DTEND, calendar.getTimeInMillis() + 3600000);
             cv.put(CalendarContract.Events.CALENDAR_ID, 1);
             cv.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
@@ -144,18 +150,15 @@ public class CalendarActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.WRITE_CALENDAR},
                         1);
             }
-            Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, cv);
+            uri = cr.insert(CalendarContract.Events.CONTENT_URI, cv);
             Toast.makeText(this, "Inserido" + uri, Toast.LENGTH_LONG).show();
 
 
         }
 
-
-
-
-
-
-
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        startActivity(intent);
 
 
     }
