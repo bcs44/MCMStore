@@ -32,12 +32,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
 import mestrado.ipg.mcmstore.Globals.Place;
+import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
@@ -50,6 +53,7 @@ public class MarcacaoAssembleia extends AppCompatActivity {
     EditText etInitialDate, etInitialTime, etDesc, etTitle;
     Spinner spinnerPlaces;
     String placeDesc, placeId;
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -142,6 +146,14 @@ public class MarcacaoAssembleia extends AppCompatActivity {
                     case "getPlacesToMarcAssembleia":
                         context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                         dealWithSpinners(data);
+                        break;
+                    case "postAssembleia":
+                        context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
+                        Toast.makeText(MarcacaoAssembleia.this, "Assembleia Marcada", Toast.LENGTH_LONG).show();
+                        etInitialDate.setText("");
+                        etInitialTime.setText("");
+                        etDesc.setText("");
+                        etTitle.setText("");
                         break;
                 }
 
@@ -253,10 +265,16 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         params.put("urlStr", url);
         params.put("_uri", _uri);
 
-        params.put("meeting_date", String.valueOf(myCalendarInitial.getTimeInMillis()));
+
+
+        Date date = new Date(myCalendarInitial.getTimeInMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+        params.put("meeting_date",  format.format(date));
         params.put("place_id", placeId);
         params.put("description", String.valueOf(etDesc.getText()));
         params.put("title", String.valueOf(etTitle.getText()));
+        params.put("user_id", user.getUser_id());
 
         params.put("wherefrom", "postAssembleia");
 
