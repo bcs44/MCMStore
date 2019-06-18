@@ -290,7 +290,6 @@ public class BackgroundGetServiceAuth extends Service {
             sParamsNonce = "nonce=" + nonce;
         }
 
-        // prepare path
         byte[] urlBytes = new byte[0];
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             urlBytes = URI.getBytes(StandardCharsets.US_ASCII);
@@ -301,10 +300,8 @@ public class BackgroundGetServiceAuth extends Service {
         outputStream.write(paramsNonceBytes);
         byte[] finalArray = outputStream.toByteArray();
 
-        // ket key username + password -> same database
         String secret = buildSecret(username, password);
 
-        // calculate and prepare headers map
         String apiSign = calculateHMAC(finalArray, secret);
         Map<String, String> headers = new HashMap<>();
         headers.put("api-sign", apiSign);
@@ -366,6 +363,4 @@ public class BackgroundGetServiceAuth extends Service {
         }
         return hexString.toString();
     }
-
-
 }

@@ -29,22 +29,17 @@ import mestrado.ipg.mcmstore.R;
 
 public class ChatCondominio extends AppCompatActivity {
 
-
     private Button add_room;
     private EditText room_name;
-
     private ListView listView;
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> list_of_rooms = new ArrayList<>();
-    // private String name;
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().getRoot();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_condominio);
-        Intent it = getIntent();
         User user = User.getInstance();
         final String name = user.getUsername();
 
@@ -53,18 +48,14 @@ public class ChatCondominio extends AppCompatActivity {
         listView = findViewById(R.id.listView);
 
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list_of_rooms);
-
         listView.setAdapter(arrayAdapter);
 
-        //request_user_name();
+        add_room.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
 
-        add_room.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-
-                Map<String,Object> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>();
                 map.put(room_name.getText().toString(), "");
                 root.updateChildren(map);
-
             }
         });
 
@@ -75,18 +66,16 @@ public class ChatCondominio extends AppCompatActivity {
                 Set<String> set = new HashSet<String>();
                 Iterator i = dataSnapshot.getChildren().iterator();
 
-                while (i.hasNext()){
-                    set.add(((DataSnapshot)i.next()).getKey());
+                while (i.hasNext()) {
+                    set.add(((DataSnapshot) i.next()).getKey());
                 }
                 list_of_rooms.clear();
                 list_of_rooms.addAll(set);
-
                 arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -95,7 +84,7 @@ public class ChatCondominio extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Intent intent = new Intent(getApplication(), SalaChat.class);
-                intent.putExtra("room_name", ((TextView)view).getText().toString());
+                intent.putExtra("room_name", ((TextView) view).getText().toString());
                 intent.putExtra("user_name", name);
                 startActivity(intent);
             }

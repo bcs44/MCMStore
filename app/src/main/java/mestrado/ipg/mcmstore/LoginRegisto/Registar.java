@@ -32,7 +32,6 @@ public class Registar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registar);
 
-
         login_rgt = findViewById(R.id.login_rgt);
         userET = findViewById(R.id.user);
         emailET = findViewById(R.id.email);
@@ -46,7 +45,6 @@ public class Registar extends AppCompatActivity {
         });
 
         registerReceiver();
-
     }
 
     private void registo(String username, String email, String password) {
@@ -60,7 +58,6 @@ public class Registar extends AppCompatActivity {
         intent.putExtra("password", password);
 
         startService(intent);
-
     }
 
     private void registerReceiver() {
@@ -83,7 +80,6 @@ public class Registar extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(Registar.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServiceRegisto"));
-
     }
 
     private void registoTerminado(String data, String username, String email, String password) {
@@ -91,7 +87,6 @@ public class Registar extends AppCompatActivity {
         JSONObject json;
         String api_key;
         String townhouse_id;
-
 
         try {
             json = new JSONObject(data);
@@ -109,8 +104,5 @@ public class Registar extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
-
 }

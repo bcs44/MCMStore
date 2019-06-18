@@ -23,8 +23,6 @@ import java.util.Map;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
-import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
-import mestrado.ipg.mcmstore.Services.BackgroundPostService;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 
@@ -53,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
         login_rgt.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,19 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         registerReceiver();
-
-
     }
 
     private void login(String username, String password) {
-
-     /*   String url = "https://bd.ipg.pt:5500/ords/bda_1701887/user/login";
-        Intent intent = new Intent(LoginActivity.this, BackgroundPostServiceAuth.class);
-        intent.putExtra("urlStrg", url);
-        intent.putExtra("wherefrom", "login");
-        intent.putExtra("username", username);
-        intent.putExtra("password", password);
-        startService(intent);*/
 
         HashMap<String, String> params = new HashMap<>();
         params.put("urlStr", "https://bd.ipg.pt:5500/ords/bda_1701887/user/login");
@@ -87,10 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, BackgroundPostServiceAuth.class);
         intent.putExtra("ParamsMAP", params);
         startService(intent);
-
-
     }
-
 
     private void registerReceiver() {
 
@@ -119,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(LoginActivity.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServiceLogin"));
-
     }
 
     private void loginTerminado(String data, String username, String password) {
@@ -152,7 +135,5 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
-
 }
 

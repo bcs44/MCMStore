@@ -7,9 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Base64InputStream;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -86,7 +84,6 @@ public class BackgroundPostServiceAuth extends Service {
         @Override
         protected HashMap doInBackground(HashMap... args) {
 
-
             String username = "";
             String password = "";
             String apiKey = "";
@@ -118,7 +115,7 @@ public class BackgroundPostServiceAuth extends Service {
             hashMap.remove("wherefrom");
             hashMap.remove("_uri");
 
-            if(wherefrom.equals("postNewFile")){
+            if (wherefrom.equals("postNewFile")) {
                 FileGlobal fileGlobal = FileGlobal.getInstance();
                 hashMap.put("file_base64", fileGlobal.getBase64());
                 hashMap.put("file_type", fileGlobal.getType());
@@ -159,10 +156,6 @@ public class BackgroundPostServiceAuth extends Service {
                 urlConnection.setReadTimeout(60 * 1000);
                 urlConnection.setConnectTimeout(60 * 1000);
 
-
-
-
-
                 BufferedReader bis = null;
                 InputStream in = null;
                 OutputStream out = null;
@@ -181,10 +174,6 @@ public class BackgroundPostServiceAuth extends Service {
                 byte[] data = str.substring(0, str.length() - 1).getBytes();
                 out.write(data);
 
-
-
-
-
                 urlConnection.connect();
                 in = urlConnection.getInputStream();
                 bis = new BufferedReader(new InputStreamReader(in));
@@ -200,14 +189,11 @@ public class BackgroundPostServiceAuth extends Service {
                     intent = new Intent("ServiceLogin");
                 } else if (wherefrom.equals("PostConfigSensors")) {
                     intent = new Intent("ServiceConfigSensors");
-                }
-                else if (wherefrom.equals("postActiveSensor")) {
+                } else if (wherefrom.equals("postActiveSensor")) {
                     intent = new Intent("ServiceSensorSwitch");
-                }
-                else if (wherefrom.equals("postAssembleia")) {
+                } else if (wherefrom.equals("postAssembleia")) {
                     intent = new Intent("ServiceMarcAssembleia");
-                }
-                else if (wherefrom.equals("postComunicado")) {
+                } else if (wherefrom.equals("postComunicado")) {
                     intent = new Intent("ServiceComunicados");
                 }
 
@@ -317,10 +303,8 @@ public class BackgroundPostServiceAuth extends Service {
         outputStream.write(paramsNonceBytes);
         byte[] finalArray = outputStream.toByteArray();
 
-        // ket key username + password -> same database
         String secret = buildSecret(username, password);
 
-        // calculate and prepare headers map
         String apiSign = calculateHMAC(finalArray, secret);
         Map<String, String> headers = new HashMap<>();
         headers.put("api-sign", apiSign);

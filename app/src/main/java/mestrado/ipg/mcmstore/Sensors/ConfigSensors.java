@@ -24,7 +24,6 @@ import java.util.Map;
 
 import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.R;
-import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
@@ -32,7 +31,6 @@ import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 public class ConfigSensors extends AppCompatActivity {
 
     Button saveTemp, saveHum, saveCO2, saveLum;
-
     EditText minTemp, maxTemp, minHum, maxHum, minCo, maxCo, minLum, maxLum;
     String placeDescTemp, placeIdTemp, placeDescHum, placeIdHum, placeDescCo, placeIdCo, placeDescLum, placeIdLum;
     HashMap<String, String> paramsTOSEND = new HashMap<>();
@@ -46,7 +44,6 @@ public class ConfigSensors extends AppCompatActivity {
         saveHum = findViewById(R.id.saveHum);
         saveCO2 = findViewById(R.id.saveCO2);
         saveLum = findViewById(R.id.saveLum);
-
         minTemp = findViewById(R.id.MinValueSensorTemp);
         maxTemp = findViewById(R.id.MaxValueSensorTemp);
         minHum = findViewById(R.id.MinValueSensorHum);
@@ -55,10 +52,6 @@ public class ConfigSensors extends AppCompatActivity {
         maxCo = findViewById(R.id.MaxValueSensorCO2);
         minLum = findViewById(R.id.MinValueSensorLum);
         maxLum = findViewById(R.id.MaxValueSensorLum);
-
-        //1) get places - escolho
-        //2) get sensor por type e place
-        //3) post sensor com config (Max e Min)
 
         registerReceiver();
         getPlaces();
@@ -162,7 +155,6 @@ public class ConfigSensors extends AppCompatActivity {
                 new sendPost().execute(params);
             }
         });
-
     }
 
     private void getPlaces() {
@@ -172,7 +164,6 @@ public class ConfigSensors extends AppCompatActivity {
         intent.putExtra("_uri", "/place/all");
         intent.putExtra("wherefrom", "getPlacesToConfSens");
         startService(intent);
-
     }
 
     private void getSensorID(String sensorType, String placeId) {
@@ -185,7 +176,6 @@ public class ConfigSensors extends AppCompatActivity {
         intent.putExtra("wherefrom", "getSensorIDToConfSens");
         intent.putExtra("sensorType", sensorType);
         startService(intent);
-
     }
 
     private void registerReceiver() {
@@ -211,16 +201,12 @@ public class ConfigSensors extends AppCompatActivity {
                         context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                         break;
                 }
-
-
                 intent.getBundleExtra("Location");
-
             }
         };
 
         LocalBroadcastManager.getInstance(ConfigSensors.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServiceConfigSensors"));
-
     }
 
     private void dealWithSensorID(String data, String sensorType) {
@@ -238,11 +224,9 @@ public class ConfigSensors extends AppCompatActivity {
                     paramsTOSEND.put(sensorType, json.getString("sensor_id"));
                 }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private class sendPost extends AsyncTask<HashMap, HashMap, String> {
@@ -251,16 +235,15 @@ public class ConfigSensors extends AppCompatActivity {
         protected String doInBackground(HashMap... args) {
 
             HashMap<String, String> hashMap = args[0];
-
             Intent intent = new Intent(ConfigSensors.this, BackgroundPostServiceAuth.class);
             intent.putExtra("ParamsMAP", hashMap);
             startService(intent);
-
             return "done";
         }
     }
 
     public void dealWithSpinners(String data) {
+
         Spinner spinnerTemp, spinnerHum, spinnerCo, spinnerLum;
         spinnerTemp = findViewById(R.id.spinnerTemp);
         spinnerHum = findViewById(R.id.spinnerHum);
@@ -285,7 +268,6 @@ public class ConfigSensors extends AppCompatActivity {
                     places[i].setDesc(json.getString("description"));
                 }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -389,6 +371,4 @@ public class ConfigSensors extends AppCompatActivity {
             }
         });
     }
-
-
 }

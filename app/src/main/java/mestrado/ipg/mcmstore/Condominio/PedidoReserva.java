@@ -41,17 +41,18 @@ public class PedidoReserva extends AppCompatActivity {
     EditText dateET, timeET, descET, fotoET;
     Calendar myCalendar = Calendar.getInstance();
     Button sendPost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_reserva);
 
-
         dateET = findViewById(R.id.initialDate);
         timeET = findViewById(R.id.initialTime);
         descET = findViewById(R.id.desc);
         fotoET = findViewById(R.id.foto);
-        sendPost  = findViewById(R.id.senPostReservation);
+        sendPost = findViewById(R.id.senPostReservation);
+
         registerReceiver();
         getPlaces();
 
@@ -109,9 +110,6 @@ public class PedidoReserva extends AppCompatActivity {
             public void onClick(View v) {
                 HashMap<String, String> params = new HashMap<>();
 
-
-                //TODO
-
                 String x = "?";
 
                 String url = "https://bd.ipg.pt:5500/ords/bda_1701887/reservation/insert";
@@ -126,7 +124,6 @@ public class PedidoReserva extends AppCompatActivity {
                 params.put("place_id", x);
                 params.put("start_date", x);
 
-
                 new sendPost().execute(params);
             }
         });
@@ -136,16 +133,14 @@ public class PedidoReserva extends AppCompatActivity {
 
         @Override
         protected String doInBackground(HashMap... args) {
-
             HashMap<String, String> hashMap = args[0];
-
             Intent intent = new Intent(PedidoReserva.this, BackgroundPostServiceAuth.class);
             intent.putExtra("ParamsMAP", hashMap);
             startService(intent);
-
             return "done";
         }
     }
+
     private void registerReceiver() {
 
         BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -167,16 +162,15 @@ public class PedidoReserva extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(PedidoReserva.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServicePedidoReserva"));
-
     }
 
     private void getPlaces() {
+
         Intent intent = new Intent(PedidoReserva.this, BackgroundGetServiceAuth.class);
         intent.putExtra("urlStrg", "https://bd.ipg.pt:5500/ords/bda_1701887/place/all");
         intent.putExtra("_uri", "/place/all");
         intent.putExtra("wherefrom", "getPlacesToPedidoReserva");
         startService(intent);
-
     }
 
     public void dealWithSpinner(String data) {
@@ -224,8 +218,6 @@ public class PedidoReserva extends AppCompatActivity {
                         placeId = place.getId();
                         Toast.makeText(PedidoReserva.this, "ID: " + place.getId() + "\nDesc: " + place.getDesc(),
                                 Toast.LENGTH_SHORT).show();
-
-                        //    getSensorID("Temperatura", placeIdTemp);
                     }
                 }
             }
@@ -234,8 +226,5 @@ public class PedidoReserva extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapter) {
             }
         });
-
-
     }
-
 }

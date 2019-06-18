@@ -7,8 +7,6 @@ public class FileGlobal {
     private String type;
     private static FileGlobal instance;
 
-
-
     public FileGlobal() {
         this.base64 = "";
         this.type = "";
