@@ -32,7 +32,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,7 +59,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marcacao_assembleia);
 
-
         saveDate = findViewById(R.id.saveDateBTN);
         etInitialDate = findViewById(R.id.initialDate);
         etInitialTime = findViewById(R.id.initialTime);
@@ -70,7 +68,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
 
         registerReceiver();
         getPlaces();
-
 
         final DatePickerDialog.OnDateSetListener initialDate = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -84,7 +81,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         };
 
         etInitialDate.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(MarcacaoAssembleia.this, initialDate, myCalendarInitial
@@ -119,18 +115,14 @@ public class MarcacaoAssembleia extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addEventToCalendar();
-
             }
         });
-
-
     }
 
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
         etInitialDate.setText(sdf.format(myCalendarInitial.getTime()));
-
     }
 
     private void registerReceiver() {
@@ -156,16 +148,12 @@ public class MarcacaoAssembleia extends AppCompatActivity {
                         etTitle.setText("");
                         break;
                 }
-
-
                 intent.getBundleExtra("Location");
-
             }
         };
 
         LocalBroadcastManager.getInstance(MarcacaoAssembleia.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServiceMarcAssembleia"));
-
     }
 
     public void dealWithSpinners(String data) {
@@ -175,7 +163,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         JSONObject json;
         JSONArray array;
         Place[] places = new Place[0];
-
 
         try {
             json = new JSONObject(data);
@@ -221,7 +208,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapter) {
             }
         });
-
     }
 
 
@@ -232,9 +218,7 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         intent.putExtra("_uri", "/place/all");
         intent.putExtra("wherefrom", "getPlacesToMarcAssembleia");
         startService(intent);
-
     }
-
 
     private void addEventToCalendar() {
 
@@ -265,12 +249,10 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         params.put("urlStr", url);
         params.put("_uri", _uri);
 
-
-
         Date date = new Date(myCalendarInitial.getTimeInMillis());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
-        params.put("meeting_date",  format.format(date));
+        params.put("meeting_date", format.format(date));
         params.put("place_id", placeId);
         params.put("description", String.valueOf(etDesc.getText()));
         params.put("title", String.valueOf(etTitle.getText()));
@@ -279,8 +261,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
         params.put("wherefrom", "postAssembleia");
 
         new sendPost().execute(params);
-
-
     }
 
     private class sendPost extends AsyncTask<HashMap, HashMap, String> {
@@ -297,7 +277,6 @@ public class MarcacaoAssembleia extends AppCompatActivity {
             return "done";
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

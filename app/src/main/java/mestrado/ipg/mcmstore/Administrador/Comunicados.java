@@ -21,12 +21,10 @@ import java.util.HashMap;
 
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.R;
-import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 public class Comunicados extends AppCompatActivity {
-
 
     EditText tituloET, descET;
     Button enviarBtn;
@@ -37,11 +35,9 @@ public class Comunicados extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comunicados);
 
-
         tituloET = findViewById(R.id.titulo);
         descET = findViewById(R.id.desc);
         enviarBtn = findViewById(R.id.enviar);
-
 
         enviarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +47,6 @@ public class Comunicados extends AppCompatActivity {
         });
 
         registerReceiver();
-
     }
 
     private void sendData(String title, String desc) {
@@ -66,14 +61,12 @@ public class Comunicados extends AppCompatActivity {
         params.put("_uri", _uri);
         params.put("title", title);
         params.put("description", desc);
-        params.put("registry_date",  format.format(date));
+        params.put("registry_date", format.format(date));
         params.put("user_id", user.getUser_id());
         params.put("wherefrom", "postComunicado");
 
         new sendPost().execute(params);
-
     }
-
 
     private class sendPost extends AsyncTask<HashMap, HashMap, String> {
 
@@ -81,11 +74,9 @@ public class Comunicados extends AppCompatActivity {
         protected String doInBackground(HashMap... args) {
 
             HashMap<String, String> hashMap = args[0];
-
             Intent intent = new Intent(Comunicados.this, BackgroundPostServiceAuth.class);
             intent.putExtra("ParamsMAP", hashMap);
             startService(intent);
-
             return "done";
         }
     }
@@ -113,7 +104,6 @@ public class Comunicados extends AppCompatActivity {
                         }
                     });
                     dialogo.show();
-
                 }
 
                 intent.getBundleExtra("Location");
@@ -123,6 +113,5 @@ public class Comunicados extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(Comunicados.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServiceComunicados"));
-
     }
 }

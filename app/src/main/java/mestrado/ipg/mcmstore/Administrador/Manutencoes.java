@@ -11,11 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
 import mestrado.ipg.mcmstore.R;
 
 public class Manutencoes extends AppCompatActivity {
-
 
     EditText dateET;
     Calendar myCalendar = Calendar.getInstance();
@@ -25,9 +23,7 @@ public class Manutencoes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manutencoes);
 
-
         dateET = findViewById(R.id.date);
-
 
         final DatePickerDialog.OnDateSetListener initialDate = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -52,6 +48,5 @@ public class Manutencoes extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
     }
 }

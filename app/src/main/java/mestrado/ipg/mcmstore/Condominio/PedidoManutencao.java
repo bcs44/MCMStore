@@ -17,7 +17,6 @@ import mestrado.ipg.mcmstore.R;
 
 public class PedidoManutencao extends AppCompatActivity {
 
-
     EditText dateET, timeET, descET, fotoET;
     Calendar myCalendar = Calendar.getInstance();
 
@@ -26,14 +25,10 @@ public class PedidoManutencao extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_manutencao);
 
-
-
         dateET = findViewById(R.id.initialDate);
         timeET = findViewById(R.id.initialTime);
         descET = findViewById(R.id.desc);
         fotoET = findViewById(R.id.foto);
-
-
 
         final DatePickerDialog.OnDateSetListener initialDate = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -42,7 +37,6 @@ public class PedidoManutencao extends AppCompatActivity {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
                 String myFormat = "MM/dd/yy"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
                 dateET.setText(sdf.format(myCalendar.getTime()));
@@ -81,9 +75,5 @@ public class PedidoManutencao extends AppCompatActivity {
                 mTimePicker.show();
             }
         });
-
-
-
     }
-
 }

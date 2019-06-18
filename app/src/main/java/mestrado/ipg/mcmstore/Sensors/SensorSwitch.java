@@ -46,10 +46,6 @@ public class SensorSwitch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_switch);
 
-        // get all places
-        // get all sensor from place
-        // switch sensor
-
         registerReceiver();
         getPlaces();
         onFirstCall = true;
@@ -67,7 +63,6 @@ public class SensorSwitch extends AppCompatActivity {
                 if (!onFirstCall) {
                     sendData("Temperatura", isChecked);
                 }
-
             }
         });
 
@@ -78,8 +73,6 @@ public class SensorSwitch extends AppCompatActivity {
                 if (!onFirstCall) {
                     sendData("Humidade", isChecked);
                 }
-
-
             }
         });
         switchCo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -90,8 +83,6 @@ public class SensorSwitch extends AppCompatActivity {
                 if (!onFirstCall) {
                     sendData("CO2", isChecked);
                 }
-
-
             }
         });
         switchLum.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -102,14 +93,12 @@ public class SensorSwitch extends AppCompatActivity {
                 if (!onFirstCall) {
                     sendData("Luminosidade", isChecked);
                 }
-
             }
         });
 
     }
 
     private void getActiveSensors() {
-
 
         String url = "https://bd.ipg.pt:5500/ords/bda_1701887/activesensor/place/" + placeId;
         String _uri = "/activesensor/place/" + placeId;
@@ -118,6 +107,7 @@ public class SensorSwitch extends AppCompatActivity {
         intent.putExtra("_uri", _uri);
         intent.putExtra("wherefrom", "getActiveSensors");
         startService(intent);
+
     }
 
     private void registerReceiver() {
@@ -156,13 +146,9 @@ public class SensorSwitch extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(SensorSwitch.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServiceSensorSwitch"));
-
     }
 
     private void dealWithActiveSensors(String data) {
-
-        System.out.println(data);
-
 
         JSONObject json;
         JSONArray array;
@@ -237,11 +223,9 @@ public class SensorSwitch extends AppCompatActivity {
         protected String doInBackground(HashMap... args) {
 
             HashMap<String, String> hashMap = args[0];
-
             Intent intent = new Intent(SensorSwitch.this, BackgroundPostServiceAuth.class);
             intent.putExtra("ParamsMAP", hashMap);
             startService(intent);
-
             return "done";
         }
     }
@@ -253,14 +237,11 @@ public class SensorSwitch extends AppCompatActivity {
         intent.putExtra("_uri", "/place/all");
         intent.putExtra("wherefrom", "getPlacesToSensorSwitch");
         startService(intent);
-
-
     }
 
     public void dealWithSpinner(String data) {
         Spinner spinnerPlace;
         spinnerPlace = findViewById(R.id.spinnerPlace);
-
         final SpinAdapter adapter;
 
         JSONObject json;
@@ -305,8 +286,6 @@ public class SensorSwitch extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
 
                         getActiveSensors();
-
-                        //    getSensorID("Temperatura", placeIdTemp);
                     }
                 }
             }
@@ -315,10 +294,6 @@ public class SensorSwitch extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapter) {
             }
         });
-
-
     }
-
-
 }
 

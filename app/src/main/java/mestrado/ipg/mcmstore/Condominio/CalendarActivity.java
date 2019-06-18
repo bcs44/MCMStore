@@ -9,38 +9,29 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import mestrado.ipg.mcmstore.Administrador.MarcacaoAssembleia;
 import mestrado.ipg.mcmstore.Globals.Meeting;
-import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.Globals.User;
-import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
-
 
 public class CalendarActivity extends AppCompatActivity {
 
@@ -55,7 +46,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         registerReceiver();
         getMeetings();
-
     }
 
     private void getMeetings() {
@@ -64,7 +54,6 @@ public class CalendarActivity extends AppCompatActivity {
         intent.putExtra("_uri", "/meeting/townhouse/" + user.getTownhouse_id());
         intent.putExtra("wherefrom", "getMeetingsToCalendar");
         startService(intent);
-
     }
 
     private void registerReceiver() {
@@ -80,7 +69,6 @@ public class CalendarActivity extends AppCompatActivity {
                     context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                     dealWithCalendar(data);
                 }
-
                 intent.getBundleExtra("Location");
                 Log.d("1233", "BCR");
             }
@@ -88,7 +76,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(CalendarActivity.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServiceCalendar"));
-
     }
 
     private void dealWithCalendar(String data) {
@@ -117,7 +104,7 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         Uri uri = null;
-        for (int i=0; i<meetings.length; i++){
+        for (int i = 0; i < meetings.length; i++) {
 
             Calendar calendar = GregorianCalendar.getInstance();
             try {
@@ -135,7 +122,6 @@ public class CalendarActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
             ContentResolver cr = this.getContentResolver();
             ContentValues cv = new ContentValues();
 
@@ -152,17 +138,11 @@ public class CalendarActivity extends AppCompatActivity {
             }
             uri = cr.insert(CalendarContract.Events.CONTENT_URI, cv);
             Toast.makeText(this, "Inserido" + uri, Toast.LENGTH_LONG).show();
-
-
         }
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
         startActivity(intent);
-
-
     }
-
-
 }
 
