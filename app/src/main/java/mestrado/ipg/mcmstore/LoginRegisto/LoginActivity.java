@@ -128,16 +128,17 @@ public class LoginActivity extends AppCompatActivity {
         String api_key;
         String email;
         String townhouse_id;
+        String user_id;
 
         try {
             json = new JSONObject(data);
             api_key = json.getString("api-key");
-
             email = json.getString("email");
-
             townhouse_id = json.getString("townhouse_id");
+            user_id = json.getString("user_id");
 
             user.setApi_key(api_key);
+            user.setUser_id(user_id);
             user.setUsername(username);
             user.setEmail(email);
             user.setPassword(password);
