@@ -207,6 +207,9 @@ public class BackgroundPostServiceAuth extends Service {
                 else if (wherefrom.equals("postAssembleia")) {
                     intent = new Intent("ServiceMarcAssembleia");
                 }
+                else if (wherefrom.equals("postComunicado")) {
+                    intent = new Intent("ServiceComunicados");
+                }
 
                 intent.putExtra("data", sb.toString());
                 intent.putExtra("hashParams", hashMap);

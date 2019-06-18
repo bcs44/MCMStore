@@ -34,7 +34,6 @@
             android:hint="Título"
             android:textAlignment="center"
             android:clickable="true"
-            android:editable="false"
             />
 
     </LinearLayout>
