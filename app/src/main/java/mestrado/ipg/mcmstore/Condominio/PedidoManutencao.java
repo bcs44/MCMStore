@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import mestrado.ipg.mcmstore.Globals.Place;
+import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
@@ -45,6 +46,7 @@ public class PedidoManutencao extends AppCompatActivity {
     Button sendRequest;
     Calendar myCalendar = Calendar.getInstance();
     String placeId;
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +111,7 @@ public class PedidoManutencao extends AppCompatActivity {
 
                 String url = "https://bd.ipg.pt:5500/ords/bda_1701887/maintenance/insert";
                 String _uri = "/maintenance/insert";
-                params.put("url", url);
+                params.put("urlStr", url);
                 params.put("_uri", _uri);
                 params.put("wherefrom", "PostPedidoManutencao");
                 params.put("description", String.valueOf(descET.getText()));
@@ -119,6 +121,7 @@ public class PedidoManutencao extends AppCompatActivity {
 
                 params.put("maintenance_date", format.format(date));
                 params.put("place_id", placeId);
+                params.put("user_id", user.getUser_id());
 
 
                 new sendPost().execute(params);
