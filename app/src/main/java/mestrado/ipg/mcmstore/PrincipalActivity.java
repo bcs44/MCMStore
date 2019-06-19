@@ -26,6 +26,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import mestrado.ipg.mcmstore.Administrador.Comunicados;
 import mestrado.ipg.mcmstore.Administrador.Ficheiros;
 import mestrado.ipg.mcmstore.Administrador.Manutencoes;
@@ -41,6 +43,7 @@ import mestrado.ipg.mcmstore.LoginRegisto.Registar;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
+import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 
 public class PrincipalActivity extends AppCompatActivity
@@ -59,11 +62,8 @@ public class PrincipalActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         //Comunicados>>
-
-
         getComunicados();
         registerReceiver();
-
         //Comunicados<<
 
 
@@ -119,7 +119,7 @@ public class PrincipalActivity extends AppCompatActivity
     private void dealWithComunicados(String data) {
 
         //verificar se existe.
-        // se existe, criar nova activity, para mostrar o comunicado
+        // se existe, mostrar o comunicado
 
         JSONObject json;
         JSONArray array;
@@ -133,7 +133,7 @@ public class PrincipalActivity extends AppCompatActivity
             for (int i = 0; i < array.length(); ++i) {
                 json = array.getJSONObject(i);
                 if (json != null) {
-                    if(json.getString("confirmation").equals("0")) {
+                    if (json.getString("confirmation").equals("0")) {
                         communication[i] = new Communication();
                         communication[i].setCommunication_id(json.getString("communication_id"));
                         communication[i].setTitle(json.getString("title"));
@@ -173,20 +173,19 @@ public class PrincipalActivity extends AppCompatActivity
     private void abrirComunicados(Communication[] finalCommunication) {
 
 
-        for(int i = 0 ; i< finalCommunication.length; i++) {
+        for (int i = 0; i < finalCommunication.length; i++) {
 
             AlertDialog.Builder dialogo = new
                     AlertDialog.Builder(PrincipalActivity.this);
             dialogo.setTitle(finalCommunication[i].getTitle());
             dialogo.setMessage(finalCommunication[i].getDescription());
-            dialogo.setNeutralButton("Confirmar", new DialogInterface.OnClickListener() {
+            dialogo.setNeutralButton("Confirmar Receção", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     //confirmar
                     dialog.dismiss();
                 }
             });
             dialogo.show();
-
         }
     }
 

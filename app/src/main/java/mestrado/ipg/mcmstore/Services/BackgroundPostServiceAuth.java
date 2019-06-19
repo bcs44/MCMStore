@@ -202,6 +202,9 @@ public class BackgroundPostServiceAuth extends Service {
                 else if (wherefrom.equals("postComunicadoPartaker")) {
                     intent = new Intent("ServiceComunicados");
                 }
+                else if (wherefrom.equals("PostPedidoManutencao")) {
+                    intent = new Intent("ServicePedidoManutencao");
+                }
 
 
 
