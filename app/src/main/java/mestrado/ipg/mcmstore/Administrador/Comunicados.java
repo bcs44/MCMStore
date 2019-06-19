@@ -55,19 +55,13 @@ public class Comunicados extends AppCompatActivity {
                 createCommunication(String.valueOf(tituloET.getText()), String.valueOf(descET.getText()));
             }
         });
-
         registerReceiver();
     }
 
     private void getUsersByTownhouse(String data) {
 
         //data é o id do comunicado
-
-
-
         JSONObject json;
-
-
         try {
             json = new JSONObject(data);
             communications.setCommunication_id(json.getString("communication_id"));
@@ -81,7 +75,6 @@ public class Comunicados extends AppCompatActivity {
         intent.putExtra("_uri", "/user/townhouse/" + user.getTownhouse_id());
         intent.putExtra("wherefrom", "getUsersToSendComunicado");
         startService(intent);
-
     }
 
     private class sendPost extends AsyncTask<HashMap, HashMap, String> {
@@ -147,8 +140,6 @@ public class Comunicados extends AppCompatActivity {
         //receber id do comunicado
         //enviar para o communication_partaker
 
-
-
         JSONObject json;
         JSONArray array;
         UserGlobal[] userGlobals = new UserGlobal[0];
@@ -163,7 +154,6 @@ public class Comunicados extends AppCompatActivity {
                 if (json != null) {
                     userGlobals[i] = new UserGlobal();
                     userGlobals[i].setUser_id(json.getString("user_id"));
-                    userGlobals[i].setUsername(json.getString("username"));
                 }
             }
 
@@ -182,15 +172,12 @@ public class Comunicados extends AppCompatActivity {
             String _uri = "/communicationpartaker/insert";
             params.put("urlStr", url);
             params.put("_uri", _uri);
-            params.put("user_id", user.getUser_id());
+            params.put("user_id", userGlobals[i].getUser_id());
             params.put("communication_id", communications.getCommunication_id());
             params.put("wherefrom", "postComunicadoPartaker");
 
             new sendPost().execute(params);
-
         }
-
-
     }
 
     private void createCommunication(String title, String desc) {
@@ -210,7 +197,5 @@ public class Comunicados extends AppCompatActivity {
         params.put("wherefrom", "postComunicado");
 
         new sendPost().execute(params);
-
     }
-
 }

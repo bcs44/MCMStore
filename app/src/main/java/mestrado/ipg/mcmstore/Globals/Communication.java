@@ -7,6 +7,7 @@ public class Communication {
     private String registry_date;
     private String user_id;
     private String communication_id;
+    private String confirmation;
     private static Communication instance;
 
 
@@ -15,6 +16,14 @@ public class Communication {
         this.description = "";
         this.registry_date = "";
         this.user_id = "";
+    }
+
+    public String getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(String confirmation) {
+        this.confirmation = confirmation;
     }
 
     public String getCommunication_id() {
