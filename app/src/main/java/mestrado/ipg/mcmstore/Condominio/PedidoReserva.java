@@ -38,7 +38,7 @@ import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 public class PedidoReserva extends AppCompatActivity {
 
     String placeId;
-    EditText dateET, timeET, descET, fotoET;
+    EditText dateET, timeET, descET;
     Calendar myCalendar = Calendar.getInstance();
     Button sendPost;
 
@@ -50,7 +50,6 @@ public class PedidoReserva extends AppCompatActivity {
         dateET = findViewById(R.id.initialDate);
         timeET = findViewById(R.id.initialTime);
         descET = findViewById(R.id.desc);
-        fotoET = findViewById(R.id.foto);
         sendPost = findViewById(R.id.senPostReservation);
 
         registerReceiver();
@@ -110,6 +109,7 @@ public class PedidoReserva extends AppCompatActivity {
             public void onClick(View v) {
                 HashMap<String, String> params = new HashMap<>();
 
+                //TODO
                 String x = "?";
 
                 String url = "https://bd.ipg.pt:5500/ords/bda_1701887/reservation/insert";
