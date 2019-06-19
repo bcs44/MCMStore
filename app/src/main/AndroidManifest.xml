@@ -19,15 +19,7 @@
         android:roundIcon="@mipmap/ic_building"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Administrador.Ficheiros" />
-        <activity android:name=".Administrador.Manutencoes" />
-        <activity android:name=".Administrador.Reservas" />
-        <activity android:name=".Administrador.Comunicados" />
-        <activity android:name=".Condominio.PedidoReserva" />
-        <activity
-            android:name=".Condominio.PedidoManutencao"
-            android:label="@string/title_activity_pedido_manutencao"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+
 
         <service
             android:name=".Services.BackgroundPostService"
@@ -64,7 +56,13 @@
         <activity android:name=".Administrador.MarcacaoAssembleia" ></activity>
         <activity android:name=".Sensors.SensorSwitch" ></activity>
         <activity android:name=".LoginRegisto.Registar" ></activity>
-        <activity android:name=".Sensors.ConfigSensors" ></activity>
+        <activity android:name=".Sensors.ConfigSensors"></activity>
+        <activity android:name=".Administrador.Ficheiros" />
+        <activity android:name=".Administrador.Manutencoes" />
+        <activity android:name=".Administrador.Reservas" />
+        <activity android:name=".Administrador.Comunicados" />
+        <activity android:name=".Condominio.PedidoReserva" />
+        <activity android:name=".Condominio.PedidoManutencao" />
     </application>
 
 </manifest>
