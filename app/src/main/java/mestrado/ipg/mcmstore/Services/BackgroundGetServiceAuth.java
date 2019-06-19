@@ -220,6 +220,9 @@ public class BackgroundGetServiceAuth extends Service {
             else if (wherefrom.equals("getUsersToSendComunicado")) {
                 intent = new Intent("ServiceComunicados");
             }
+            else if (wherefrom.equals("getComunicadosPrincipalAct")) {
+                intent = new Intent("ServicePrincipalActvivity");
+            }
 
             intent.putExtra("data", data);
             intent.putExtra("wherefrom", wherefrom);
