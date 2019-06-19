@@ -1,13 +1,17 @@
 package mestrado.ipg.mcmstore.Sensors;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mestrado.ipg.mcmstore.Globals.Place;
+import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
@@ -35,10 +40,24 @@ public class ConfigSensors extends AppCompatActivity {
     String placeDescTemp, placeIdTemp, placeDescHum, placeIdHum, placeDescCo, placeIdCo, placeDescLum, placeIdLum;
     HashMap<String, String> paramsTOSEND = new HashMap<>();
 
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config_sensors);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(ConfigSensors.this, PrincipalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         saveTemp = findViewById(R.id.saveTemp);
         saveHum = findViewById(R.id.saveHum);
@@ -371,4 +390,5 @@ public class ConfigSensors extends AppCompatActivity {
             }
         });
     }
+
 }

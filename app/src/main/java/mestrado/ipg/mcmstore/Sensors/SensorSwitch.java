@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,10 +25,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import mestrado.ipg.mcmstore.Administrador.Reservas;
 import mestrado.ipg.mcmstore.Globals.ActiveSensor;
 import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.Globals.Sensor;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
+import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Services.BackgroundGetService;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
@@ -45,6 +48,17 @@ public class SensorSwitch extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_switch);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(SensorSwitch.this, PrincipalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         registerReceiver();
         getPlaces();

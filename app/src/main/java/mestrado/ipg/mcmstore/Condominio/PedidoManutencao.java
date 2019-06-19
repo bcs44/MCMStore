@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,9 +33,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import mestrado.ipg.mcmstore.Administrador.Reservas;
 import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
+import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
@@ -52,6 +55,17 @@ public class PedidoManutencao extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_manutencao);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(PedidoManutencao.this, PrincipalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         dateET = findViewById(R.id.initialDate);
         timeET = findViewById(R.id.initialTime);
