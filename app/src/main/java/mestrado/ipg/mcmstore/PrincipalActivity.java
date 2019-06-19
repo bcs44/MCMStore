@@ -1,7 +1,9 @@
 package mestrado.ipg.mcmstore;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -57,24 +59,12 @@ public class PrincipalActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         //Comunicados>>
-        fab = findViewById(R.id.fab);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-            }
-        });
 
         getComunicados();
         registerReceiver();
 
         //Comunicados<<
-
-
-
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -101,9 +91,7 @@ public class PrincipalActivity extends AppCompatActivity
         intent.putExtra("_uri", "/communicationpartaker/user/" + user.getUser_id());
         intent.putExtra("wherefrom", "getComunicadosPrincipalAct");
         startService(intent);
-
     }
-
 
     private void registerReceiver() {
 
@@ -130,7 +118,6 @@ public class PrincipalActivity extends AppCompatActivity
 
     private void dealWithComunicados(String data) {
 
-
         //verificar se existe.
         // se existe, criar nova activity, para mostrar o comunicado
 
@@ -146,13 +133,15 @@ public class PrincipalActivity extends AppCompatActivity
             for (int i = 0; i < array.length(); ++i) {
                 json = array.getJSONObject(i);
                 if (json != null) {
-                    communication[i] = new Communication();
-                    communication[i].setCommunication_id(json.getString("communication_id"));
-                    communication[i].setTitle(json.getString("title"));
-                    communication[i].setDescription(json.getString("description"));
-                    communication[i].setRegistry_date(json.getString("registry_date"));
-                    communication[i].setUser_id(json.getString("user_id"));
-                    communication[i].setConfirmation(json.getString("confirmation"));
+                    if(json.getString("confirmation").equals("0")) {
+                        communication[i] = new Communication();
+                        communication[i].setCommunication_id(json.getString("communication_id"));
+                        communication[i].setTitle(json.getString("title"));
+                        communication[i].setDescription(json.getString("description"));
+                        communication[i].setRegistry_date(json.getString("registry_date"));
+                        communication[i].setUser_id(json.getString("user_id"));
+                        communication[i].setConfirmation(json.getString("confirmation"));
+                    }
                 }
             }
 
@@ -160,14 +149,45 @@ public class PrincipalActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
+        fab = findViewById(R.id.fab);
 
-        fabText = findViewById(R.id.fabText);
-            fabText.setText(String.valueOf(communication.length));
+        if (communication.length > 0) {
+            Communication[] finalCommunication = communication;
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Tem " + finalCommunication.length + " comunicados por ler!", Snackbar.LENGTH_LONG)
+                            .setAction("Abrir", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    abrirComunicados(finalCommunication);
+                                }
+                            }).show();
+                }
+            });
+        } else {
+            fab.hide();
+        }
+    }
+
+    private void abrirComunicados(Communication[] finalCommunication) {
 
 
+        for(int i = 0 ; i< finalCommunication.length; i++) {
 
+            AlertDialog.Builder dialogo = new
+                    AlertDialog.Builder(PrincipalActivity.this);
+            dialogo.setTitle(finalCommunication[i].getTitle());
+            dialogo.setMessage(finalCommunication[i].getDescription());
+            dialogo.setNeutralButton("Confirmar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //confirmar
+                    dialog.dismiss();
+                }
+            });
+            dialogo.show();
 
-
+        }
     }
 
 
