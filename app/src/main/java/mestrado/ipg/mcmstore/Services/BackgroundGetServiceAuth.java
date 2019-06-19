@@ -217,6 +217,9 @@ public class BackgroundGetServiceAuth extends Service {
             else if (wherefrom.equals("getMeetingsToCalendar")) {
                 intent = new Intent("ServiceCalendar");
             }
+            else if (wherefrom.equals("getUsersToSendComunicado")) {
+                intent = new Intent("ServiceComunicados");
+            }
 
             intent.putExtra("data", data);
             intent.putExtra("wherefrom", wherefrom);
