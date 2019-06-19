@@ -175,7 +175,7 @@ public class PedidoReserva extends AppCompatActivity {
 
     public void dealWithSpinner(String data) {
         Spinner spinnerPlace;
-        spinnerPlace = findViewById(R.id.spinnerPlacesRes);
+        spinnerPlace = findViewById(R.id.spinnerPlace);
 
         final SpinAdapter adapter;
 
