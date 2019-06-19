@@ -166,10 +166,15 @@ public class PedidoManutencao extends AppCompatActivity {
                     dialogo.setMessage("Pedido de Manutenção Enviado");
                     dialogo.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            dateET.setText("");
+                            timeET.setText("");
+                            descET.setText("");
                             dialog.dismiss();
+
                         }
                     });
                     dialogo.show();
+
                 }
 
                 intent.getBundleExtra("Location");
