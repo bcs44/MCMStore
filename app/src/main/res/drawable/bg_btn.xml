@@ -6,6 +6,8 @@
 
     </corners>
 
-    <solid android:color="@color/colorAccent"></solid>
+    <solid android:color="#317bdf"></solid>
+
+
 
 </shape>
