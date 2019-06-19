@@ -30,7 +30,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Guardar" />
+            android:text="Guardar"
+            android:background="@drawable/bg_btn"
+            android:textColor="@color/cardview_light_background"/>
     </LinearLayout>
 
 

@@ -67,6 +67,7 @@
         <Button
             android:id="@+id/saveTemp"
             android:background="@drawable/bg_btn"
+            android:textColor="@color/cardview_light_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -116,6 +117,7 @@
         <Button
             android:id="@+id/saveHum"
             android:background="@drawable/bg_btn"
+            android:textColor="@color/cardview_light_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -166,6 +168,7 @@
         <Button
             android:id="@+id/saveCO2"
             android:background="@drawable/bg_btn"
+            android:textColor="@color/cardview_light_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -218,6 +221,7 @@
         <Button
             android:id="@+id/saveLum"
             android:background="@drawable/bg_btn"
+            android:textColor="@color/cardview_light_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"

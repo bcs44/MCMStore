@@ -78,12 +78,20 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Rejeitar"/>
+            android:text="Rejeitar"
+            android:background="@drawable/bg_btn"
+            android:textColor="@color/cardview_light_background"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"/>
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Aceitar"/>
+            android:text="Aceitar"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/bg_btn"
+            android:textColor="@color/cardview_light_background"/>
     </LinearLayout>
 
 
