@@ -11,7 +11,9 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -62,11 +64,19 @@ public class BackgroundGetServiceAuth extends Service {
         String url = intent.getStringExtra("urlStrg");
         String _uri = intent.getStringExtra("_uri");
         String wherefrom = intent.getStringExtra("wherefrom");
+        String start = intent.getStringExtra("start");
+        String end = intent.getStringExtra("end");
         HashMap<String, String> params = new HashMap<>();
 
         params.put("url", url);
         params.put("_uri", _uri);
         params.put("wherefrom", wherefrom);
+        if(start != null) {
+            params.put("start", start);
+        }
+        if(end != null) {
+            params.put("end", end);
+        }
 
         if (wherefrom.equals("getSensorIDToConfSens")) {
             String sensorType = intent.getStringExtra("sensorType");
@@ -98,7 +108,8 @@ public class BackgroundGetServiceAuth extends Service {
             String _uri = "";
             String wherefrom = "";
             String sensorType = "";
-
+            String startDate = "";
+            String endDate = "";
             for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("url")) {
                     stringURL = entry.getValue();
@@ -108,27 +119,39 @@ public class BackgroundGetServiceAuth extends Service {
                     _uri = entry.getValue();
                 } else if (entry.getKey().equals("sensorType")) {
                     sensorType = entry.getValue();
+                } else if (entry.getKey().equals("start")) {
+                    startDate = entry.getValue();
+                } else if (entry.getKey().equals("end")) {
+                    endDate = entry.getValue();
                 }
             }
 
+            String query = null;
+            if (!startDate.equals("")) {
+                query = "start=" + startDate;
+                if(!endDate.equals("")) {
+                    query += "&end=" + endDate;
+                }
+            }
 
             Calendar cal = Calendar.getInstance();
             long nonce = cal.getTimeInMillis();
             Map<String, String> headers = null;
             try {
-                headers = createHeaders(_uri, null, nonce, user.getUsername(), user.getPassword(),
+                headers = createHeaders(_uri, query, nonce, user.getUsername(), user.getPassword(),
                         user.getApi_key());
-
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
 
 
-            String query = null;
-            if (query == null) {
-                query = "";
+
+            if(query == null) {
+                query = "?nonce=" + nonce;
+            } else {
+                query = "?" + query;
+                query += "&nonce=" + nonce;
             }
-            query += "?nonce=" + nonce;
 
             HashMap<String, String> params = new HashMap<>();
 
@@ -148,21 +171,18 @@ public class BackgroundGetServiceAuth extends Service {
                 urlConnection.setConnectTimeout(60 * 1000);
 
                 BufferedReader in = null;
-                StringBuilder body;
+                String body;
                 String inputLine;
-                in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                body = new StringBuilder();
-
-                while ((inputLine = in.readLine()) != null) {
-                    body.append(inputLine);
+                try {
+                    body = read(urlConnection.getInputStream());
+                    params.put("data", body);
+                    params.put("wherefrom", wherefrom);
+                    if (wherefrom.equals("getSensorIDToConfSens")) {
+                        params.put("sensorType", sensorType);
+                    }
+                } catch(java.net.ProtocolException pException) {
+                    Log.e(BackgroundGetServiceAuth.class.toString(), pException.getMessage());
                 }
-
-                params.put("data", body.toString());
-                params.put("wherefrom", wherefrom);
-                if (wherefrom.equals("getSensorIDToConfSens")) {
-                    params.put("sensorType", sensorType);
-                }
-
                 return params;
 
             } catch (NoSuchAlgorithmException e) {
@@ -178,6 +198,38 @@ public class BackgroundGetServiceAuth extends Service {
             return params;
         }
 
+        private String read(InputStream is) throws IOException {
+            BufferedReader in = null;
+            String inputLine;
+            StringBuilder body;
+            try {
+                in = new BufferedReader(new InputStreamReader(is));
+
+                body = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    body.append(inputLine);
+                }
+                in.close();
+
+                return body.toString();
+            } catch (IOException ioe) {
+                throw ioe;
+            } finally {
+                closeQuietly(in);
+            }
+        }
+
+        private void closeQuietly(Closeable closeable) {
+            try {
+                if (closeable != null) {
+                    closeable.close();
+                }
+            } catch (IOException ex) {
+
+            }
+        }
+
         @Override
         protected void onPostExecute(HashMap<String, String> hashMap) {
             super.onPostExecute(hashMap);
@@ -190,7 +242,6 @@ public class BackgroundGetServiceAuth extends Service {
             for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("data")) {
                     data = entry.getValue();
-
                 } else if (entry.getKey().equals("wherefrom")) {
                     wherefrom = entry.getValue();
                 } else if (entry.getKey().equals("sensorType")) {
@@ -207,31 +258,29 @@ public class BackgroundGetServiceAuth extends Service {
                 }
             } else if (wherefrom.equals("getPlacesToSensorSwitch") || wherefrom.equals("getActiveSensors")) {
                 intent = new Intent("ServiceSensorSwitch");
-            }
-            else if (wherefrom.equals("getPlacesToPedidoReserva")) {
+            } else if (wherefrom.equals("getPlacesToPedidoReserva")) {
                 intent = new Intent("ServicePedidoReserva");
-            }
-            else if (wherefrom.equals("getPlacesToMarcAssembleia")) {
+            } else if (wherefrom.equals("getPlacesToMarcAssembleia")) {
                 intent = new Intent("ServiceMarcAssembleia");
-            }
-            else if (wherefrom.equals("getMeetingsToCalendar")) {
+            } else if (wherefrom.equals("getMeetingsToCalendar")) {
                 intent = new Intent("ServiceCalendar");
-            }
-            else if (wherefrom.equals("getUsersToSendComunicado")) {
+            } else if (wherefrom.equals("getUsersToSendComunicado")) {
                 intent = new Intent("ServiceComunicados");
-            }
-            else if (wherefrom.equals("getComunicadosPrincipalAct")) {
+            } else if (wherefrom.equals("getComunicadosPrincipalAct")) {
                 intent = new Intent("ServicePrincipalActvivity");
-            }
-            else if (wherefrom.equals("getPlacesToPedidoManutencao")) {
+            } else if (wherefrom.equals("getPlacesToPedidoManutencao")) {
                 intent = new Intent("ServicePedidoManutencao");
+            } else if (wherefrom.equals("Charts")) {
+                intent = new Intent("ServiceDayRecords");
             }
 
-            intent.putExtra("data", data);
-            intent.putExtra("wherefrom", wherefrom);
-            Bundle b = new Bundle();
-            intent.putExtra("Location", b);
-            LocalBroadcastManager.getInstance(BackgroundGetServiceAuth.this).sendBroadcast(intent);
+            if(intent != null) {
+                intent.putExtra("data", data);
+                intent.putExtra("wherefrom", wherefrom);
+                Bundle b = new Bundle();
+                intent.putExtra("Location", b);
+                LocalBroadcastManager.getInstance(BackgroundGetServiceAuth.this).sendBroadcast(intent);
+            }
         }
     }
 

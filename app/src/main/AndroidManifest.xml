@@ -18,6 +18,9 @@
         android:roundIcon="@mipmap/ic_building"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".Sensors.Charts"
+            android:label="@string/title_activity_charts"></activity>
         <activity android:name=".Administrador.Ficheiros" />
         <activity android:name=".Administrador.Manutencoes" />
         <activity android:name=".Administrador.Reservas" />

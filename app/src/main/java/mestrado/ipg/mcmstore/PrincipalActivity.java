@@ -40,6 +40,7 @@ import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
 import mestrado.ipg.mcmstore.Globals.Communication;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.LoginRegisto.Registar;
+import mestrado.ipg.mcmstore.Sensors.Charts;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
@@ -222,77 +223,42 @@ public class PrincipalActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-
+        Intent myIntent = null;
         if (id == R.id.sens_conf) {
-            Intent myIntent = new Intent(PrincipalActivity.this, ConfigSensors.class);
-            startActivity(myIntent);
-
+            myIntent = new Intent(PrincipalActivity.this, ConfigSensors.class);
         } else if (id == R.id.sens_graph) {
-            //graficos sensores
-
+            myIntent = new Intent(PrincipalActivity.this, Charts.class);
         } else if (id == R.id.sens_switch) {
-            Intent myIntent = new Intent(PrincipalActivity.this, SensorSwitch.class);
-            startActivity(myIntent);
-
+            myIntent = new Intent(PrincipalActivity.this, SensorSwitch.class);
         } else if (id == R.id.sens_info) {
             //Informação de Sensores
 
         } else if (id == R.id.cond_chat) {
-            //Chat Condomonio
-
-            Intent myIntent = new Intent(PrincipalActivity.this, ChatCondominio.class);
-            startActivity(myIntent);
-
+            myIntent = new Intent(PrincipalActivity.this, ChatCondominio.class);
         } else if (id == R.id.cond_cal) {
-            //Calendario de condominio
-            Intent myIntent = new Intent(PrincipalActivity.this, CalendarActivity.class);
-            startActivity(myIntent);
-
+            myIntent = new Intent(PrincipalActivity.this, CalendarActivity.class);
         } else if (id == R.id.cond_fich) {
-            //Ficheiros de condominio
-
-            Intent myIntent = new Intent(PrincipalActivity.this, Registar.class);
-            startActivity(myIntent);
-
+            myIntent = new Intent(PrincipalActivity.this, Registar.class);
         } else if (id == R.id.cond_regras) {
             //Regras de condominio
+
         } else if (id == R.id.cond_manu) {
-            Intent myIntent = new Intent(PrincipalActivity.this, PedidoManutencao.class);
-            startActivity(myIntent);
+            myIntent = new Intent(PrincipalActivity.this, PedidoManutencao.class);
         } else if (id == R.id.cond_res) {
-            //Reservas de espaço
-
-            Intent myIntent = new Intent(PrincipalActivity.this, PedidoReserva.class);
-            startActivity(myIntent);
-
-
+            myIntent = new Intent(PrincipalActivity.this, PedidoReserva.class);
         } else if (id == R.id.admin_marc) {
-            Intent myIntent = new Intent(PrincipalActivity.this, MarcacaoAssembleia.class);
-            startActivity(myIntent);
+            myIntent = new Intent(PrincipalActivity.this, MarcacaoAssembleia.class);
         } else if (id == R.id.admin_comuni) {
-            //Comunicados de condominio
-
-
-            Intent myIntent = new Intent(PrincipalActivity.this, Comunicados.class);
-            startActivity(myIntent);
-
+            myIntent = new Intent(PrincipalActivity.this, Comunicados.class);
         } else if (id == R.id.admin_res) {
-            //Reservas
-
-            Intent myIntent = new Intent(PrincipalActivity.this, Reservas.class);
-            startActivity(myIntent);
-
-
+            myIntent = new Intent(PrincipalActivity.this, Reservas.class);
         } else if (id == R.id.admin_man) {
-            //Reservas
-
-            Intent myIntent = new Intent(PrincipalActivity.this, Manutencoes.class);
-            startActivity(myIntent);
-
+            myIntent = new Intent(PrincipalActivity.this, Manutencoes.class);
         } else if (id == R.id.admin_ficheiro) {
-            Intent myIntent = new Intent(PrincipalActivity.this, Ficheiros.class);
+            myIntent = new Intent(PrincipalActivity.this, Ficheiros.class);
+        }
+        if(myIntent != null) {
             startActivity(myIntent);
-
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
