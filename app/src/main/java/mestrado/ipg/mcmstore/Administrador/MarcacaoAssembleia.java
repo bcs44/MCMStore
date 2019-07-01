@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -41,7 +42,9 @@ import java.util.Locale;
 import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
+import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
+import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
@@ -58,6 +61,17 @@ public class MarcacaoAssembleia extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marcacao_assembleia);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(MarcacaoAssembleia.this, PrincipalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         saveDate = findViewById(R.id.saveDateBTN);
         etInitialDate = findViewById(R.id.initialDate);

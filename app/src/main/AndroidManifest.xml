@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mestrado.ipg.mcmstore">
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+
+
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -18,18 +19,7 @@
         android:roundIcon="@mipmap/ic_building"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity
-            android:name=".Sensors.Charts"
-            android:label="@string/title_activity_charts"></activity>
-        <activity android:name=".Administrador.Ficheiros" />
-        <activity android:name=".Administrador.Manutencoes" />
-        <activity android:name=".Administrador.Reservas" />
-        <activity android:name=".Administrador.Comunicados" />
-        <activity android:name=".Condominio.PedidoReserva" />
-        <activity
-            android:name=".Condominio.PedidoManutencao"
-            android:label="@string/title_activity_pedido_manutencao"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+
 
         <service
             android:name=".Services.BackgroundPostService"
@@ -48,7 +38,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".PrincipalActivity" />
+
         <activity
             android:name=".LoginRegisto.LoginActivity"
             android:label="@string/title_activity_login">
@@ -58,13 +48,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Condominio.CalendarActivity" />
-        <activity android:name=".Condominio.ChatCondominio" />
-        <activity android:name=".Condominio.SalaChat" />
-        <activity android:name=".Administrador.MarcacaoAssembleia" />
-        <activity android:name=".Sensors.SensorSwitch" />
-        <activity android:name=".LoginRegisto.Registar" />
-        <activity android:name=".Sensors.ConfigSensors" />
+
+        <activity android:name=".PrincipalActivity" ></activity>
+        <activity android:name=".Condominio.CalendarActivity" ></activity>
+        <activity android:name=".Condominio.ChatCondominio" ></activity>
+        <activity android:name=".Condominio.SalaChat" ></activity>
+        <activity android:name=".Administrador.MarcacaoAssembleia" ></activity>
+        <activity android:name=".Sensors.SensorSwitch" ></activity>
+        <activity android:name=".LoginRegisto.Registar" ></activity>
+        <activity android:name=".Sensors.ConfigSensors"></activity>
+        <activity android:name=".Administrador.Ficheiros" />
+        <activity android:name=".Administrador.Manutencoes" />
+        <activity android:name=".Administrador.Reservas" />
+        <activity android:name=".Administrador.Comunicados" />
+        <activity android:name=".Condominio.PedidoReserva" />
+        <activity android:name=".Condominio.PedidoManutencao" />
     </application>
 
 </manifest>

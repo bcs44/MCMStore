@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +21,9 @@ import java.util.HashMap;
 
 import mestrado.ipg.mcmstore.Globals.FileGlobal;
 import mestrado.ipg.mcmstore.Globals.User;
+import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
+import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 public class Ficheiros extends AppCompatActivity {
@@ -32,6 +35,17 @@ public class Ficheiros extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ficheiros);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(Ficheiros.this, PrincipalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         et = findViewById(R.id.file);
 

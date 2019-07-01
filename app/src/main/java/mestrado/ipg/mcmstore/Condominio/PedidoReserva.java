@@ -1,15 +1,18 @@
 package mestrado.ipg.mcmstore.Condominio;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,11 +29,15 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import mestrado.ipg.mcmstore.Administrador.Reservas;
 import mestrado.ipg.mcmstore.Globals.Place;
+import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
+import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
@@ -41,14 +48,26 @@ public class PedidoReserva extends AppCompatActivity {
     EditText dateET, timeET, descET;
     Calendar myCalendar = Calendar.getInstance();
     Button sendPost;
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido_reserva);
 
-        dateET = findViewById(R.id.initialDate);
-        timeET = findViewById(R.id.initialTime);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(PedidoReserva.this, PrincipalActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        dateET = findViewById(R.id.reservDate);
+        timeET = findViewById(R.id.reservTime);
         descET = findViewById(R.id.desc);
         sendPost = findViewById(R.id.senPostReservation);
 
@@ -114,15 +133,22 @@ public class PedidoReserva extends AppCompatActivity {
 
                 String url = "https://bd.ipg.pt:5500/ords/bda_1701887/reservation/insert";
                 String _uri = "/reservation/insert";
-                params.put("url", url);
+                params.put("urlStr", url);
                 params.put("_uri", _uri);
                 params.put("wherefrom", "PostPedidoReserva");
-                params.put("end_date", x);
-                params.put("reservation_date", x);
-                params.put("user_id", x);
-                params.put("description", x);
-                params.put("place_id", x);
-                params.put("start_date", x);
+
+                params.put("user_id", user.getUser_id());
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                Date reservation_date = new Date();
+                Date date = new Date(myCalendar.getTimeInMillis());
+
+                params.put("description", String.valueOf(descET.getText()));
+                params.put("place_id", placeId);
+                params.put("start_date", format.format(date));
+                params.put("end_date", format.format(date));
+                params.put("reservation_date", format.format(reservation_date));
+
 
                 new sendPost().execute(params);
             }
@@ -153,6 +179,22 @@ public class PedidoReserva extends AppCompatActivity {
                 if (wherefrom.equals("getPlacesToPedidoReserva")) {
                     context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
                     dealWithSpinner(data);
+                }
+                else if (wherefrom.equals("PostPedidoReserva")) {
+                    context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
+                    AlertDialog.Builder dialogo = new
+                            AlertDialog.Builder(PedidoReserva.this);
+                    dialogo.setTitle("Aviso");
+                    dialogo.setMessage("Pedido de Reserva Enviado");
+                    dialogo.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dateET.setText("");
+                            timeET.setText("");
+                            descET.setText("");
+                            dialog.dismiss();
+                        }
+                    });
+                    dialogo.show();
                 }
 
                 intent.getBundleExtra("Location");

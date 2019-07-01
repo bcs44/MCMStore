@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +30,9 @@ import mestrado.ipg.mcmstore.Globals.Place;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.Globals.UserGlobal;
 import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
+import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
+import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
@@ -44,6 +47,17 @@ public class Comunicados extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comunicados);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(Comunicados.this, PrincipalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         tituloET = findViewById(R.id.titulo);
         descET = findViewById(R.id.desc);
