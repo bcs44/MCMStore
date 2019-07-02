@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,9 +43,10 @@ import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
 import mestrado.ipg.mcmstore.Globals.Communication;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.LoginRegisto.Registar;
-import mestrado.ipg.mcmstore.Sensors.Charts;
+import mestrado.ipg.mcmstore.Sensors.ChartTemperature;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
+import mestrado.ipg.mcmstore.Sensors.ShakeDetector;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
@@ -82,6 +86,7 @@ public class PrincipalActivity extends AppCompatActivity
         usernameET = headerView.findViewById(R.id.username);
         usernameET.setText(user.getUsername());
         emailET.setText(user.getEmail());
+
 
     }
 
@@ -227,7 +232,7 @@ public class PrincipalActivity extends AppCompatActivity
         if (id == R.id.sens_conf) {
             myIntent = new Intent(PrincipalActivity.this, ConfigSensors.class);
         } else if (id == R.id.sens_graph) {
-            myIntent = new Intent(PrincipalActivity.this, Charts.class);
+            myIntent = new Intent(PrincipalActivity.this, ChartTemperature.class);
         } else if (id == R.id.sens_switch) {
             myIntent = new Intent(PrincipalActivity.this, SensorSwitch.class);
         } else if (id == R.id.sens_info) {

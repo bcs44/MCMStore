@@ -2,18 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/nav_temperature"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:title="@string/Temperature" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/nav_humidity"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:title="@string/Humidity" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/nav_gas"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:title="@string/Gas" />
+    <item
+        android:id="@+id/nav_luminosity"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/Luminosity" />
 
 </menu>

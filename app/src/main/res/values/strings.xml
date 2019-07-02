@@ -49,4 +49,13 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="Temperature">Temperatura</string>
+    <string name="Humidity">Humidade</string>
+    <string name="Gas">Gás</string>
+    <string name="Luminosity">Luminosidade</string>
+    <string name="details">Detalhes</string>
+    <string name="title_activity_chart_humidity">Humidade</string>
+    <string name="title_activity_chart_Temperature">Temperatura</string>
+    <string name="title_activity_chart_gas">ChartGas</string>
+    <string name="title_activity_chart_luminosity">ChartLuminosity</string>
 </resources>

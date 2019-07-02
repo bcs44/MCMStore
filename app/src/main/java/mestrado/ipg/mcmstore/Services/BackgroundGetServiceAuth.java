@@ -62,6 +62,7 @@ public class BackgroundGetServiceAuth extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         String url = intent.getStringExtra("urlStrg");
+        String sensorType = intent.getStringExtra("sensorType");
         String _uri = intent.getStringExtra("_uri");
         String wherefrom = intent.getStringExtra("wherefrom");
         String start = intent.getStringExtra("start");
@@ -77,9 +78,7 @@ public class BackgroundGetServiceAuth extends Service {
         if(end != null) {
             params.put("end", end);
         }
-
-        if (wherefrom.equals("getSensorIDToConfSens")) {
-            String sensorType = intent.getStringExtra("sensorType");
+        if(sensorType != null) {
             params.put("sensorType", sensorType);
         }
 
@@ -177,9 +176,7 @@ public class BackgroundGetServiceAuth extends Service {
                     body = read(urlConnection.getInputStream());
                     params.put("data", body);
                     params.put("wherefrom", wherefrom);
-                    if (wherefrom.equals("getSensorIDToConfSens")) {
-                        params.put("sensorType", sensorType);
-                    }
+                    params.put("sensorType", sensorType);
                 } catch(java.net.ProtocolException pException) {
                     Log.e(BackgroundGetServiceAuth.class.toString(), pException.getMessage());
                 }
@@ -242,9 +239,11 @@ public class BackgroundGetServiceAuth extends Service {
             for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                 if (entry.getKey().equals("data")) {
                     data = entry.getValue();
-                } else if (entry.getKey().equals("wherefrom")) {
+                }
+                if (entry.getKey().equals("wherefrom")) {
                     wherefrom = entry.getValue();
-                } else if (entry.getKey().equals("sensorType")) {
+                }
+                if (entry.getKey().equals("sensorType")) {
                     sensorType = entry.getValue();
                 }
             }
@@ -272,6 +271,7 @@ public class BackgroundGetServiceAuth extends Service {
                 intent = new Intent("ServicePedidoManutencao");
             } else if (wherefrom.equals("Charts")) {
                 intent = new Intent("ServiceDayRecords");
+                intent.putExtra("sensorType", sensorType);
             }
 
             if(intent != null) {

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        lookForCredentials();
 
         etUsername = findViewById(R.id.user);
         etPassword = findViewById(R.id.password);
@@ -108,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginTerminado(String data, String username, String password) {
-
         JSONObject json;
         String api_key;
         String email;
@@ -129,13 +131,52 @@ public class LoginActivity extends AppCompatActivity {
             user.setPassword(password);
             user.setTownhouse_id(townhouse_id);
 
+            saveCredentials();
+
             Intent myIntent = new Intent(LoginActivity.this, PrincipalActivity.class);
             startActivity(myIntent);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    private void saveCredentials() {
+        SharedPreferences sp = getSharedPreferences("Login", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putString("api-key", user.getApi_key());
+        ed.putString("email", user.getEmail());
+        ed.putString("townhouse_id", user.getTownhouse_id());
+        ed.putString("user_id", user.getUser_id());
+        ed.putString("username", user.getUsername());
+        ed.putString("password", user.getPassword());
+        ed.commit();
+    }
+
+    private void lookForCredentials() {
+        SharedPreferences options = this.getSharedPreferences("Login", MODE_PRIVATE);
+        if (options != null) {
+            String apiKey = options.getString("api-key", null);
+            String email = options.getString("email", null);
+            String townhouseId = options.getString("townhouse_id", null);
+            String userId = options.getString("user_id", null);
+            String userName = options.getString("username", null);
+            String password = options.getString("password", null);
+            boolean condition = true;
+            if (apiKey == null || email == null || townhouseId == null ||
+                    userId == null || userName == null || password == null) {
+                return;
+            }
+            user.setApi_key(apiKey);
+            user.setUser_id(userId);
+            user.setUsername(userName);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setTownhouse_id(townhouseId);
+            Intent myIntent = new Intent(LoginActivity.this, PrincipalActivity.class);
+            startActivity(myIntent);
+            finish();
+        }
     }
 }
 
