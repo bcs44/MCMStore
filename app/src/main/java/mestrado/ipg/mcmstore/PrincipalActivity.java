@@ -261,6 +261,10 @@ public class PrincipalActivity extends AppCompatActivity
             myIntent = new Intent(PrincipalActivity.this, Manutencoes.class);
         } else if (id == R.id.admin_ficheiro) {
             myIntent = new Intent(PrincipalActivity.this, Ficheiros.class);
+        } else if (id == R.id.logout) {
+            getSharedPreferences("Login", MODE_PRIVATE).edit().clear().commit();
+            finishAffinity();
+            System.exit(0);
         }
         if(myIntent != null) {
             startActivity(myIntent);

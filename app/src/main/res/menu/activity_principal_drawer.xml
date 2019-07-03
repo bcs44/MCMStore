@@ -23,6 +23,10 @@
                 android:id="@+id/sens_info"
                 android:icon="@mipmap/ic_info"
                 android:title="@string/informa_o_atual" />
+            <item
+                android:id="@+id/logout"
+                android:icon="@mipmap/ic_info"
+                android:title="@string/logout" />
         </menu>
     </item>
     <item android:title="@string/condom_nio">

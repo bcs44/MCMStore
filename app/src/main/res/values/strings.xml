@@ -58,4 +58,5 @@
     <string name="title_activity_chart_Temperature">Temperatura</string>
     <string name="title_activity_chart_gas">ChartGas</string>
     <string name="title_activity_chart_luminosity">ChartLuminosity</string>
+    <string name="logout">Sair</string>
 </resources>

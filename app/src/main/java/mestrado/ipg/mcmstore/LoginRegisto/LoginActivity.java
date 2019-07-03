@@ -123,18 +123,21 @@ public class LoginActivity extends AppCompatActivity {
             email = json.getString("email");
             townhouse_id = json.getString("townhouse_id");
             user_id = json.getString("user_id");
+            if(api_key != null && email != null && townhouse_id != null && user_id != null) {
+                user.setApi_key(api_key);
+                user.setUser_id(user_id);
+                user.setUsername(username);
+                user.setEmail(email);
+                user.setPassword(password);
+                user.setTownhouse_id(townhouse_id);
 
-            user.setApi_key(api_key);
-            user.setUser_id(user_id);
-            user.setUsername(username);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setTownhouse_id(townhouse_id);
+                saveCredentials();
 
-            saveCredentials();
-
-            Intent myIntent = new Intent(LoginActivity.this, PrincipalActivity.class);
-            startActivity(myIntent);
+                Intent myIntent = new Intent(LoginActivity.this, PrincipalActivity.class);
+                startActivity(myIntent);
+            } else {
+                Toast.makeText(this, "Login não foi concluido com sucesso.", Toast.LENGTH_LONG);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
