@@ -12,6 +12,7 @@ public class User {
     private String password;
     private String townhouse_id;
 
+
     public String getTownhouse_id() {
         return townhouse_id;
     }

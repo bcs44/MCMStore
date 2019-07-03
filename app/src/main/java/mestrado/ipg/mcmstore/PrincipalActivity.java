@@ -61,10 +61,9 @@ public class PrincipalActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Comunicados>>
-        getComunicados();
-        registerReceiver();
-        //Comunicados<<
+
+
+
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -82,6 +81,26 @@ public class PrincipalActivity extends AppCompatActivity
         usernameET.setText(user.getUsername());
         emailET.setText(user.getEmail());
 
+
+        //Tipo de Utilizador
+
+        Menu menuNav = navigationView.getMenu();
+        MenuItem sensorMenu = menuNav.findItem(R.id.itemSensor);
+        MenuItem condominioMenu = menuNav.findItem(R.id.itemCondominio);
+        MenuItem administradorMenu = menuNav.findItem(R.id.itemAdministrador);
+
+        if(user.getRule_id().equals("1")){
+            //condomino(Hey)
+           // administradorMenu.setVisible(false);
+            //Comunicados>>
+            getComunicados();
+            registerReceiver();
+            //Comunicados<<
+        }
+        else if(user.getRule_id().equals("3")){
+            //administrador(Oioi)
+            condominioMenu.setVisible(false);
+        }
     }
 
     private void getComunicados() {
