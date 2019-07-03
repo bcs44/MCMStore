@@ -5,7 +5,8 @@
 
 
 
-    <item android:title="@string/sensores">
+    <item android:title="@string/sensores"
+        android:id="@+id/itemSensor">
         <menu>
             <item
                 android:id="@+id/sens_conf"
@@ -25,7 +26,8 @@
                 android:title="@string/informa_o_atual" />
         </menu>
     </item>
-    <item android:title="@string/condom_nio">
+    <item android:title="@string/condom_nio"
+        android:id="@+id/itemCondominio">
         <menu>
             <item
                 android:id="@+id/cond_chat"
@@ -53,7 +55,8 @@
                 android:title="@string/pedidos_de_reservas" />
         </menu>
     </item>
-    <item android:title="@string/administrador"> <!--android:visible="false">-->
+    <item android:title="@string/administrador"
+        android:id="@+id/itemAdministrador"> <!--android:visible="false">-->
         <menu>
             <item
                 android:id="@+id/admin_marc"

@@ -226,6 +226,9 @@ public class BackgroundGetServiceAuth extends Service {
             else if (wherefrom.equals("getPlacesToPedidoManutencao")) {
                 intent = new Intent("ServicePedidoManutencao");
             }
+            else if (wherefrom.equals("getManutencao")) {
+                intent = new Intent("ServiceManutencoesAdmin");
+            }
 
             intent.putExtra("data", data);
             intent.putExtra("wherefrom", wherefrom);
