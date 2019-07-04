@@ -95,7 +95,6 @@ public class Charts extends Service implements SensorEventListener {
 
         }
         anyChartView.invalidate();
-        anyChartView.refreshDrawableState();
     }
 
     public static List<Record> parseObject(String data) {
