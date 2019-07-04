@@ -156,10 +156,7 @@ public class BackgroundPostServiceAuth extends Service {
                 urlConnection.setReadTimeout(60 * 1000);
                 urlConnection.setConnectTimeout(60 * 1000);
 
-                BufferedReader bis = null;
-                InputStream in = null;
-                OutputStream out = null;
-                out = urlConnection.getOutputStream();
+
 
                 StringBuilder sb = new StringBuilder();
 
@@ -169,6 +166,11 @@ public class BackgroundPostServiceAuth extends Service {
                     sb.append(entry.getValue());
                     sb.append('&');
                 }
+
+                BufferedReader bis = null;
+                InputStream in = null;
+                OutputStream out = null;
+                out = urlConnection.getOutputStream();
 
                 String str = sb.toString();
                 byte[] data = str.substring(0, str.length() - 1).getBytes();

@@ -32,6 +32,8 @@ import mestrado.ipg.mcmstore.domain.TypeSensor;
 public class ChartLuminosity extends AppCompatActivity {
     private User user = User.getInstance();
     private List<Record> recordsLuminosity = new ArrayList<>();
+    private Date startDate;
+    private Date endDate;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -98,13 +100,13 @@ public class ChartLuminosity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(HashMap... args) {
-            Date eDate = new Date(System.currentTimeMillis());
+            endDate = new Date(System.currentTimeMillis());
             SimpleDateFormat sdf;
             sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            String endDate = sdf.format(eDate);
-            Date sDate = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 6);
-            String startDate = sdf.format(sDate);
-            startTemperatureChart(startDate, endDate);
+            String endSDate = sdf.format(endDate);
+            startDate = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 6);
+            String startSDate = sdf.format(startDate);
+            startTemperatureChart(startSDate, endSDate);
             return "done";
         }
     }
@@ -150,6 +152,16 @@ public class ChartLuminosity extends AppCompatActivity {
                 mMessageReceiver, new IntentFilter("ServiceDayRecords"));
     }
 
+    public void getDetails(View view) {
+        Intent intent = new Intent(ChartLuminosity.this, DetailsLuminosity.class);
+        intent.putExtra("startDate", Charts.convertDateToString(startDate));
+        intent.putExtra("finalDate", Charts.convertDateToString(endDate));
+        intent.putExtra("maximumValue", Charts.getMaximum(recordsLuminosity));
+        intent.putExtra("minimumValue", Charts.getMinimum(recordsLuminosity));
+        intent.putExtra("mediaValue", Charts.getMedia(recordsLuminosity));
+        intent.putExtra("actualValue", recordsLuminosity.size() > 0 ? recordsLuminosity.get(0).getValue() : 0.0);
+        startActivity(intent);
+    }
 
 
 }

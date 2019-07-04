@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -23,13 +21,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
 
 import mestrado.ipg.mcmstore.Administrador.Comunicados;
 import mestrado.ipg.mcmstore.Administrador.Ficheiros;
@@ -46,9 +41,7 @@ import mestrado.ipg.mcmstore.LoginRegisto.Registar;
 import mestrado.ipg.mcmstore.Sensors.ChartTemperature;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
-import mestrado.ipg.mcmstore.Sensors.ShakeDetector;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
-import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 
 
 public class PrincipalActivity extends AppCompatActivity
@@ -82,7 +75,7 @@ public class PrincipalActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
 
-        emailET = headerView.findViewById(R.id.textView);
+        emailET = headerView.findViewById(R.id.textViewValueMaxima);
         usernameET = headerView.findViewById(R.id.username);
         usernameET.setText(user.getUsername());
         emailET.setText(user.getEmail());

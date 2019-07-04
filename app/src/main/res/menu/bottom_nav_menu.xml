@@ -3,21 +3,21 @@
 
     <item
         android:id="@+id/nav_temperature"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@mipmap/ic_temperature"
         android:title="@string/Temperature" />
 
     <item
         android:id="@+id/nav_humidity"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@mipmap/ic_humidity"
         android:title="@string/Humidity" />
 
     <item
         android:id="@+id/nav_gas"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@mipmap/ic_gas"
         android:title="@string/Gas" />
     <item
         android:id="@+id/nav_luminosity"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@mipmap/ic_luminosity"
         android:title="@string/Luminosity" />
 
 </menu>

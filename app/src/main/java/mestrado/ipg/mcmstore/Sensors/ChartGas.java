@@ -32,6 +32,8 @@ import mestrado.ipg.mcmstore.domain.TypeSensor;
 public class ChartGas extends AppCompatActivity {
     private User user = User.getInstance();
     private List<Record> recordsGas = new ArrayList<>();
+    private Date startDate;
+    private Date endDate;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -99,13 +101,13 @@ public class ChartGas extends AppCompatActivity {
 
         @Override
         protected String doInBackground(HashMap... args) {
-            Date eDate = new Date(System.currentTimeMillis());
+            endDate = new Date(System.currentTimeMillis());
             SimpleDateFormat sdf;
             sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            String endDate = sdf.format(eDate);
-            Date sDate = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 6);
-            String startDate = sdf.format(sDate);
-            startTemperatureChart(startDate, endDate);
+            String endSDate = sdf.format(endDate);
+            startDate = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 6);
+            String startSDate = sdf.format(startDate);
+            startTemperatureChart(startSDate, endSDate);
             return "done";
         }
     }
@@ -152,6 +154,16 @@ public class ChartGas extends AppCompatActivity {
                 mMessageReceiver, new IntentFilter("ServiceDayRecords"));
     }
 
+    public void getDetails(View view) {
+        Intent intent = new Intent(ChartGas.this, DetailsGas.class);
+        intent.putExtra("startDate", Charts.convertDateToString(startDate));
+        intent.putExtra("finalDate", Charts.convertDateToString(endDate));
+        intent.putExtra("maximumValue", Charts.getMaximum(recordsGas));
+        intent.putExtra("minimumValue", Charts.getMinimum(recordsGas));
+        intent.putExtra("mediaValue", Charts.getMedia(recordsGas));
+        intent.putExtra("actualValue", recordsGas.size() > 0 ? recordsGas.get(0).getValue() : 0.0);
+        startActivity(intent);
+    }
 
 
 }

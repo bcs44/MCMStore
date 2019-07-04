@@ -64,10 +64,10 @@ public class Charts extends Service implements SensorEventListener {
                 data.add(new ValueDataEntry("Sem dados", 0));
             }
         }
+
         anyChartView.setHorizontalScrollBarEnabled(true);
         anyChartView.setVerticalScrollBarEnabled(true);
         anyChartView.setZoomEnabled(true);
-        anyChartView.refreshDrawableState();
 
         switch(type) {
             case 0:
@@ -94,6 +94,8 @@ public class Charts extends Service implements SensorEventListener {
                 break;
 
         }
+        anyChartView.invalidate();
+        anyChartView.refreshDrawableState();
     }
 
     public static List<Record> parseObject(String data) {
@@ -149,6 +151,17 @@ public class Charts extends Service implements SensorEventListener {
         return null;
     }
 
+    public static String convertDateToString(Date date){
+        try {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            format = new SimpleDateFormat("dd/MM/yyyy");
+            return format.format(date);
+        } catch(Exception ex) {
+            Log.e(ChartTemperature.class.toString(), ex.getMessage());
+        }
+        return null;
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -183,5 +196,39 @@ public class Charts extends Service implements SensorEventListener {
                 drawChart(RECORDS, ANYCHARTVIEW, CARTESIAN);
             }
         }
+    }
+
+    public static Double getMaximum(List<Record> records){
+        Double auxiliar = 0.0;
+        for(Record record : records) {
+            if(record.getValue() >= auxiliar) {
+                auxiliar = record.getValue();
+            }
+        }
+        return auxiliar;
+    }
+
+    public static Double getMedia(List<Record> records){
+        Double auxiliar = 0.0;
+        for(Record record : records) {
+            auxiliar += record.getValue();
+        }
+        if(auxiliar == 0.0) {
+            return auxiliar;
+        }
+        return auxiliar / records.size();
+    }
+
+    public static Double getMinimum(List<Record> records){
+        Double auxiliar = 1000000.0;
+        for(Record record : records) {
+            if(record.getValue() <= auxiliar) {
+                auxiliar = record.getValue();
+            }
+        }
+        if (auxiliar == 1000000.0) {
+            return 0.0;
+        }
+        return auxiliar;
     }
 }

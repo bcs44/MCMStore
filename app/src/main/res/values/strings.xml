@@ -59,4 +59,12 @@
     <string name="title_activity_chart_gas">ChartGas</string>
     <string name="title_activity_chart_luminosity">ChartLuminosity</string>
     <string name="logout">Sair</string>
+
+    <string name="med">Valor médio:</string>
+    <string name="max">Valor máximo:</string>
+    <string name="actual">Valor atual:</string>
+    <string name="min">Valor mínimo:</string>
+    <string name="data_start">Início</string>
+    <string name="data_end">Final</string>
+    <string name="update">Atualizar</string>
 </resources>

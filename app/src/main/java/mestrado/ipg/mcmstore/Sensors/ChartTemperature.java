@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -13,26 +11,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Cartesian;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,9 +32,8 @@ import mestrado.ipg.mcmstore.domain.TypeSensor;
 public class ChartTemperature extends AppCompatActivity {
     private User user = User.getInstance();
     private List<Record> recordsTemperature = new ArrayList<>();
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private ShakeDetector mShakeDetector;
+    private Date startDate;
+    private Date endDate;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -95,7 +78,6 @@ public class ChartTemperature extends AppCompatActivity {
     }
 
     private void initiateChartsService(){
-
         Intent intent = new Intent(this, Charts.class);
         startService(intent);
     }
@@ -113,7 +95,7 @@ public class ChartTemperature extends AppCompatActivity {
         });
     }
 
-    private void getDayRecords(){
+    public void getDayRecords(){
         new sendGet().execute();
     }
 
@@ -125,13 +107,13 @@ public class ChartTemperature extends AppCompatActivity {
 
         @Override
         protected String doInBackground(HashMap... args) {
-            Date eDate = new Date(System.currentTimeMillis());
+            endDate = new Date(System.currentTimeMillis());
             SimpleDateFormat sdf;
             sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            String endDate = sdf.format(eDate);
-            Date sDate = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 6);
-            String startDate = sdf.format(sDate);
-            startTemperatureChart(startDate, endDate);
+            String endSDate = sdf.format(endDate);
+            startDate = new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 6);
+            String startSDate = sdf.format(startDate);
+            startTemperatureChart(startSDate, endSDate);
             return "done";
         }
     }
@@ -175,6 +157,17 @@ public class ChartTemperature extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(ChartTemperature.this).registerReceiver(
                 mMessageReceiver, new IntentFilter("ServiceDayRecords"));
+    }
+
+    public void getDetails(View view) {
+        Intent intent = new Intent(ChartTemperature.this, DetailsTemperature.class);
+        intent.putExtra("startDate", Charts.convertDateToString(startDate));
+        intent.putExtra("finalDate", Charts.convertDateToString(endDate));
+        intent.putExtra("maximumValue", Charts.getMaximum(recordsTemperature));
+        intent.putExtra("minimumValue", Charts.getMinimum(recordsTemperature));
+        intent.putExtra("mediaValue", Charts.getMedia(recordsTemperature));
+        intent.putExtra("actualValue", recordsTemperature.size() > 0 ? recordsTemperature.get(0).getValue() : 0.0);
+        startActivity(intent);
     }
 
 }

@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.R;
 
 public class SalaChat extends AppCompatActivity {
@@ -37,7 +36,7 @@ public class SalaChat extends AppCompatActivity {
 
         Button btn_send_msg = findViewById(R.id.btn_send);
         input_msg = findViewById(R.id.msg_input);
-        chat_conversation = findViewById(R.id.textView);
+        chat_conversation = findViewById(R.id.textViewValueMaxima);
 
         user_name = getIntent().getExtras().get("user_name").toString();
         String room_name = getIntent().getExtras().get("room_name").toString();

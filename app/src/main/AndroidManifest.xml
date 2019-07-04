@@ -18,9 +18,13 @@
         android:roundIcon="@mipmap/ic_building"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Sensors.DetailsLuminosity"></activity>
+        <activity android:name=".Sensors.DetailsGas" />
+        <activity android:name=".Sensors.DetailsHumidity" />
+        <activity android:name=".Sensors.DetailsTemperature" />
         <activity
             android:name=".Sensors.ChartLuminosity"
-            android:label="@string/title_activity_chart_luminosity"></activity>
+            android:label="@string/title_activity_chart_luminosity" />
         <activity
             android:name=".Sensors.ChartGas"
             android:label="@string/title_activity_chart_gas" />
@@ -47,7 +51,7 @@
             android:name=".Services.BackgroundGetServiceAuth"
             android:enabled="true"
             android:exported="true" />
-        <service android:name="mestrado.ipg.mcmstore.Sensors.Charts"></service>
+        <service android:name=".Sensors.Charts" />
 
         <activity
             android:name=".LoginRegisto.LoginActivity"
