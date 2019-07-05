@@ -18,7 +18,11 @@
         android:roundIcon="@mipmap/ic_building"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Sensors.DetailsLuminosity"></activity>
+        <activity
+            android:name=".Condominio.InfoActual"
+            android:label="@string/title_activity_info_actual"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity android:name=".Sensors.DetailsLuminosity" />
         <activity android:name=".Sensors.DetailsGas" />
         <activity android:name=".Sensors.DetailsHumidity" />
         <activity android:name=".Sensors.DetailsTemperature" />

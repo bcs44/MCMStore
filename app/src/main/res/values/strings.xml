@@ -67,4 +67,15 @@
     <string name="data_start">Início</string>
     <string name="data_end">Final</string>
     <string name="update">Atualizar</string>
+    <string name="title_activity_info_actual">InfoActual</string>
+    <string name="installed_sensors">Sensores instalados:</string>
+    <string name="number_active_sensors">sensores ativos:</string>
+    <string name="local">Lugar</string>
+    <string name="Temp">Temp</string>
+    <string name="Humi">Humi</string>
+    <string name="Lumi">Lumi</string>
+    <string name="legenda">Legenda:</string>
+    <string name="active">Ativo: V</string>
+    <string name="Instalado">Instalado: O</string>
+    <string name="naoinstalado">Não instalado: X</string>
 </resources>

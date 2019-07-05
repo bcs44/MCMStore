@@ -88,8 +88,6 @@ public class ChartTemperature extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(ChartTemperature.this, PrincipalActivity.class);
-                startActivity(intent);
                 finish();
             }
         });

@@ -275,6 +275,8 @@ public class BackgroundGetServiceAuth extends Service {
             } else if (wherefrom.equals("Details")) {
                 intent = new Intent("ServiceDetailsRecords");
                 intent.putExtra("sensorType", sensorType);
+            } else if (wherefrom.equals("InfoAtual")) {
+                intent = new Intent("ServiceGlobalInfo");
             }
 
             if(intent != null) {

@@ -81,8 +81,6 @@ public class ChartLuminosity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(ChartLuminosity.this, PrincipalActivity.class);
-                startActivity(intent);
                 finish();
             }
         });

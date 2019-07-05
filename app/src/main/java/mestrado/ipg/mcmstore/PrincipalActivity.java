@@ -33,6 +33,7 @@ import mestrado.ipg.mcmstore.Administrador.Reservas;
 import mestrado.ipg.mcmstore.Condominio.CalendarActivity;
 import mestrado.ipg.mcmstore.Condominio.ChatCondominio;
 import mestrado.ipg.mcmstore.Administrador.MarcacaoAssembleia;
+import mestrado.ipg.mcmstore.Condominio.InfoActual;
 import mestrado.ipg.mcmstore.Condominio.PedidoManutencao;
 import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
 import mestrado.ipg.mcmstore.Globals.Communication;
@@ -229,8 +230,7 @@ public class PrincipalActivity extends AppCompatActivity
         } else if (id == R.id.sens_switch) {
             myIntent = new Intent(PrincipalActivity.this, SensorSwitch.class);
         } else if (id == R.id.sens_info) {
-            //Informação de Sensores
-
+            myIntent = new Intent(PrincipalActivity.this, InfoActual.class);
         } else if (id == R.id.cond_chat) {
             myIntent = new Intent(PrincipalActivity.this, ChatCondominio.class);
         } else if (id == R.id.cond_cal) {
