@@ -95,11 +95,11 @@
 
         <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/simpleTableLayout"
-            android:layout_width="390dp"
+            android:layout_width="350dp"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="60dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="60dp"
             android:scrollbarStyle="insideOverlay"
             android:stretchColumns="1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -110,14 +110,14 @@
             <TableRow
 
                 android:id="@+id/firstRow"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <!-- first element of the row-->
                 <TextView
 
                     android:id="@+id/simpleTextTitleLocal"
-                    android:layout_width="wrap_content"
+                    android:layout_width="148dp"
                     android:layout_height="wrap_content"
                     android:background="#b0b0b0"
                     android:paddingStart="10dp"
@@ -127,6 +127,7 @@
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/local"
+                    android:textAlignment="center"
                     android:textColor="#000"
                     android:textSize="12dp" />
 
@@ -256,7 +257,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@mipmap/ic_exclamacao"
-        />
+        android:onClick="showInfo"
+        app:srcCompat="@mipmap/ic_exclamacao" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,20 +64,17 @@ public class InfoActual extends AppCompatActivity {
         textViewValueActiveSensors = findViewById(R.id.textViewValueActiveSensors);
         textViewValueNumberSensors = findViewById(R.id.textViewValueSensorNumber);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         registerReceiver();
         getInfo();
     }
 
-    public void getInfo(){
+    public void getInfo() {
         new InfoActual.sendGet().execute();
+    }
+
+    public void showInfo(View view) {
+        Snackbar.make(view, "Você tem informação sobre " + sensorStates.size() + " sensores.", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
 
@@ -110,14 +108,14 @@ public class InfoActual extends AppCompatActivity {
                 sensorStates = parseObject(data);
                 textViewValueNumberSensors.setText("" + sensorStates.size());
                 int count = 0;
-                for(SensorState st : sensorStates) {
-                    if(st.getState() == 1) {
+                for (SensorState st : sensorStates) {
+                    if (st.getState() == 1) {
                         count++;
                     }
                 }
                 textViewValueActiveSensors.setText("" + count);
                 Map<String, List<SensorState>> maspp = createMapsByPlace();
-                for(Map.Entry<String, List<SensorState>> entry : maspp.entrySet()){
+                for (Map.Entry<String, List<SensorState>> entry : maspp.entrySet()) {
                     addTableRow(entry.getKey(), entry.getValue());
                 }
                 context.stopService(new Intent(context, BackgroundGetServiceAuth.class));
@@ -136,7 +134,7 @@ public class InfoActual extends AppCompatActivity {
             JSONObject json = new JSONObject(data);
             JSONArray jArray = (JSONArray) json.get("response");
             int counter;
-            for(counter = 0; counter < jArray.length(); counter++) {
+            for (counter = 0; counter < jArray.length(); counter++) {
                 json = (JSONObject) jArray.get(counter);
                 Integer activeSensorId = (Integer) json.get("active_sensor_id");
                 Integer sensorId = (Integer) json.get("sensor_id");
@@ -147,13 +145,15 @@ public class InfoActual extends AppCompatActivity {
 
                 try {
                     latitude = (Double) json.get("latitude");
-                }catch(ClassCastException ex){}
+                } catch (ClassCastException ex) {
+                }
 
                 try {
                     longitude = (Double) json.get("longitude");
-                }catch(ClassCastException ex){ }
+                } catch (ClassCastException ex) {
+                }
 
-                Integer state  = (Integer) json.get("state");
+                Integer state = (Integer) json.get("state");
                 Integer placeId = (Integer) json.get("place_id");
                 String place = (String) json.get("place");
                 String type = (String) json.get("type");
@@ -169,10 +169,10 @@ public class InfoActual extends AppCompatActivity {
         return sensorStateArray;
     }
 
-    private Map<String, List<SensorState>> createMapsByPlace(){
+    private Map<String, List<SensorState>> createMapsByPlace() {
         Map<String, List<SensorState>> masp = new HashMap<>();
         for (SensorState st : sensorStates) {
-            if(masp.get(st.getPlace()) != null){
+            if (masp.get(st.getPlace()) != null) {
                 masp.get(st.getPlace()).add(st);
                 continue;
             }
@@ -184,8 +184,8 @@ public class InfoActual extends AppCompatActivity {
     }
 
     private SensorState hasSensorType(List<SensorState> sensorByPlace, TypeSensor type) {
-        for(SensorState st : sensorByPlace) {
-            if(st.getType().toLowerCase().equals(type.getValue().toLowerCase())){
+        for (SensorState st : sensorByPlace) {
+            if (st.getType().toLowerCase().equals(type.getValue().toLowerCase())) {
                 return st;
             }
         }
@@ -193,25 +193,25 @@ public class InfoActual extends AppCompatActivity {
     }
 
 
-    private void addTableRow(String namePlace, List<SensorState> sensorByPlace){
+    private void addTableRow(String namePlace, List<SensorState> sensorByPlace) {
         TableLayout tl = (TableLayout) findViewById(R.id.simpleTableLayout);
         TableRow tr = new TableRow(this);
         tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-        TableRow.LayoutParams params = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT,1.0f);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
 
         TextView textTitle = new TextView(this);
         textTitle.setText(namePlace);
         textTitle.setLayoutParams(params);
         textTitle.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        textTitle.setPadding(10,40,10,40);
+        textTitle.setPadding(10, 40, 10, 40);
         textTitle.setTextColor(Color.parseColor("#000000"));
         textTitle.setTextSize(12);
         tr.addView(textTitle);
 
         TextView text = new TextView(this);
         SensorState state = hasSensorType(sensorByPlace, TypeSensor.Temperature);
-        if(state != null) {
-            if(state.getState() == 1) {
+        if (state != null) {
+            if (state.getState() == 1) {
                 text.setText("V");
             } else {
                 text.setText("O");
@@ -224,8 +224,8 @@ public class InfoActual extends AppCompatActivity {
 
         text = new TextView(this);
         state = hasSensorType(sensorByPlace, TypeSensor.Humidity);
-        if(state != null) {
-            if(state.getState() == 1) {
+        if (state != null) {
+            if (state.getState() == 1) {
                 text.setText("V");
             } else {
                 text.setText("O");
@@ -238,8 +238,8 @@ public class InfoActual extends AppCompatActivity {
 
         text = new TextView(this);
         state = hasSensorType(sensorByPlace, TypeSensor.Luminosity);
-        if(state != null) {
-            if(state.getState() == 1) {
+        if (state != null) {
+            if (state.getState() == 1) {
                 text.setText("V");
             } else {
                 text.setText("O");
@@ -252,8 +252,8 @@ public class InfoActual extends AppCompatActivity {
 
         text = new TextView(this);
         state = hasSensorType(sensorByPlace, TypeSensor.Gas);
-        if(state != null) {
-            if(state.getState() == 1) {
+        if (state != null) {
+            if (state.getState() == 1) {
                 text.setText("V");
             } else {
                 text.setText("O");
@@ -267,10 +267,10 @@ public class InfoActual extends AppCompatActivity {
         tl.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    private void configureTextView(TextView text, TableRow.LayoutParams params){
+    private void configureTextView(TextView text, TableRow.LayoutParams params) {
         text.setLayoutParams(params);
         text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        text.setPadding(10,40,10,40);
+        text.setPadding(10, 40, 10, 40);
         text.setTextColor(Color.parseColor("#000000"));
         text.setTextSize(12);
     }

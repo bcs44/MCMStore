@@ -44,6 +44,8 @@ public class Charts extends Service implements SensorEventListener {
     private static int TYPE = 0;
     private final int CARTESIAN = 0;
     private final int LINES = 1;
+    private static Cartesian cartesian;
+    private static Cartesian3d cartesian3d;
 
     public static void drawChart(List<Record> records,
                                  AnyChartView anyChartView,
@@ -64,37 +66,34 @@ public class Charts extends Service implements SensorEventListener {
                 data.add(new ValueDataEntry("Sem dados", 0));
             }
         }
-
+        anyChartView.invalidate();
+        anyChartView.getRootView().invalidate();
         anyChartView.setHorizontalScrollBarEnabled(true);
         anyChartView.setVerticalScrollBarEnabled(true);
         anyChartView.setZoomEnabled(true);
 
         switch(type) {
-            case 0:
-                anyChartView.refreshDrawableState();
-                Cartesian cartesian = AnyChart.line();
+            case 1:
+                cartesian = AnyChart.line();
                 if(data.size() > 2) {
                     cartesian.xAxis(0).labels().width(60);
                 }
                 cartesian.data(data);
-                anyChartView.invalidate();
                 anyChartView.setChart(cartesian);
                 break;
             default:
-                anyChartView.refreshDrawableState();
-                Cartesian3d cartesian3d = AnyChart.area3d();
-                cartesian3d.animation().duration(5);
+                cartesian3d = AnyChart.area3d();
+                cartesian3d.animation().duration(3000);
                 cartesian3d.zAngle(45);
                 if(data.size() > 2) {
                     cartesian3d.xAxis(0).labels().width(60);
                 }
                 cartesian3d.data(data);
-                anyChartView.invalidate();
                 anyChartView.setChart(cartesian3d);
                 break;
 
         }
-        anyChartView.invalidate();
+
     }
 
     public static List<Record> parseObject(String data) {
