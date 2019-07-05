@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,14 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import mestrado.ipg.mcmstore.Globals.Communication;
-import mestrado.ipg.mcmstore.Globals.Place;
+import mestrado.ipg.mcmstore.Globals.Communication;;
 import mestrado.ipg.mcmstore.Globals.User;
 import mestrado.ipg.mcmstore.Globals.UserGlobal;
-import mestrado.ipg.mcmstore.Helpers.SpinAdapter;
 import mestrado.ipg.mcmstore.PrincipalActivity;
 import mestrado.ipg.mcmstore.R;
-import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Services.BackgroundGetServiceAuth;
 import mestrado.ipg.mcmstore.Services.BackgroundPostServiceAuth;
 

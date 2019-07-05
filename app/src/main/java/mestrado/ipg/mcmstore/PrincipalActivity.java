@@ -39,6 +39,7 @@ import mestrado.ipg.mcmstore.Condominio.PedidoManutencao;
 import mestrado.ipg.mcmstore.Condominio.PedidoReserva;
 import mestrado.ipg.mcmstore.Globals.Communication;
 import mestrado.ipg.mcmstore.Globals.User;
+import mestrado.ipg.mcmstore.LoginRegisto.LoginActivity;
 import mestrado.ipg.mcmstore.LoginRegisto.Registar;
 import mestrado.ipg.mcmstore.Sensors.ConfigSensors;
 import mestrado.ipg.mcmstore.Sensors.SensorSwitch;
@@ -60,10 +61,6 @@ public class PrincipalActivity extends AppCompatActivity
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
-
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -207,8 +204,7 @@ public class PrincipalActivity extends AppCompatActivity
             dialogo.show();
         }
     }
-
-
+    
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -231,7 +227,8 @@ public class PrincipalActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            return true;
+            Intent myIntent = new Intent(PrincipalActivity.this, LoginActivity.class);
+            startActivity(myIntent);
         }
         return super.onOptionsItemSelected(item);
     }
